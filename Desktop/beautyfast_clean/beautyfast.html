@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>El Secreto de Aris</title>
+  <!-- fuente moderna para estilo profesional -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="beautyfast.css">
+</head>
+<body>
+
+<header class="header">
+
+  <!-- HAMBURGER MENU -->
+  <button id="hamburger" class="hamburger" title="Menú">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <!-- BRAND (CENTRADO) -->
+  <div class="brand">
+    <!-- SVG del logo -->
+    <svg width="40" height="40" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" class="leaf-icon">
+      <path d="M 50 100 Q 30 70 40 40 Q 50 20 70 30 Q 90 40 85 70 Q 80 90 70 100 L 60 95 Q 50 75 55 55 L 50 100 Z" fill="#7CB342"/>
+      <path d="M 55 60 Q 60 75 65 90" stroke="#558B2F" stroke-width="2" stroke-linecap="round"/>
+      <path d="M 110 80 Q 130 50 150 45 Q 170 40 175 60 Q 180 80 165 100 Q 155 115 140 110 L 135 105 Q 145 90 145 70 L 110 80 Z" fill="#9CCC65"/>
+      <path d="M 140 70 Q 145 85 145 100" stroke="#689F38" stroke-width="2" stroke-linecap="round"/>
+      <path d="M 65 110 Q 40 120 25 140 Q 10 160 20 175 Q 30 185 50 175 Q 70 165 75 145 Q 80 125 70 115 L 67 120 Q 55 135 40 140 L 65 110 Z" fill="#8BC34A"/>
+      <path d="M 50 135 Q 55 145 60 155" stroke="#558B2F" stroke-width="2" stroke-linecap="round"/>
+      <path d="M 90 115 Q 85 140 90 165 Q 95 185 110 190 Q 120 192 125 180 Q 130 165 125 140 Q 120 120 110 115 L 105 120 Q 105 140 110 160 L 90 115 Z" fill="#AED581"/>
+      <path d="M 105 135 Q 108 150 110 165" stroke="#7CB342" stroke-width="2" stroke-linecap="round"/>
+      <path d="M 135 115 Q 155 125 170 145 Q 185 165 175 180 Q 165 190 150 180 Q 135 170 130 150 Q 125 130 130 120 L 133 125 Q 140 140 155 145 L 135 115 Z" fill="#9CCC65"/>
+      <path d="M 145 140 Q 148 150 150 165" stroke="#689F38" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="100" cy="110" r="15" fill="#7CB342"/>
+      <circle cx="100" cy="110" r="10" fill="#9CCC65"/>
+    </svg>
+    <h1>El Secreto de Aris</h1>
+  </div>
+
+  <!-- SEARCH + CART -->
+  <div class="header-right">
+    <!-- SEARCH -->
+    <div class="search-box">
+      <button id="searchToggle" class="search-toggle" type="button" title="Buscar">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.35-4.35"></path>
+        </svg>
+      </button>
+      <input type="text" id="search" placeholder="Buscar..." class="search-input">
+      <button id="clearSearch" type="button" class="clear-search">✕</button>
+    </div>
+    
+    <!-- CART -->
+    <div class="cart">
+      <!-- Carrito minimalista -->
+      <svg class="cart-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="#e6d8b0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="9" cy="21" r="1.5"></circle>
+        <circle cx="20" cy="21" r="1.5"></circle>
+        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+      </svg>
+      <span id="cartCount">0</span>
+    </div>
+  </div>
+
+</header>
+
+<!-- Hero banner que da sensación profesional -->
+<div class="hero">
+  <h2>Productos naturales para tu cabello</h2>
+  <p>Calidad y confianza en cada gota.</p>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <button class="active" onclick="showSection('capilar', this)">Línea Capilar</button>
+  <button onclick="showSection('individuales', this)">Individuales</button>
+  <button onclick="showSection('otros', this)">Otros</button>
+</div>
+
+<!-- SIDEBAR CON MENÚ DESPLEGABLE -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-search-container">
+    <svg class="sidebar-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="11" cy="11" r="8"></circle>
+      <path d="m21 21-4.35-4.35"></path>
+    </svg>
+    <input type="text" id="sidebarSearch" placeholder="Buscar..." class="sidebar-search-input">
+    <button id="clearSidebarSearch" class="sidebar-search-clear" title="Limpiar búsqueda">✕</button>
+  </div>
+  <div class="sidebar-categories" id="sidebarCategories">
+    <!-- Las categorías se generarán con JavaScript -->
+  </div>
+</div>
+
+<!-- OVERLAY para cerrar el sidebar -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<main class="main">
+
+  <!-- SECCIONES Y CARDS -->
+  <section id="capilar" class="section">
+    <div class="card">
+      <div class="card-image">
+        <img src="img/linea.jpg" alt="Línea Pequeña">
+      </div>
+      <div class="card-body">
+        <h3 class="card-title">Línea Pequeña</h3>
+        <p class="card-price">RD$ 1,050.00</p>
+        <button onclick="addToCart('Línea Pequeña', 1050)">Agregar al carrito</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-image">
+        <img src="img/linea.jpg" alt="Línea Mediana">
+      </div>
+      <div class="card-body">
+        <h3 class="card-title">Línea Mediana</h3>
+        <p class="card-price">RD$ 1,350.00</p>
+        <button onclick="addToCart('Línea Mediana', 1350)">Agregar al carrito</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-image">
+        <img src="img/linea.jpg" alt="Línea Grande">
+      </div>
+      <div class="card-body">
+        <h3 class="card-title">Línea Grande</h3>
+        <p class="card-price">RD$ 1,850.00</p>
+        <button onclick="addToCart('Línea Grande', 1850)">Agregar al carrito</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-image">
+        <img src="img/linea.jpg" alt="Línea Jumbo">
+      </div>
+      <div class="card-body">
+        <h3 class="card-title">Línea Jumbo</h3>
+        <p class="card-price">RD$ 2,000.00</p>
+        <button onclick="addToCart('Línea Jumbo', 2000)">Agregar al carrito</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="individuales" class="section">
+<div class="card">
+  <div class="card-image">
+    <img src="img/shampoo16oz.jpg" alt="Shampoo 16 OZ">
+  </div>
+
+  <div class="card-body">
+    <h3 class="card-title">Shampoo 16 OZ</h3>
+    <p class="card-price">$1,200</p>
+
+    <button onclick="addToCart('Shampoo 16 OZ', 1200)">
+      Agregar al carrito
+    </button>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-image">
+    <img src="img/shampoo32oz.jpg" alt="Shampoo 32 OZ">
+  </div>
+  <div class="card-body">
+    <h3 class="card-title">Shampoo 32 OZ</h3>
+    <p class="card-price">RD$ 900.00</p>
+    <button onclick="addToCart('Shampoo 32 OZ', 900)">Agregar al carrito</button>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-image">
+    <img src="img/TratInt.jpg" alt="Tratamiento Intensivo">
+  </div>
+  <div class="card-body">
+    <h3 class="card-title">Tratamiento Intensivo</h3>
+    <p class="card-price">RD$ 500.00</p>
+    <button onclick="addToCart('Tratamiento Intensivo', 500)">Agregar al carrito</button>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-image">
+    <img src="img/gotero4oz.jpg" alt="Gotero">
+  </div>
+  <div class="card-body">
+    <h3 class="card-title">Gotero</h3>
+    <p class="card-price">RD$ 800.00</p>
+    <button onclick="addToCart('Gotero', 800)">Agregar al carrito</button>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-image">
+    <img src="img/SupMask.jpg" alt="Super Mascarilla">
+  </div>
+  <div class="card-body">
+    <h3 class="card-title">Super Mascarilla</h3>
+    <p class="card-price">RD$ 800.00</p>
+    <button onclick="addToCart('Super Mascarilla', 800)">Agregar al carrito</button>
+  </div>
+</div>
+</section>
+
+  <section id="otros" class="section">
+    <div class="card">
+      <h3>Aprieta Cuca</h3>
+      <p>RD$ 1,000.00</p>
+      <button onclick="addToCart('Aprieta Cuca', 1000)">Agregar al carrito</button>
+    </div>
+  </section>
+
+
+<!-- Fondo para clic afuera -->
+<div id="cartOverlay" class="cart-overlay"></div>
+
+<div id="cartPanel" class="cart-panel">
+  <button id="closeCart" class="close-cart">&times;</button>
+  <h2>Tu carrito</h2>
+  <div id="cartItems"></div>
+  <p id="cartTotal">Total: RD$ 0</p>
+  <div class="cart-actions">
+    <button id="emptyCart">Vaciar</button>
+    <button id="checkoutBtn">Pagar</button>
+  </div>
+</div>
+
+<!-- Botón flotante de WhatsApp -->
+<a href="https://wa.link/n7qvjb" target="_blank" class="whatsapp-button" title="Contactar por WhatsApp">
+  <img src="img/Whatsapp.jpg" alt="WhatsApp" class="whatsapp-icon">
+</a>
+
+<!-- MODAL DEL PRODUCTO -->
+<div id="productModal" class="product-modal">
+  <div class="product-modal-content">
+    <button id="closeProductModal" class="close-product-modal">&times;</button>
+    <div class="product-detail">
+      <div class="product-detail-image">
+        <img id="productModalImage" src="" alt="Producto">
+      </div>
+      <div class="product-detail-info">
+        <h2 id="productModalTitle"></h2>
+        <p id="productModalDesc"></p>
+        <p id="productModalPrice" class="product-modal-price"></p>
+        <button id="productModalAddCart" class="btn-add-cart">Agregar al carrito</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main> <!-- removed duplicate cart panel -->
+
+<footer class="site-footer">
+  <div class="info-block">
+    <h3>Sobre Nosotros</h3>
+    <p>Somos una empresa dedicada a ofrecer productos capilares naturales, formulados con amor y experiencia para cuidar de tu belleza.</p>
+  </div>
+  <div class="info-block">
+    <h3>Contacto</h3>
+    <p>Escríbenos a <a href="mailto:info@secretoaris.do">info@secretoaris.do</a> o utiliza el botón de WhatsApp para soporte rápido.</p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<script src="beautyfast.js"></script>
+
+</body>
+</html>

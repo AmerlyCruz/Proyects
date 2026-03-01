@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Pagar - El Secreto de Aris</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="beautyfast.css">
+  <style>
+    body { background: #f8f8f8; }
+    .checkout-container { max-width: 500px; margin: 40px auto; background: #fff; border-radius: 12px; box-shadow: 0 2px 12px #0001; padding: 32px 24px; font-family: 'Poppins', sans-serif; }
+    .checkout-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 18px; text-align: center; }
+    .checkout-section { margin-bottom: 24px; }
+    .checkout-label { display: block; font-weight: 600; margin-bottom: 6px; }
+    .checkout-input, .checkout-select { width: 100%; padding: 8px 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 1rem; margin-bottom: 12px; }
+    .checkout-summary { background: #f5f5f5; border-radius: 8px; padding: 16px; margin-bottom: 18px; }
+    .checkout-summary-title { font-weight: 600; margin-bottom: 8px; }
+    .checkout-total { font-size: 1.2rem; font-weight: 700; color: #bc6c25; }
+    .checkout-radio-group { display: flex; gap: 18px; margin-bottom: 12px; }
+    .checkout-radio { accent-color: #bc6c25; }
+    .bank-info { background: #f9f6f2; border: 1px solid #eee; border-radius: 6px; padding: 12px; margin-top: 10px; margin-bottom: 10px; }
+    .checkout-btn { width: 100%; background: #bc6c25; color: #fff; border: none; border-radius: 6px; padding: 14px 0; font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: background 0.2s; }
+    .checkout-btn:hover { background: #a05a1e; }
+    .checkout-note { font-size: 0.95em; color: #888; margin-bottom: 10px; }
+    .azul-logo { height: 28px; vertical-align: middle; margin-right: 8px; }
+    .bank-logo { height: 22px; vertical-align: middle; margin-right: 8px; }
+    .checkout-row { display: flex; gap: 10px; }
+    .checkout-row > * { flex: 1; }
+  </style>
+</head>
+<body>
+  <header class="header" style="background:#606c38;color:#fff;padding:15px 20px;display:flex;align-items:center;justify-content:center;gap:10px;">
+    <svg width="36" height="36" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" class="leaf-icon">
+      <path d="M 50 100 Q 30 70 40 40 Q 50 20 70 30 Q 90 40 85 70 Q 80 90 70 100 L 60 95 Q 50 75 55 55 L 50 100 Z" fill="#7CB342"/>
+      <path d="M 55 60 Q 60 75 65 90" stroke="#558B2F" stroke-width="2" stroke-linecap="round"/>
+      <path d="M 110 80 Q 130 50 150 45 Q 170 40 175 60 Q 180 80 165 100 Q 155 115 140 110 L 135 105 Q 145 90 145 70 L 110 80 Z" fill="#9CCC65"/>
+      <path d="M 140 70 Q 145 85 145 100" stroke="#689F38" stroke-width="2" stroke-linecap="round"/>
+      <path d="M 65 110 Q 40 120 25 140 Q 10 160 20 175 Q 30 185 50 175 Q 70 165 75 145 Q 80 125 70 115 L 67 120 Q 55 135 40 140 L 65 110 Z" fill="#8BC34A"/>
+      <path d="M 50 135 Q 55 145 60 155" stroke="#558B2F" stroke-width="2" stroke-linecap="round"/>
+      <path d="M 90 115 Q 85 140 90 165 Q 95 185 110 190 Q 120 192 125 180 Q 130 165 125 140 Q 120 120 110 115 L 105 120 Q 105 140 110 160 L 90 115 Z" fill="#AED581"/>
+      <path d="M 105 135 Q 108 150 110 165" stroke="#7CB342" stroke-width="2" stroke-linecap="round"/>
+      <path d="M 135 115 Q 155 125 170 145 Q 185 165 175 180 Q 165 190 150 180 Q 135 170 130 150 Q 125 130 130 120 L 133 125 Q 140 140 155 145 L 135 115 Z" fill="#9CCC65"/>
+      <path d="M 145 140 Q 148 150 150 165" stroke="#689F38" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="100" cy="110" r="15" fill="#7CB342"/>
+      <circle cx="100" cy="110" r="10" fill="#9CCC65"/>
+    </svg>
+    <h1 style="font-size:26px;margin:0 0 0 8px;font-weight:700;letter-spacing:1px;">El Secreto de Aris</h1>
+  </header>
+  <div class="checkout-container">
+    <div class="checkout-title">Pantalla de pago</div>
+    <div id="orderNumBox" style="text-align:center;font-weight:600;color:#bc6c25;margin-bottom:10px;display:none;"></div>
+    <form id="checkoutForm" autocomplete="off">
+      <div class="checkout-section checkout-summary">
+        <div class="checkout-summary-title">Resumen del pedido</div>
+        <div id="checkoutCartItems"></div>
+        <div class="checkout-total" id="checkoutTotal"></div>
+      </div>
+      <div class="checkout-section">
+        <div class="checkout-label">Correo electrónico</div>
+        <input type="email" class="checkout-input" name="email" required>
+        <label style="font-size:0.95em;"><input type="checkbox" name="newsletter"> Enviarme novedades y ofertas por correo electrónico</label>
+      </div>
+      <div class="checkout-section">
+        <div class="checkout-label">Entrega</div>
+        <div class="checkout-row">
+          <input type="text" class="checkout-input" name="nombre" placeholder="Nombre" required>
+          <input type="text" class="checkout-input" name="apellidos" placeholder="Apellidos" required>
+        </div>
+        <input type="text" class="checkout-input" name="direccion" placeholder="Dirección" required>
+        <input type="text" class="checkout-input" name="extra" placeholder="Casa, apartamento, etc. (opcional)">
+        <div class="checkout-row">
+          <input type="text" class="checkout-input" name="ciudad" placeholder="Ciudad" required>
+          <input type="text" class="checkout-input" name="postal" placeholder="Código postal (opcional)">
+        </div>
+        <input type="text" class="checkout-input" name="telefono" placeholder="Teléfono" required>
+        <select class="checkout-select" name="pais" required>
+          <option value="">Selecciona país</option>
+          <option value="República Dominicana" selected>República Dominicana</option>
+        </select>
+        <label style="font-size:0.95em;"><input type="checkbox" name="guardar"> Guardar mi información y consultar más rápidamente la próxima vez</label>
+      </div>
+      <div class="checkout-section">
+        <div class="checkout-label">Método de envío</div>
+        <select class="checkout-select" name="envio" required>
+          <option value="delivery">Delivery (RD$ 200.00)</option>
+        </select>
+        <div class="checkout-note">Plazos de entrega a domicilio según la zona</div>
+      </div>
+      <div class="checkout-section">
+        <div class="checkout-label">Pago</div>
+        <div class="checkout-radio-group">
+          <label><input type="radio" class="checkout-radio" name="pago" value="azul" checked> <img src="https://azul.com.do/wp-content/uploads/2021/09/logo-azul.png" class="azul-logo" alt="AZUL"> Tarjeta (AZUL)</label>
+          <label><input type="radio" class="checkout-radio" name="pago" value="banco"> <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" class="bank-logo" alt="Banco"> Depósito Bancario</label>
+        </div>
+        <div id="bankInfo" class="bank-info" style="display:none;">
+          <b>Datos bancarios:</b><br>
+          <div style="margin-bottom:8px;display:flex;align-items:center;gap:8px;">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Logo_Banco_Popular_Dominicano.png" alt="Popular" style="height:22px;vertical-align:middle;"> 
+            <span><b>Banco Popular</b> - Cuenta: <span id="popNum">00000</span></span>
+            <button type="button" class="copy-btn" data-copy="00000" title="Copiar cuenta Popular">📋</button>
+          </div>
+          <div style="margin-bottom:8px;display:flex;align-items:center;gap:8px;">
+            <img src="https://seeklogo.com/images/B/bhd-leon-logo-1B7B1B2B1B-seeklogo.com.png" alt="BHD" style="height:22px;vertical-align:middle;"> 
+            <span><b>BHD</b> - Cuenta: <span id="bhdNum">00000</span></span>
+            <button type="button" class="copy-btn" data-copy="00000" title="Copiar cuenta BHD">📋</button>
+          </div>
+          <div style="margin-bottom:8px;display:flex;align-items:center;gap:8px;">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2e/Logo_Banco_de_Reservas.png" alt="Reservas" style="height:22px;vertical-align:middle;"> 
+            <span><b>Banreservas</b> - Cuenta: <span id="resNum">00000</span></span>
+            <button type="button" class="copy-btn" data-copy="00000" title="Copiar cuenta Banreservas">📋</button>
+          </div>
+          <div style="font-size:0.95em; color:#888;">Nombre: <b>La Pocion RD</b> | RNC: <b>00000</b></div>
+          <span style="font-size:0.95em; color:#888;">Envía tu comprobante de pago por WhatsApp tras completar el pedido.</span>
+        </div>
+        <div class="checkout-note">Todas las transacciones son seguras y están encriptadas.</div>
+      </div>
+      <button type="submit" class="checkout-btn" id="checkoutBtn">Pagar ahora</button>
+    </form>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script src="beautyfast.js"></script>
+  <script>
+    // Cargar carrito desde localStorage
+    let cart = [];
+    if(localStorage.getItem("cart")) cart = JSON.parse(localStorage.getItem("cart"));
+    // Mostrar resumen del pedido
+    function renderCheckoutCart() {
+      const itemsDiv = document.getElementById('checkoutCartItems');
+      const totalDiv = document.getElementById('checkoutTotal');
+      if(!cart.length) {
+        itemsDiv.innerHTML = '<em>No hay productos en el carrito.</em>';
+        totalDiv.textContent = '';
+        document.getElementById('checkoutBtn').disabled = true;
+        return;
+      }
+      let total = 0;
+      let html = '<ul style="padding-left:18px; margin:0;">';
+      cart.forEach(item => {
+        html += `<li>${item.name} <b>x${item.quantity}</b> <span style='float:right;'>RD$ ${(item.price*item.quantity).toLocaleString('es-DO',{minimumFractionDigits:2})}</span></li>`;
+        total += item.price * item.quantity;
+      });
+      html += '</ul>';
+      itemsDiv.innerHTML = html;
+      totalDiv.textContent = 'Total: RD$ ' + (total+200).toLocaleString('es-DO',{minimumFractionDigits:2});
+    }
+    renderCheckoutCart();
+    // Mostrar/ocultar info bancaria y mostrar número de pedido
+    let currentOrderNum = '';
+    function showOrderNum(num) {
+      const box = document.getElementById('orderNumBox');
+      box.textContent = 'Número de pedido: ' + num;
+      box.style.display = 'block';
+    }
+    function hideOrderNum() {
+      const box = document.getElementById('orderNumBox');
+      box.textContent = '';
+      box.style.display = 'none';
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      function updateBankInfoVisibility() {
+        const radioBanco = document.querySelector('input[name="pago"][value="banco"]');
+        const bankInfo = document.getElementById('bankInfo');
+        if (radioBanco && radioBanco.checked) {
+          bankInfo.style.display = 'block';
+          document.getElementById('checkoutBtn').textContent = 'Completar pedido';
+        } else {
+          bankInfo.style.display = 'none';
+          document.getElementById('checkoutBtn').textContent = 'Pagar ahora';
+        }
+      }
+      const radios = document.querySelectorAll('input[name="pago"]');
+      radios.forEach(radio => {
+        radio.addEventListener('change', updateBankInfoVisibility);
+      });
+      updateBankInfoVisibility();
+    });
+    // Copiar número de cuenta
+    document.addEventListener('click', function(e){
+      if(e.target.classList.contains('copy-btn')){
+        const val = e.target.getAttribute('data-copy');
+        navigator.clipboard.writeText(val);
+        e.target.textContent = '✔';
+        setTimeout(()=>{ e.target.textContent = '📋'; }, 1200);
+      }
+    });
+    // Generar número de pedido único
+    function generateOrderNumber() {
+      let n = localStorage.getItem('lastOrderNum') || 0;
+      n = parseInt(n)+1;
+      localStorage.setItem('lastOrderNum', n);
+      return 'PED-' + n.toString().padStart(6,'0');
+    }
+    // Mostrar número de pedido al cargar
+    currentOrderNum = generateOrderNumber();
+    showOrderNum(currentOrderNum);
+    // Manejar submit
+    document.getElementById('checkoutForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const form = e.target;
+      const pago = form.pago.value;
+      const orderNum = currentOrderNum;
+      if(pago==='azul') {
+        Swal.fire({
+          title: 'Redirigiendo a AZUL...',
+          timer: 1800,
+          showConfirmButton: false,
+          willClose: () => {
+            setTimeout(()=>{
+              Swal.fire({
+                icon: 'success',
+                title: '¡Pago realizado!',
+                text: 'Tu pedido ' + orderNum + ' ha sido procesado.',
+                timer: 2200,
+                showConfirmButton: false,
+                didOpen: () => { confetti(); }
+              });
+              localStorage.removeItem('cart');
+              setTimeout(()=>{ window.location.href = 'index.html'; }, 2200);
+            }, 500);
+          }
+        });
+      } else {
+        Swal.fire({
+          icon: 'success',
+          title: 'Pedido registrado',
+          html: 'Envía tu comprobante de pago por WhatsApp.<br><b>Número de pedido:</b> ' + orderNum,
+          showConfirmButton: true,
+          confirmButtonText: 'Enviar comprobante',
+          didOpen: () => { confetti(); }
+        }).then(() => {
+          const msg = encodeURIComponent(`Hola, adjunto comprobante de pago para el pedido ${orderNum}`);
+          window.location.href = 'https://wa.link/n7qvjb?text=' + msg;
+          localStorage.removeItem('cart');
+          setTimeout(()=>{ window.location.href = 'index.html'; }, 2000);
+        });
+      }
+    });
+  </script>
+</body>
+</html>
