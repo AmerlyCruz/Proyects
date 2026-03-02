@@ -1,3 +1,17 @@
+/* Enlace del header como marca */
+#brandHomeLink {
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+   display: inline-block;
+}
+#brandHomeLink:hover {
+  text-decoration: underline;
+}
+.brand-link {
+  text-decoration: none;
+  color: inherit;
+}
 /* ============================================== */
 /* CSS VARIABLES - CHANGE COLOR & BRANDING HERE */
 /* ============================================== */

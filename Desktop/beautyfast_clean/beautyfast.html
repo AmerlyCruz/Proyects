@@ -9,7 +9,9 @@
 </head>
 <body>
 
-<header class="header">
+
+<header class="header" style="position:relative;">
+
 
   <!-- HAMBURGER MENU -->
   <button id="hamburger" class="hamburger" title="Menú">
@@ -35,8 +37,12 @@
       <circle cx="100" cy="110" r="15" fill="#7CB342"/>
       <circle cx="100" cy="110" r="10" fill="#9CCC65"/>
     </svg>
-    <h1>El Secreto de Aris</h1>
-  </div>
+    <h1>
+    <a href="index.html" class="brand-link" onclick="window.location='index.html'">
+      El Secreto de Aris
+    </a>
+  </h1>
+</div>
 
   <!-- SEARCH + CART -->
   <div class="header-right">
@@ -66,11 +72,13 @@
 
 </header>
 
-<!-- Hero banner que da sensación profesional -->
-<div class="hero">
-  <h2>Productos naturales para tu cabello</h2>
-  <p>Calidad y confianza en cada gota.</p>
-</div>
+
+
+
+
+<script>
+// Eliminar scroll automático, ahora el botón abre en nueva pestaña
+</script>
 
 <!-- TABS -->
 <div class="tabs">
@@ -92,6 +100,28 @@
   <div class="sidebar-categories" id="sidebarCategories">
     <!-- Las categorías se generarán con JavaScript -->
   </div>
+  <div style="margin:12px 0 0 0;text-align:center;position:sticky;bottom:24px;z-index:10;">
+    <a href="index.html" class="sidebar-btn" style="display:inline-block;background:#bc6c25;color:#fff;padding:12px 28px;border-radius:8px;font-weight:700;text-decoration:none;font-size:1.1rem;box-shadow:0 2px 8px #0001;transition:background 0.2s;">Inicio</a>
+    <a href="beautyfast.html" class="sidebar-btn" style="display:inline-block;background:#d4af37;color:#111;padding:12px 28px;border-radius:8px;font-weight:700;text-decoration:none;font-size:1.1rem;box-shadow:0 2px 8px #0001;margin-left:10px;transition:background 0.2s;">Productos</a>
+  </div>
+<div id="loader" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(255,255,255,0.85);z-index:9999;align-items:center;justify-content:center;">
+  <div style="background:#fff;padding:32px 48px;border-radius:18px;box-shadow:0 2px 24px #0002;display:flex;flex-direction:column;align-items:center;">
+    <div class="loader-spinner" style="border:6px solid #eee;border-top:6px solid #bc6c25;border-radius:50%;width:48px;height:48px;animation:spin 1s linear infinite;margin-bottom:18px;"></div>
+    <div style="font-size:1.2rem;color:#bc6c25;font-weight:700;">Cargando productos...</div>
+  </div>
+</div>
+<style>
+@keyframes spin { 100% { transform: rotate(360deg); } }
+</style>
+<script>
+// Mostrar animación de carga al abrir desde otra página
+if(document.referrer && document.referrer.includes('home.html')){
+  document.getElementById('loader').style.display = 'flex';
+  setTimeout(()=>{
+    document.getElementById('loader').style.display = 'none';
+  }, 900);
+}
+</script>
 </div>
 
 <!-- OVERLAY para cerrar el sidebar -->
@@ -100,7 +130,7 @@
 <main class="main">
 
   <!-- SECCIONES Y CARDS -->
-  <section id="capilar" class="section">
+  <section id="capilar" class="section active">
     <div class="card">
       <div class="card-image">
         <img src="img/linea.jpg" alt="Línea Pequeña">
@@ -252,15 +282,16 @@
 
 </main> <!-- removed duplicate cart panel -->
 
-<footer class="site-footer">
-  <div class="info-block">
-    <h3>Sobre Nosotros</h3>
-    <p>Somos una empresa dedicada a ofrecer productos capilares naturales, formulados con amor y experiencia para cuidar de tu belleza.</p>
+<footer class="site-footer" style="background:#111;color:#fff;padding:32px 0 18px 0;box-shadow:0 -2px 12px #0002;position:static;width:100%;margin-top:48px;">
+  <div class="info-block" style="max-width:600px;margin:0 auto 18px auto;">
+    <h3 style="color:#d4af37;font-weight:800;letter-spacing:1px;">Sobre Nosotros</h3>
+    <p style="color:#fff;">Somos una empresa dedicada a ofrecer productos capilares naturales, formulados con amor y experiencia para cuidar de tu belleza.</p>
   </div>
-  <div class="info-block">
-    <h3>Contacto</h3>
-    <p>Escríbenos a <a href="mailto:info@secretoaris.do">info@secretoaris.do</a> o utiliza el botón de WhatsApp para soporte rápido.</p>
+  <div class="info-block" style="max-width:600px;margin:0 auto 0 auto;">
+    <h3 style="color:#d4af37;font-weight:800;letter-spacing:1px;">Contacto</h3>
+    <p style="color:#fff;">Escríbenos a <a href="mailto:info@secretoaris.do" style="color:#d4af37;text-decoration:underline;">info@secretoaris.do</a> o utiliza el botón de WhatsApp para soporte rápido.</p>
   </div>
+  <div style="text-align:center;margin-top:18px;color:#d4af37;font-size:1.05em;letter-spacing:1px;">© 2026 El Secreto de Aris</div>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

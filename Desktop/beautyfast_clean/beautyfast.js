@@ -5,8 +5,8 @@ console.log("JS conectado correctamente");
 
 // update header brand text on load
 window.addEventListener('DOMContentLoaded', () => {
-  const brandEl = document.querySelector('.brand h1');
-  if (brandEl) brandEl.textContent = BUSINESS_NAME;
+  const brandLink = document.querySelector('.brand-link');
+  if (brandLink) brandLink.textContent = BUSINESS_NAME;
 });
 
 // -------- TOGGLE SEARCH BOX --------
@@ -139,11 +139,22 @@ function updateWhatsappLink(){
 }
 
 // ---------------- Renderizar carrito ----------------
+
 function renderCart(){
   const container = document.getElementById("cartItems"); // contenedor de items
   const totalEl = document.getElementById("cartTotal");  // elemento del total
+  const actions = document.querySelector('.cart-actions');
   container.innerHTML = "";
   let total = 0;
+
+  if(cart.length === 0){
+    container.innerHTML = '<div style="text-align:center;color:#888;font-size:1.1em;padding:18px 0;">Carrito vacío 🛒</div>';
+    totalEl.innerText = "Total: RD$ 0.00";
+    if(actions) actions.style.display = 'none';
+    return;
+  } else {
+    if(actions) actions.style.display = '';
+  }
 
   cart.forEach((item,index)=>{
     const div = document.createElement("div");
@@ -432,8 +443,12 @@ function initializeSidebarMenu() {
           <span class="sidebar-product-price">RD$ ${product.price}</span>
         `;
         item.addEventListener('click', () => {
-          openProductModal(product.id);
-          closeSidebar();
+          // Abrir la página de productos en una nueva pestaña y resaltar la sección correspondiente
+          let section = '';
+          if(product.category === 'capilar') section = 'capilar';
+          else if(product.category === 'individuales') section = 'individuales';
+          else if(product.category === 'otros') section = 'otros';
+          window.open(`beautyfast.html#${section}`,'_blank');
         });
         itemsContainer.appendChild(item);
       });
