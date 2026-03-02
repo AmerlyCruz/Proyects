@@ -1,3 +1,6 @@
+// Espera a que el DOM cargue antes de ejecutar el JS
+document.addEventListener("DOMContentLoaded", function () {
+
 // change this variable to update business name site-wide
 const BUSINESS_NAME = "El Secreto de Aris";
 
@@ -509,4 +512,4 @@ function initializeSidebarMenu() {
   // Render initial menu
   renderSidebarMenu();
 }
-
+});
