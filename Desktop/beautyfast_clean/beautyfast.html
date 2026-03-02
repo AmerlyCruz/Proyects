@@ -7,6 +7,10 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="beautyfast.css">
 </head>
+<style>
+@keyframes spin { 100% { transform: rotate(360deg); } }
+</style>
+</head>
 <body>
 
 
@@ -38,10 +42,10 @@
       <circle cx="100" cy="110" r="10" fill="#9CCC65"/>
     </svg>
     <h1>
-    <a href="index.html" class="brand-link" onclick="window.location='index.html'">
-      El Secreto de Aris
-    </a>
-  </h1>
+      <a href="index.html" class="brand-link">
+        El Secreto de Aris
+      </a>
+    </h1>
 </div>
 
   <!-- SEARCH + CART -->
@@ -110,9 +114,6 @@
     <div style="font-size:1.2rem;color:#bc6c25;font-weight:700;">Cargando productos...</div>
   </div>
 </div>
-<style>
-@keyframes spin { 100% { transform: rotate(360deg); } }
-</style>
 <script>
 // Mostrar animación de carga al abrir desde otra página
 if(document.referrer && document.referrer.includes('home.html')){
@@ -138,7 +139,7 @@ if(document.referrer && document.referrer.includes('home.html')){
       <div class="card-body">
         <h3 class="card-title">Línea Pequeña</h3>
         <p class="card-price">RD$ 1,050.00</p>
-        <button onclick="addToCart('Línea Pequeña', 1050)">Agregar al carrito</button>
+        <button onclick="addToCart('Línea Pequeña')">Agregar al carrito</button>
       </div>
     </div>
     <div class="card">
@@ -148,7 +149,7 @@ if(document.referrer && document.referrer.includes('home.html')){
       <div class="card-body">
         <h3 class="card-title">Línea Mediana</h3>
         <p class="card-price">RD$ 1,350.00</p>
-        <button onclick="addToCart('Línea Mediana', 1350)">Agregar al carrito</button>
+        <button onclick="addToCart('Línea Mediana')">Agregar al carrito</button>
       </div>
     </div>
     <div class="card">
@@ -158,7 +159,7 @@ if(document.referrer && document.referrer.includes('home.html')){
       <div class="card-body">
         <h3 class="card-title">Línea Grande</h3>
         <p class="card-price">RD$ 1,850.00</p>
-        <button onclick="addToCart('Línea Grande', 1850)">Agregar al carrito</button>
+        <button onclick="addToCart('Línea Grande')">Agregar al carrito</button>
       </div>
     </div>
     <div class="card">
@@ -168,7 +169,7 @@ if(document.referrer && document.referrer.includes('home.html')){
       <div class="card-body">
         <h3 class="card-title">Línea Jumbo</h3>
         <p class="card-price">RD$ 2,000.00</p>
-        <button onclick="addToCart('Línea Jumbo', 2000)">Agregar al carrito</button>
+        <button onclick="addToCart('Línea Jumbo')">Agregar al carrito</button>
       </div>
     </div>
   </section>
@@ -183,7 +184,7 @@ if(document.referrer && document.referrer.includes('home.html')){
     <h3 class="card-title">Shampoo 16 OZ</h3>
     <p class="card-price">$1,200</p>
 
-    <button onclick="addToCart('Shampoo 16 OZ', 1200)">
+    <button onclick="addToCart('Shampoo 16 OZ')">
       Agregar al carrito
     </button>
   </div>
@@ -196,7 +197,7 @@ if(document.referrer && document.referrer.includes('home.html')){
   <div class="card-body">
     <h3 class="card-title">Shampoo 32 OZ</h3>
     <p class="card-price">RD$ 900.00</p>
-    <button onclick="addToCart('Shampoo 32 OZ', 900)">Agregar al carrito</button>
+    <button onclick="addToCart('Shampoo 32 OZ')">Agregar al carrito</button>
   </div>
 </div>
 
@@ -207,7 +208,7 @@ if(document.referrer && document.referrer.includes('home.html')){
   <div class="card-body">
     <h3 class="card-title">Tratamiento Intensivo</h3>
     <p class="card-price">RD$ 500.00</p>
-    <button onclick="addToCart('Tratamiento Intensivo', 500)">Agregar al carrito</button>
+    <button onclick="addToCart('Tratamiento Intensivo')">Agregar al carrito</button>
   </div>
 </div>
 
@@ -218,7 +219,7 @@ if(document.referrer && document.referrer.includes('home.html')){
   <div class="card-body">
     <h3 class="card-title">Gotero</h3>
     <p class="card-price">RD$ 800.00</p>
-    <button onclick="addToCart('Gotero', 800)">Agregar al carrito</button>
+    <button onclick="addToCart('Gotero')">Agregar al carrito</button>
   </div>
 </div>
 
@@ -229,7 +230,7 @@ if(document.referrer && document.referrer.includes('home.html')){
   <div class="card-body">
     <h3 class="card-title">Super Mascarilla</h3>
     <p class="card-price">RD$ 800.00</p>
-    <button onclick="addToCart('Super Mascarilla', 800)">Agregar al carrito</button>
+    <button onclick="addToCart('Super Mascarilla')">Agregar al carrito</button>
   </div>
 </div>
 </section>
@@ -238,7 +239,7 @@ if(document.referrer && document.referrer.includes('home.html')){
     <div class="card">
       <h3>Aprieta Cuca</h3>
       <p>RD$ 1,000.00</p>
-      <button onclick="addToCart('Aprieta Cuca', 1000)">Agregar al carrito</button>
+      <button onclick="addToCart('Aprieta Cuca')">Agregar al carrito</button>
     </div>
   </section>
 

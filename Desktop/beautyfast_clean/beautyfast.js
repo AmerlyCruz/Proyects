@@ -99,10 +99,16 @@ if(localStorage.getItem("cart")){
 function normalizeText(text){ return text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,""); }
 
 // ---------------- Funciones básicas ----------------
-function addToCart(name, price){
+// Prevenir manipulación de precios: solo se usa el precio interno
+function addToCart(name){
+  const product = products.find(p => p.name === name);
+  if (!product) {
+    Swal.fire({ icon: 'error', title: 'Producto no encontrado', toast: true, position: 'top-end', showConfirmButton: false, timer: 1200 });
+    return;
+  }
   const existing = cart.find(i=>i.name===name);
   if(existing) existing.quantity++;
-  else cart.push({name,price,quantity:1});
+  else cart.push({name, price: product.price, quantity:1});
   saveCart(); updateCartCount(); renderCart();
   Swal.fire({ 
     icon:'success', 
@@ -305,7 +311,7 @@ clearSearchBtn.addEventListener("click",()=>{
 // ============================================================
 
 // Product database
-const products = [
+const products = Object.freeze([
   /* Línea Capilar */
   { id: 1, name: 'Línea Pequeña', price: 1050, image: 'img/linea.jpg', description: 'Producto de línea capilar en formato pequeño. Ideal para pruebas y viajes.', category: 'capilar' },
   { id: 2, name: 'Línea Mediana', price: 1350, image: 'img/linea.jpg', description: 'Formato mediano de nuestra línea capilar. Perfecto para uso regular.', category: 'capilar' },
@@ -319,7 +325,7 @@ const products = [
   { id: 9, name: 'Super Mascarilla', price: 800, image: 'img/SupMask.jpg', description: 'Mascarilla ultra nutritiva. Hidrata y fortalece en profundidad.', category: 'individuales' },
   /* Otros */
   { id: 10, name: 'Aprieta Cuca', price: 1000, image: 'img/linea.jpg', description: 'Producto especial con efectos reafirmantes. Úsalo regularmente para mejores resultados.', category: 'otros' }
-];
+]);
 
 const productModal = document.getElementById('productModal');
 const closeProductModalBtn = document.getElementById('closeProductModal');
