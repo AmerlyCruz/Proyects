@@ -12,6 +12,18 @@
   text-decoration: none;
   color: inherit;
 }
+/* estilos base para celulares */
+body { padding: 1rem; font-size: 1rem; }
+
+/* tablet */
+@media (min-width: 768px) {
+  .nav { display: flex; }
+}
+
+/* desktop */
+@media (min-width: 1024px) {
+  .grid { grid-template-columns: repeat(3, 1fr); }
+}
 /* ============================================== */
 /* CSS VARIABLES - CHANGE COLOR & BRANDING HERE */
 /* ============================================== */
