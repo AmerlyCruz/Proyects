@@ -506,14 +506,20 @@ body {
   gap: 20px;
 }
 
-.section.active { 
+/* ===== BASE REAL MOBILE FIRST ===== */
+.section.active {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
-  justify-content: center;        /* center cards horizontally */
-  max-width: 1200px;   /* 👈 este es el truco */
+  justify-content: space-between;
+  gap: 16px;
   width: 100%;
-  margin: 0 auto;               /* center container itself */
+  padding: 0 10px;
+}
+
+.card {
+  width: 48%;
+  max-width: 100%;
+  margin: 0;
 }
 
 
