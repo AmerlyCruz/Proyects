@@ -13,7 +13,10 @@
   color: inherit;
 }
 /* estilos base para celulares */
-body { padding: 1rem; font-size: 1rem; }
+body {
+  margin: 0;
+  font-size: 1rem;
+}
 
 /* tablet */
 @media (min-width: 768px) {
