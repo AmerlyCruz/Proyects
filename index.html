@@ -121,21 +121,34 @@
 	</div>
 </div>
 
-<footer class="site-footer" style="background:#111;color:#fff;padding:32px 0 18px 0;box-shadow:0 -2px 12px #0002;position:static;width:100%;margin-top:48px;">
-	<div class="info-block" style="max-width:600px;margin:0 auto 18px auto;">
-		<h3 style="color:#d4af37;font-weight:800;letter-spacing:1px;">Sobre Nosotros</h3>
-		<p style="color:#fff;">Somos una empresa dedicada a ofrecer productos capilares naturales, formulados con amor y experiencia para cuidar de tu belleza.</p>
+<footer style="background:#181818;color:#fff;padding:32px 0 0 0;margin-top:40px;">
+	<div style="max-width:1100px;margin:0 auto;display:flex;flex-wrap:wrap;gap:40px 60px;justify-content:center;padding:0 16px 24px 16px;">
+		<div style="min-width:180px;flex:1 1 220px;">
+			<h3 style="font-size:1.15em;font-weight:700;margin-bottom:10px;color:#d4af37;">Acerca de nosotros</h3>
+			<ul style="list-style:none;padding:0;margin:0;line-height:2;">
+				<li style="color:#aaa;">Nosotros</li>
+				<li><a href="#" style="color:#fff;text-decoration:none;background:#333;padding:2px 10px;border-radius:10px;">Redes sociales</a></li>
+				<li style="color:#aaa;">Contacto</li>
+			</ul>
+		</div>
+		<div style="min-width:180px;flex:1 1 220px;">
+			<h3 style="font-size:1.15em;font-weight:700;margin-bottom:10px;color:#d4af37;">Legal</h3>
+			<ul style="list-style:none;padding:0;margin:0;line-height:2;">
+				<li><a href="#" style="color:#fff;text-decoration:none;background:#333;padding:2px 10px;border-radius:10px;">Términos y condiciones de uso</a></li>
+				<li style="color:#aaa;">Políticas de Privacidad</li>
+				<li style="color:#aaa;">Cambios & Devoluciones</li>
+			</ul>
+		</div>
 	</div>
-	<div class="info-block" style="max-width:600px;margin:0 auto 0 auto;">
-		<h3 style="color:#d4af37;font-weight:800;letter-spacing:1px;">Contacto</h3>
-		<p style="color:#fff;">Escríbenos a <a href="mailto:info@secretoaris.do" style="color:#d4af37;text-decoration:underline;">info@secretoaris.do</a> o utiliza el botón de WhatsApp para soporte rápido.</p>
+	<div style="border-top:1px solid #333;margin:0 16px 0 16px;padding:18px 0 0 0;text-align:center;font-size:1em;color:#d4af37;">
+		© 2026 El Secreto de Aris
+		<br>
+		<span style="font-size:0.95em; color:#888;">Envía tu comprobante de pago por WhatsApp tras completar el pedido.</span>
 	</div>
-	<div style="text-align:center;margin-top:18px;color:#d4af37;font-size:1.05em;letter-spacing:1px;">© 2026 El Secreto de Aris</div>
+	<a href="https://wa.me/18493990014" target="_blank" title="Contactar por WhatsApp" style="position:fixed;right:18px;bottom:18px;z-index:1000;">
+		<img src="img/Whatsapp.jpg" alt="WhatsApp" style="height:54px;width:54px;border-radius:50%;box-shadow:0 2px 8px #0006;">
+	</a>
 </footer>
-<!-- Botón flotante de WhatsApp -->
-<a href="https://wa.me/18493990014" target="_blank" class="whatsapp-button" title="Contactar por WhatsApp">
-	<img src="img/Whatsapp.jpg" alt="WhatsApp" class="whatsapp-icon">
-</a>
 <script src="beautyfast.js"></script>
 <script>
 // Forzar productos y categorías en el sidebar y búsqueda aunque no estén en el contenido principal
@@ -183,5 +196,9 @@ document.getElementById('btnIrProductos').addEventListener('click', function(e) 
 	fadeOutAndGo('beautyfast.html');
 });
 </script>
+ <!-- Botón flotante de WhatsApp soporte -->
+  <a href="https://wa.me/18493990014?text=Hola,%20quiero%20m%C3%A1s%20informaci%C3%B3n..." class="whatsapp-button" title="Contactar por WhatsApp" target="_blank" style="position:fixed;right:18px;bottom:18px;z-index:1000;">
+    <img src="img/Whatsapp.jpg" alt="WhatsApp" style="height:54px;width:54px;border-radius:50%;box-shadow:0 2px 8px #0006;">
+  </a>
 </body>
 </html>

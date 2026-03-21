@@ -232,12 +232,16 @@
           didOpen: () => { confetti(); }
         }).then(() => {
           const msg = encodeURIComponent(`Hola, adjunto comprobante de pago para el pedido ${orderNum}`);
-          window.location.href = 'https://wa.link/n7qvjb?text=' + msg;
+          window.location.href = 'https://wa.me/18493990014?text=' + msg;
           localStorage.removeItem('cart');
           setTimeout(()=>{ window.location.href = 'index.html'; }, 2000);
         });
       }
     });
   </script>
+  <!-- Botón flotante de WhatsApp soporte -->
+  <a href="https://wa.me/18493990014?text=Hola,%20quiero%20m%C3%A1s%20informaci%C3%B3n..." class="whatsapp-button" title="Contactar por WhatsApp" target="_blank" style="position:fixed;right:18px;bottom:18px;z-index:1000;">
+    <img src="img/Whatsapp.jpg" alt="WhatsApp" style="height:54px;width:54px;border-radius:50%;box-shadow:0 2px 8px #0006;">
+  </a>
 </body>
 </html>
