@@ -95,6 +95,8 @@
     .bank-logo { height: 22px; vertical-align: middle; margin-right: 8px; }
     .checkout-row { display: flex; gap: 10px; }
     .checkout-row > * { flex: 1; }
+    .bank-info .copy-btn.copied svg rect:first-child { fill: #7CB342 !important; }
+    .copy-check { font-size: 1.1em; vertical-align: middle; transition: opacity 0.2s; }
   </style>
 </head>
 <body>
@@ -163,13 +165,13 @@
       <div class="checkout-section">
         <div class="checkout-label">Pago</div>
         <div class="checkout-radio-group">
-          <label><input type="radio" class="checkout-radio" name="pago" value="azul" checked> <img src="../../img/icono azul.jpg" class="azul-logo" alt="AZUL"> Tarjeta (AZUL)</label>
+          <label><input type="radio" class="checkout-radio" name="pago" value="azul" checked> <img src="img/icono azul.jpg" class="azul-logo" alt="AZUL"> Tarjeta (AZUL)</label>
           <label><input type="radio" class="checkout-radio" name="pago" value="banco"> <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" class="bank-logo" alt="Banco"> Depósito Bancario</label>
         </div>
         <div id="bankInfo" class="bank-info" style="display:none;">
           <b>Datos bancarios:</b><br>
           <div class="bank-row">
-            <img src="../../img/icono popular.jpg" alt="Popular" class="bank-logo-img"> 
+            <img src="img/icono popular.jpg" alt="Popular" class="bank-logo-img"> 
             <span class="bank-name">Banco Popular</span>
             <span class="bank-account" id="popNum">00000</span>
             <button type="button" class="copy-btn" data-copy="00000" title="Copiar cuenta Popular">
@@ -177,7 +179,7 @@
             </button>
           </div>
           <div class="bank-row">
-            <img src="../../img/icono bhd.jpg" alt="BHD" class="bank-logo-img"> 
+            <img src="img/icono bhd.jpg" alt="BHD" class="bank-logo-img"> 
             <span class="bank-name">BHD</span>
             <span class="bank-account" id="bhdNum">00000</span>
             <button type="button" class="copy-btn" data-copy="00000" title="Copiar cuenta BHD">
@@ -185,7 +187,7 @@
             </button>
           </div>
           <div class="bank-row">
-            <img src="../../img/icono banreservas.jpg" alt="Banreservas" class="bank-logo-img">
+            <img src="img/icono banreservas.jpg" alt="Banreservas" class="bank-logo-img">
             <span class="bank-name">Banreservas</span>
             <span class="bank-account" id="resNum">00000</span>
             <button type="button" class="copy-btn" data-copy="00000" title="Copiar cuenta Banreservas">
@@ -261,14 +263,28 @@ document.addEventListener('DOMContentLoaded', function() {
   updateBankInfoVisibility();
 });
 // Copiar número de cuenta
-document.addEventListener('click', function(e){
-  if(e.target.classList.contains('copy-btn')){
-    const val = e.target.getAttribute('data-copy');
-    navigator.clipboard.writeText(val);
-    e.target.textContent = '✔';
-    setTimeout(()=>{ e.target.textContent = '📋'; }, 1200);
-  }
-});
+function setCopyButtons() {
+  document.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+      const val = btn.getAttribute('data-copy');
+      navigator.clipboard.writeText(val);
+      let check = btn.querySelector('.copy-check');
+      if (!check) {
+        check = document.createElement('span');
+        check.className = 'copy-check';
+        check.textContent = '✔';
+        check.style.marginLeft = '6px';
+        check.style.color = '#7CB342';
+        check.style.fontWeight = 'bold';
+        btn.appendChild(check);
+      }
+      check.style.display = 'inline';
+      setTimeout(() => { check.style.display = 'none'; }, 1000);
+    });
+  });
+}
+document.addEventListener('DOMContentLoaded', setCopyButtons);
 // Generar número de pedido único
 function generateOrderNumber() {
   let n = localStorage.getItem('lastOrderNum') || 0;

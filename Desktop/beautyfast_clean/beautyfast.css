@@ -1,3 +1,68 @@
+/* === UNIFICACIÓN DE ESTILOS DE CANTIDAD Y TABS === */
+.qty-control input {
+  width: 18px;
+  height: 28px;
+  text-align: center;
+  border: none;
+  font-weight: 600;
+  font-size: 13px;
+  pointer-events: none;
+  padding: 0;
+  flex: 0 0 auto;
+}
+ .qty-btn {
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: #f0e8d0;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  color: #283618;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  flex: 0 0 auto;
+  box-shadow: none;
+  border-radius: 0;
+  transition: 0.2s;
+}
+ .qty-btn:hover { background: #dda15e; color: white; }
+
+.tabs button {
+  background: none;
+  border: none;
+  padding: 12px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-dark);
+  cursor: pointer;
+  transition: color 0.3s, border-color 0.3s;
+  border-bottom: 2px solid transparent;
+  position: relative;
+}
+.tabs button:hover {
+  color: var(--accent-color);
+  box-shadow: none !important;
+  background: none !important;
+}
+.tabs button.active {
+  color: var(--accent-color);
+  border-bottom: 2px solid var(--accent-color);
+  background: none !important;
+  box-shadow: none !important;
+}
+.tabs button.active::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 2px;
+  background: #bc6c25;
+  box-shadow: none !important;
+}
 /* Enlace del header como marca */
 #brandHomeLink {
   color: inherit;
@@ -77,15 +142,17 @@ body {
   align-items: center;
   gap: 5px;
   z-index: 100;
-  width: 40px;
+  width: 28px;
   flex-shrink: 0;
 }
 
 .hamburger span {
-  width: 24px;
+  width: 22px;
   height: 2px;
-  background: var(--secondary-green);
+  background: #dda15e;
   border-radius: 2px;
+  margin: 0.5px 0;
+  display: block;
   transition: all 0.3s ease;
 }
 
@@ -225,7 +292,6 @@ body {
 .sidebar-search-input {
   flex: 1;
   padding: 8px 10px;
-  border: 1px solid #ddd;
   border-radius: 4px;
   font-size: 13px;
   font-family: 'Poppins', sans-serif;
@@ -335,7 +401,6 @@ body {
 
 /* -------- SEARCH BOX -------- */
 .search-box {
-  position: relative;
   display: flex;
   align-items: center;
   gap: 4px;
@@ -744,21 +809,29 @@ input[type="button"]:hover {
 
 /* Cantidad compacta */
 .qty-control {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   background: white;
   border-radius: 12px;
   overflow: hidden;
   border: 1px solid #ddd;
+  gap: 0;
+  padding: 0;
+  min-width: 0;
+  width: fit-content;
+  flex: 0 0 auto;
 }
 
 .qty-control input {
-  width: 32px;
+  width: 18px;
+  height: 28px;
   text-align: center;
   border: none;
   font-weight: 600;
-  font-size: 14px;
+  font-size: 13px;
   pointer-events: none;
+  padding: 0;
+  flex: 0 0 auto;
 }
 
 /* Botones +, − */
@@ -768,12 +841,16 @@ input[type="button"]:hover {
   border: none;
   background: #f0e8d0;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: bold;
   color: #283618;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 0;
+  flex: 0 0 auto;
+  box-shadow: none;
+  border-radius: 0;
   transition: 0.2s;
 }
 
@@ -782,10 +859,7 @@ input[type="button"]:hover {
 /* Papelera SVG */
 .qty-btn.trash {
   background: #bc6c25;
-  mask: url("data:image/svg+xml;utf8,\
-<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'>\
-<path d='M3 6h18M8 6v12m8-12v12M5 6l1 14c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2l1-14M9 6V4h6v2' stroke='black' stroke-width='2' fill='none' stroke-linecap='round'/>\
-</svg>") center / 60% no-repeat;
+  mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M3 6h18M8 6v12m8-12v12M5 6l1 14c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2l1-14M9 6V4h6v2' stroke='black' stroke-width='2' fill='none' stroke-linecap='round'/></svg>") center / 58% no-repeat;
 }
 
 .qty-btn.trash:hover { background: #dda15e; }
@@ -1044,33 +1118,6 @@ footer {
     gap: 10px;
   }
 
-  .search-box input {
-    width: 120px;
-    font-size: 12px;
-    padding: 6px 30px 6px 10px;
-  }
-
-  .brand {
-    position: relative;
-    left: auto;
-    transform: none;
-    flex: 1;
-    justify-content: center;
-    order: 2;
-  }
-
-  .brand h1 {
-    font-size: 20px;
-  }
-
-  .leaf-icon {
-    width: 28px;
-    height: 28px;
-  }
-
-  .cart {
-    order: 3;
-  }
 
   /* Tabs adjustments */
   .tabs {
@@ -1138,15 +1185,11 @@ footer {
     font-size: 12px;
   }
 
-  .qty-btn {
-    width: 24px;
-    height: 24px;
-    font-size: 14px;
-  }
+  /* Eliminado: reglas de tamaño de .qty-btn en media queries para evitar sobrescribir el tamaño del botón trash */
 
   .qty-control input {
-    width: 28px;
-    font-size: 12px;
+    width: 12px;
+    font-size: 10px;
   }
 
   #cartTotal {
@@ -1261,14 +1304,10 @@ footer {
     font-size: 11px;
   }
 
-  .qty-btn {
-    width: 22px;
-    height: 22px;
-    font-size: 12px;
-  }
+  /* Eliminado: reglas de tamaño de .qty-btn en media queries para evitar sobrescribir el tamaño del botón trash */
 
   .qty-control input {
-    width: 24px;
+    width: 16px;
     font-size: 11px;
   }
 
