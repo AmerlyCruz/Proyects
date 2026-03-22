@@ -16,9 +16,11 @@ window.addEventListener('DOMContentLoaded', () => {
 const searchToggle = document.getElementById('searchToggle');
 const searchInput = document.getElementById('search');
 const clearSearchBtn = document.getElementById('clearSearch');
+const searchBox = document.querySelector('.search-box');
 
 if (searchToggle && searchInput && clearSearchBtn) {
   searchToggle.addEventListener('click', () => {
+    if (searchBox) searchBox.classList.add('search-open');
     searchInput.classList.add('active');
     searchInput.focus();
   });
@@ -77,6 +79,7 @@ if (searchToggle && searchInput && clearSearchBtn) {
   searchInput.addEventListener('blur', () => {
     if (searchInput.value.length === 0) {
       searchInput.classList.remove('active');
+      if (searchBox) searchBox.classList.remove('search-open');
     }
   });
 
@@ -86,6 +89,7 @@ if (searchToggle && searchInput && clearSearchBtn) {
       searchInput.value = '';
       searchInput.classList.remove('active');
       clearSearchBtn.classList.remove('show');
+      if (searchBox) searchBox.classList.remove('search-open');
       searchInput.blur();
       searchInput.dispatchEvent(new Event('input'));
     }
@@ -327,6 +331,7 @@ if (clearSearchBtn && searchInput) {
     searchInput.value="";
     searchInput.classList.remove("active");
     clearSearchBtn.classList.remove("show");
+    if (searchBox) searchBox.classList.remove('search-open');
     searchInput.dispatchEvent(new Event("input")); 
   });
 }
