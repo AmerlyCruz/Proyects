@@ -2,25 +2,123 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Finaliza tu pedido de El Secreto de Aris con resumen claro, datos de entrega y opciones de pago seguras.">
+  <meta name="theme-color" content="#606c38">
   <title>Pagar - El Secreto de Aris</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="beautyfast.css">
   <style>
-    body { background: #f8f8f8; }
-    .checkout-container { max-width: 500px; margin: 40px auto; background: #fff; border-radius: 12px; box-shadow: 0 2px 12px #0001; padding: 32px 24px; font-family: 'Poppins', sans-serif; }
-    .checkout-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 18px; text-align: center; }
+    body {
+      margin: 0;
+      color: #283618;
+      background:
+        radial-gradient(circle at top, rgba(212, 175, 55, 0.18), transparent 32%),
+        linear-gradient(180deg, #fbf7f1 0%, #f5efe4 100%);
+    }
+    .checkout-container {
+      max-width: 560px;
+      margin: 32px auto 48px;
+      background: rgba(255, 255, 255, 0.96);
+      border: 1px solid rgba(96, 108, 56, 0.12);
+      border-radius: 28px;
+      box-shadow: 0 18px 60px rgba(65, 43, 17, 0.08);
+      padding: 32px 24px 28px;
+      font-family: 'Poppins', sans-serif;
+      backdrop-filter: blur(10px);
+    }
+    .checkout-title {
+      font-size: 1.8rem;
+      font-weight: 800;
+      margin-bottom: 10px;
+      text-align: center;
+      color: #283618;
+    }
+    .checkout-subtitle {
+      margin: 0 0 18px;
+      text-align: center;
+      color: #5f6f52;
+      font-size: 0.98rem;
+      line-height: 1.5;
+    }
+    .trust-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+    .trust-pill {
+      padding: 10px 12px;
+      border-radius: 999px;
+      background: #f8f1e3;
+      color: #7c5a28;
+      font-size: 0.84rem;
+      font-weight: 600;
+      text-align: center;
+    }
     .checkout-section { margin-bottom: 24px; }
-    .checkout-label { display: block; font-weight: 600; margin-bottom: 6px; }
-    .checkout-input, .checkout-select { width: 100%; padding: 8px 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 1rem; margin-bottom: 12px; }
-    .checkout-summary { background: #f5f5f5; border-radius: 8px; padding: 16px; margin-bottom: 18px; }
-    .checkout-summary-title { font-weight: 600; margin-bottom: 8px; }
-    .checkout-total { font-size: 1.2rem; font-weight: 700; color: #bc6c25; }
-    .checkout-radio-group { display: flex; gap: 18px; margin-bottom: 12px; }
+    .checkout-label {
+      display: block;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: #344226;
+    }
+    .checkout-input, .checkout-select {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid #d9d6cf;
+      border-radius: 14px;
+      font-size: 1rem;
+      margin-bottom: 12px;
+      background: #fff;
+      box-sizing: border-box;
+      transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+    }
+    .checkout-input:focus, .checkout-select:focus {
+      outline: none;
+      border-color: #bc6c25;
+      box-shadow: 0 0 0 4px rgba(188, 108, 37, 0.12);
+    }
+    .checkout-summary {
+      background: linear-gradient(180deg, #fffaf2 0%, #f8f4ee 100%);
+      border: 1px solid #efe1c4;
+      border-radius: 22px;
+      padding: 18px 16px;
+      margin-bottom: 18px;
+    }
+    .checkout-summary-title {
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: #7c5a28;
+    }
+    .checkout-total {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #bc6c25;
+      margin-top: 10px;
+    }
+    .checkout-radio-group {
+      display: grid;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .checkout-radio-group label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 16px;
+      border: 1px solid #e8dfcf;
+      border-radius: 16px;
+      background: #fff;
+      font-weight: 600;
+    }
     .checkout-radio { accent-color: #bc6c25; }
     .bank-info {
       background: #fff;
       border: 1.5px solid #e6d8b0;
-      border-radius: 12px;
+      border-radius: 18px;
       padding: 18px 16px 10px 16px;
       margin-top: 14px;
       margin-bottom: 14px;
@@ -88,20 +186,162 @@
       margin-top: 8px;
       margin-bottom: 2px;
     }
-    .checkout-btn { width: 100%; background: #bc6c25; color: #fff; border: none; border-radius: 6px; padding: 14px 0; font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: background 0.2s; }
-    .checkout-btn:hover { background: #a05a1e; }
-    .checkout-note { font-size: 0.95em; color: #888; margin-bottom: 10px; }
+    .checkout-btn {
+      width: 100%;
+      background: linear-gradient(135deg, #bc6c25 0%, #d08b3c 100%);
+      color: #fff;
+      border: none;
+      border-radius: 16px;
+      padding: 16px 0;
+      font-size: 1.08rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s, filter 0.2s;
+      box-shadow: 0 14px 26px rgba(188, 108, 37, 0.22);
+    }
+    .checkout-btn:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.02);
+    }
+    .checkout-note { font-size: 0.95em; color: #7c7c7c; margin-bottom: 10px; line-height: 1.5; }
     .azul-logo { height: 28px; vertical-align: middle; margin-right: 8px; }
     .bank-logo { height: 22px; vertical-align: middle; margin-right: 8px; }
     .checkout-row { display: flex; gap: 10px; }
     .checkout-row > * { flex: 1; }
     .bank-info .copy-btn.copied svg rect:first-child { fill: #7CB342 !important; }
     .copy-check { font-size: 1.1em; vertical-align: middle; transition: opacity 0.2s; }
+    .checkout-header {
+      background:#606c38;
+      color:#fff;
+      padding:15px 20px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      position:relative;
+    }
+    .checkout-back {
+      position:absolute;
+      left:12px;
+      top:50%;
+      transform:translateY(-50%);
+      display:flex;
+      align-items:center;
+      z-index:2;
+      color: inherit;
+    }
+    .checkout-brand {
+      font-size:26px;
+      margin:0 0 0 8px;
+      font-weight:700;
+      letter-spacing:1px;
+    }
+    .checkout-brand a {
+      color:inherit;
+      text-decoration:none;
+      cursor:pointer;
+    }
+    .order-num-box {
+      text-align:center;
+      font-weight:600;
+      color:#bc6c25;
+      margin-bottom:10px;
+      display:none;
+    }
+    .checkout-checkline {
+      font-size:0.95em;
+    }
+    .bank-info-hidden {
+      display: none;
+    }
+    .checkout-summary-list {
+      padding-left: 18px;
+      margin: 0;
+    }
+    .checkout-summary-line {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .checkout-summary-line span:last-child {
+      white-space: nowrap;
+      font-weight: 700;
+    }
+    @media (max-width: 640px) {
+      .checkout-container {
+        margin: 16px 12px 32px;
+        padding: 24px 16px 20px;
+        border-radius: 22px;
+      }
+      .checkout-row,
+      .trust-strip {
+        grid-template-columns: 1fr;
+        display: grid;
+      }
+      .checkout-title {
+        font-size: 1.55rem;
+      }
+    }
+    @media (max-width: 520px) {
+      .checkout-header {
+        padding: 12px 14px;
+      }
+      .checkout-brand {
+        font-size: 18px;
+        letter-spacing: 0.02em;
+        margin-left: 4px;
+      }
+      .checkout-container {
+        margin: 10px 10px 24px;
+        padding: 18px 14px 18px;
+        border-radius: 20px;
+      }
+      .checkout-title {
+        font-size: 1.4rem;
+        line-height: 1.15;
+      }
+      .checkout-subtitle {
+        font-size: 0.94rem;
+      }
+      .trust-pill {
+        border-radius: 16px;
+        font-size: 0.8rem;
+        padding: 10px 8px;
+      }
+      .checkout-radio-group label {
+        align-items: flex-start;
+        border-radius: 14px;
+        padding: 12px 14px;
+      }
+      .bank-info {
+        padding: 14px 12px 8px;
+        border-radius: 16px;
+      }
+      .bank-info .bank-row {
+        gap: 10px;
+        align-items: center;
+      }
+      .bank-info .bank-account {
+        font-size: 0.96em;
+        letter-spacing: 0.02em;
+      }
+      .checkout-summary-line {
+        flex-direction: column;
+        gap: 2px;
+      }
+      .checkout-summary-line span:last-child {
+        align-self: flex-start;
+      }
+      .checkout-btn {
+        min-height: 50px;
+        font-size: 1rem;
+      }
+    }
   </style>
 </head>
 <body>
-  <header class="header" style="background:#606c38;color:#fff;padding:15px 20px;display:flex;align-items:center;justify-content:center;gap:10px;position:relative;">
-    <a href="#" onclick="window.history.length > 1 ? window.history.back() : window.location.href='index.html'; return false;" title="Volver" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);display:flex;align-items:center;z-index:2;">
+  <header class="header checkout-header">
+    <a href="#" onclick="window.history.length > 1 ? window.history.back() : window.location.href='index.html'; return false;" title="Volver" class="checkout-back">
       <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
     </a>
     <svg width="36" height="36" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" class="leaf-icon">
@@ -118,13 +358,19 @@
       <circle cx="100" cy="110" r="15" fill="#7CB342"/>
       <circle cx="100" cy="110" r="10" fill="#9CCC65"/>
     </svg>
-    <h1 style="font-size:26px;margin:0 0 0 8px;font-weight:700;letter-spacing:1px;">
-      <a href="index.html" style="color:inherit;text-decoration:none;cursor:pointer;">El Secreto de Aris</a>
+    <h1 class="checkout-brand">
+      <a href="index.html">El Secreto de Aris</a>
     </h1>
   </header>
   <div class="checkout-container">
     <div class="checkout-title">Pantalla de pago</div>
-    <div id="orderNumBox" style="text-align:center;font-weight:600;color:#bc6c25;margin-bottom:10px;display:none;"></div>
+    <p class="checkout-subtitle">Completa tus datos de entrega y confirma tu pedido en pocos pasos. Diseñado para una compra clara, rápida y confiable.</p>
+    <div class="trust-strip">
+      <div class="trust-pill">Compra segura</div>
+      <div class="trust-pill">Entrega local</div>
+      <div class="trust-pill">Soporte por WhatsApp</div>
+    </div>
+    <div id="orderNumBox" class="order-num-box"></div>
     <form id="checkoutForm" autocomplete="off">
       <div class="checkout-section checkout-summary">
         <div class="checkout-summary-title">Resumen del pedido</div>
@@ -134,7 +380,7 @@
       <div class="checkout-section">
         <div class="checkout-label">Correo electrónico</div>
         <input type="email" class="checkout-input" name="email" required>
-        <label style="font-size:0.95em;"><input type="checkbox" name="newsletter"> Enviarme novedades y ofertas por correo electrónico</label>
+        <label class="checkout-checkline"><input type="checkbox" name="newsletter"> Enviarme novedades y ofertas por correo electrónico</label>
       </div>
       <div class="checkout-section">
         <div class="checkout-label">Entrega</div>
@@ -153,7 +399,7 @@
           <option value="">Selecciona país</option>
           <option value="República Dominicana" selected>República Dominicana</option>
         </select>
-        <label style="font-size:0.95em;"><input type="checkbox" name="guardar"> Guardar mi información y consultar más rápidamente la próxima vez</label>
+        <label class="checkout-checkline"><input type="checkbox" name="guardar"> Guardar mi información y consultar más rápidamente la próxima vez</label>
       </div>
       <div class="checkout-section">
         <div class="checkout-label">Método de envío</div>
@@ -168,7 +414,7 @@
           <label><input type="radio" class="checkout-radio" name="pago" value="azul" checked> <img src="img/icono azul.jpg" class="azul-logo" alt="AZUL"> Tarjeta (AZUL)</label>
           <label><input type="radio" class="checkout-radio" name="pago" value="banco"> <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" class="bank-logo" alt="Banco"> Depósito Bancario</label>
         </div>
-        <div id="bankInfo" class="bank-info" style="display:none;">
+        <div id="bankInfo" class="bank-info bank-info-hidden">
           <b>Datos bancarios:</b><br>
           <div class="bank-row">
             <img src="img/icono popular.jpg" alt="Popular" class="bank-logo-img"> 
@@ -205,7 +451,6 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <script src="beautyfast.js"></script>
-</script>
 <script>
 // Cargar carrito desde localStorage
 let cart = [];
@@ -221,9 +466,9 @@ function renderCheckoutCart() {
     return;
   }
   let total = 0;
-  let html = '<ul style="padding-left:18px; margin:0;">';
+  let html = '<ul class="checkout-summary-list">';
   cart.forEach(item => {
-    html += `<li>${item.name} <b>x${item.quantity}</b> <span style='float:right;'>RD$ ${(item.price*item.quantity).toLocaleString('es-DO',{minimumFractionDigits:2})}</span></li>`;
+    html += `<li class="checkout-summary-line"><span>${item.name} <b>x${item.quantity}</b></span><span>RD$ ${(item.price*item.quantity).toLocaleString('es-DO',{minimumFractionDigits:2})}</span></li>`;
     total += item.price * item.quantity;
   });
   html += '</ul>';
@@ -350,3 +595,4 @@ document.getElementById('checkoutForm').addEventListener('submit', function(e) {
 </script>
 </body>
 </html>
+

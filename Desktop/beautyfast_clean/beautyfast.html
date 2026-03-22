@@ -2,31 +2,28 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Explora la línea capilar y los productos individuales de El Secreto de Aris con un catálogo claro, carrito y compra rápida.">
+  <meta name="theme-color" content="#606c38">
   <title>El Secreto de Aris</title>
-  <!-- fuente moderna para estilo profesional -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="beautyfast.css">
+  <style>
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+  </style>
 </head>
-<style>
-@keyframes spin { 100% { transform: rotate(360deg); } }
-</style>
-</head>
-<body>
+<body class="product-shell">
 
-
-<header class="header" style="position:relative;">
-
-
-  <!-- HAMBURGER MENU -->
-  <button id="hamburger" class="hamburger" title="Menú">
+<header class="header header-relative">
+  <button id="hamburger" class="hamburger" type="button" title="Menú" aria-label="Abrir menú">
     <span></span>
     <span></span>
     <span></span>
   </button>
 
-  <!-- BRAND (CENTRADO) -->
   <div class="brand">
-    <!-- SVG del logo -->
     <svg width="40" height="40" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" class="leaf-icon">
       <path d="M 50 100 Q 30 70 40 40 Q 50 20 70 30 Q 90 40 85 70 Q 80 90 70 100 L 60 95 Q 50 75 55 55 L 50 100 Z" fill="#7CB342"/>
       <path d="M 55 60 Q 60 75 65 90" stroke="#558B2F" stroke-width="2" stroke-linecap="round"/>
@@ -41,16 +38,10 @@
       <circle cx="100" cy="110" r="15" fill="#7CB342"/>
       <circle cx="100" cy="110" r="10" fill="#9CCC65"/>
     </svg>
-    <h1>
-      <a href="index.html" class="brand-link">
-        El Secreto de Aris
-      </a>
-    </h1>
-</div>
+    <h1><a href="index.html" class="brand-link">El Secreto de Aris</a></h1>
+  </div>
 
-  <!-- SEARCH + CART -->
   <div class="header-right">
-    <!-- SEARCH -->
     <div class="search-box">
       <button id="searchToggle" class="search-toggle" type="button" title="Buscar">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -59,12 +50,10 @@
         </svg>
       </button>
       <input type="text" id="search" placeholder="Buscar..." class="search-input">
-      <button id="clearSearch" type="button" class="clear-search">✕</button>
+      <button id="clearSearch" type="button" class="clear-search" aria-label="Limpiar búsqueda">✕</button>
     </div>
-    
-    <!-- CART -->
-    <div class="cart">
-      <!-- Carrito minimalista -->
+
+    <div class="cart" role="button" tabindex="0" aria-label="Abrir carrito">
       <svg class="cart-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="#e6d8b0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="9" cy="21" r="1.5"></circle>
         <circle cx="20" cy="21" r="1.5"></circle>
@@ -73,25 +62,20 @@
       <span id="cartCount">0</span>
     </div>
   </div>
-
 </header>
 
+<section class="catalog-hero">
+  <p class="catalog-eyebrow">Colección completa</p>
+  <h2>Encuentra tu rutina ideal</h2>
+  <p>Descubre tratamientos, shampoos y productos estrella con una presentación más clara, lista para comprar desde cualquier dispositivo.</p>
+</section>
 
-
-
-
-<script>
-// Eliminar scroll automático, ahora el botón abre en nueva pestaña
-</script>
-
-<!-- TABS -->
 <div class="tabs">
   <button class="active" onclick="showSection('capilar', this)">Línea Capilar</button>
   <button onclick="showSection('individuales', this)">Individuales</button>
   <button onclick="showSection('otros', this)">Otros</button>
 </div>
 
-<!-- SIDEBAR CON MENÚ DESPLEGABLE -->
 <div class="sidebar" id="sidebar">
   <div class="sidebar-search-container">
     <svg class="sidebar-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -99,38 +83,36 @@
       <path d="m21 21-4.35-4.35"></path>
     </svg>
     <input type="text" id="sidebarSearch" placeholder="Buscar..." class="sidebar-search-input">
-    <button id="clearSidebarSearch" class="sidebar-search-clear" title="Limpiar búsqueda">✕</button>
+    <button id="clearSidebarSearch" class="sidebar-search-clear" type="button" title="Limpiar búsqueda" aria-label="Limpiar búsqueda">✕</button>
   </div>
   <div class="sidebar-categories" id="sidebarCategories">
     <!-- Las categorías se generarán con JavaScript -->
   </div>
-  <div style="margin:12px 0 0 0;text-align:center;position:sticky;bottom:24px;z-index:10;">
-    <a href="index.html" class="sidebar-btn" style="display:inline-block;background:#bc6c25;color:#fff;padding:12px 28px;border-radius:8px;font-weight:700;text-decoration:none;font-size:1.1rem;box-shadow:0 2px 8px #0001;transition:background 0.2s;">Inicio</a>
-    <a href="beautyfast.html" class="sidebar-btn" style="display:inline-block;background:#d4af37;color:#111;padding:12px 28px;border-radius:8px;font-weight:700;text-decoration:none;font-size:1.1rem;box-shadow:0 2px 8px #0001;margin-left:10px;transition:background 0.2s;">Productos</a>
+  <div class="sidebar-actions">
+    <a href="index.html" class="sidebar-btn sidebar-btn-primary">Inicio</a>
+    <a href="beautyfast.html" class="sidebar-btn sidebar-btn-secondary">Productos</a>
   </div>
-<div id="loader" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(255,255,255,0.85);z-index:9999;align-items:center;justify-content:center;">
-  <div style="background:#fff;padding:32px 48px;border-radius:18px;box-shadow:0 2px 24px #0002;display:flex;flex-direction:column;align-items:center;">
-    <div class="loader-spinner" style="border:6px solid #eee;border-top:6px solid #bc6c25;border-radius:50%;width:48px;height:48px;animation:spin 1s linear infinite;margin-bottom:18px;"></div>
-    <div style="font-size:1.2rem;color:#bc6c25;font-weight:700;">Cargando productos...</div>
+
+  <div id="loader" class="product-loader">
+    <div class="product-loader-card">
+      <div class="loader-spinner"></div>
+      <div class="product-loader-text">Cargando productos...</div>
+    </div>
   </div>
-</div>
-<script>
-// Mostrar animación de carga al abrir desde otra página
-if(document.referrer && document.referrer.includes('home.html')){
-  document.getElementById('loader').style.display = 'flex';
-  setTimeout(()=>{
-    document.getElementById('loader').style.display = 'none';
-  }, 900);
-}
-</script>
+  <script>
+    // Mostrar animación de carga al abrir desde otra página
+    if (document.referrer && document.referrer.includes('home.html')) {
+      document.getElementById('loader').style.display = 'flex';
+      setTimeout(() => {
+        document.getElementById('loader').style.display = 'none';
+      }, 900);
+    }
+  </script>
 </div>
 
-<!-- OVERLAY para cerrar el sidebar -->
 <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-<main class="main">
-
-  <!-- SECCIONES Y CARDS -->
+<main class="main product-main">
   <section id="capilar" class="section active">
     <div class="card">
       <div class="card-image">
@@ -142,6 +124,7 @@ if(document.referrer && document.referrer.includes('home.html')){
         <button onclick="addToCart('Línea Pequeña')">Agregar al carrito</button>
       </div>
     </div>
+
     <div class="card">
       <div class="card-image">
         <img src="img/linea.jpg" alt="Línea Mediana">
@@ -152,6 +135,7 @@ if(document.referrer && document.referrer.includes('home.html')){
         <button onclick="addToCart('Línea Mediana')">Agregar al carrito</button>
       </div>
     </div>
+
     <div class="card">
       <div class="card-image">
         <img src="img/linea.jpg" alt="Línea Grande">
@@ -162,6 +146,7 @@ if(document.referrer && document.referrer.includes('home.html')){
         <button onclick="addToCart('Línea Grande')">Agregar al carrito</button>
       </div>
     </div>
+
     <div class="card">
       <div class="card-image">
         <img src="img/linea.jpg" alt="Línea Jumbo">
@@ -175,138 +160,129 @@ if(document.referrer && document.referrer.includes('home.html')){
   </section>
 
   <section id="individuales" class="section">
-<div class="card">
-  <div class="card-image">
-    <img src="img/shampoo16oz.jpg" alt="Shampoo 16 OZ">
-  </div>
-
-  <div class="card-body">
-    <h3 class="card-title">Shampoo 16 OZ</h3>
-    <p class="card-price">$1,200</p>
-
-    <button onclick="addToCart('Shampoo 16 OZ')">
-      Agregar al carrito
-    </button>
-  </div>
-</div>
-
-<div class="card">
-  <div class="card-image">
-    <img src="img/shampoo32oz.jpg" alt="Shampoo 32 OZ">
-  </div>
-  <div class="card-body">
-    <h3 class="card-title">Shampoo 32 OZ</h3>
-    <p class="card-price">RD$ 900.00</p>
-    <button onclick="addToCart('Shampoo 32 OZ')">Agregar al carrito</button>
-  </div>
-</div>
-
-<div class="card">
-  <div class="card-image">
-    <img src="img/TratInt.jpg" alt="Tratamiento Intensivo">
-  </div>
-  <div class="card-body">
-    <h3 class="card-title">Tratamiento Intensivo</h3>
-    <p class="card-price">RD$ 500.00</p>
-    <button onclick="addToCart('Tratamiento Intensivo')">Agregar al carrito</button>
-  </div>
-</div>
-
-<div class="card">
-  <div class="card-image">
-    <img src="img/gotero4oz.jpg" alt="Gotero">
-  </div>
-  <div class="card-body">
-    <h3 class="card-title">Gotero</h3>
-    <p class="card-price">RD$ 800.00</p>
-    <button onclick="addToCart('Gotero')">Agregar al carrito</button>
-  </div>
-</div>
-
-<div class="card">
-  <div class="card-image">
-    <img src="img/SupMask.jpg" alt="Super Mascarilla">
-  </div>
-  <div class="card-body">
-    <h3 class="card-title">Super Mascarilla</h3>
-    <p class="card-price">RD$ 800.00</p>
-    <button onclick="addToCart('Super Mascarilla')">Agregar al carrito</button>
-  </div>
-</div>
-</section>
-
-  <section id="otros" class="section">
     <div class="card">
-      <h3>Aprieta Cuca</h3>
-      <p>RD$ 1,000.00</p>
-      <button onclick="addToCart('Aprieta Cuca')">Agregar al carrito</button>
+      <div class="card-image">
+        <img src="img/shampoo16oz.jpg" alt="Shampoo 16 OZ">
+      </div>
+      <div class="card-body">
+        <h3 class="card-title">Shampoo 16 OZ</h3>
+        <p class="card-price">RD$ 1,200.00</p>
+        <button onclick="addToCart('Shampoo 16 OZ')">Agregar al carrito</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-image">
+        <img src="img/shampoo32oz.jpg" alt="Shampoo 32 OZ">
+      </div>
+      <div class="card-body">
+        <h3 class="card-title">Shampoo 32 OZ</h3>
+        <p class="card-price">RD$ 900.00</p>
+        <button onclick="addToCart('Shampoo 32 OZ')">Agregar al carrito</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-image">
+        <img src="img/TratInt.jpg" alt="Tratamiento Intensivo">
+      </div>
+      <div class="card-body">
+        <h3 class="card-title">Tratamiento Intensivo</h3>
+        <p class="card-price">RD$ 500.00</p>
+        <button onclick="addToCart('Tratamiento Intensivo')">Agregar al carrito</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-image">
+        <img src="img/gotero4oz.jpg" alt="Gotero">
+      </div>
+      <div class="card-body">
+        <h3 class="card-title">Gotero</h3>
+        <p class="card-price">RD$ 800.00</p>
+        <button onclick="addToCart('Gotero')">Agregar al carrito</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-image">
+        <img src="img/SupMask.jpg" alt="Super Mascarilla">
+      </div>
+      <div class="card-body">
+        <h3 class="card-title">Super Mascarilla</h3>
+        <p class="card-price">RD$ 800.00</p>
+        <button onclick="addToCart('Super Mascarilla')">Agregar al carrito</button>
+      </div>
     </div>
   </section>
 
-
-<!-- Fondo para clic afuera -->
-<div id="cartOverlay" class="cart-overlay"></div>
-
-<div id="cartPanel" class="cart-panel">
-  <button id="closeCart" class="close-cart">&times;</button>
-  <h2>Tu carrito</h2>
-  <div id="cartItems"></div>
-  <p id="cartTotal">Total: RD$ 0</p>
-  <div class="cart-actions">
-    <button id="emptyCart">Vaciar</button>
-    <button id="checkoutBtn">Pagar</button>
-  </div>
-</div>
-
-<!-- Botón flotante de WhatsApp -->
-<!-- Solo un botón flotante, abajo en el footer -->
-
-<!-- MODAL DEL PRODUCTO -->
-<div id="productModal" class="product-modal">
-  <div class="product-modal-content">
-    <button id="closeProductModal" class="close-product-modal">&times;</button>
-    <div class="product-detail">
-      <div class="product-detail-image">
-        <img id="productModalImage" src="" alt="Producto">
-      </div>
-      <div class="product-detail-info">
-        <h2 id="productModalTitle"></h2>
-        <p id="productModalDesc"></p>
-        <p id="productModalPrice" class="product-modal-price"></p>
-        <button id="productModalAddCart" class="btn-add-cart">Agregar al carrito</button>
+  <section id="otros" class="section">
+    <div class="card">
+      <div class="card-body">
+        <h3 class="card-title">Aprieta Cuca</h3>
+        <p class="card-price">RD$ 1,000.00</p>
+        <button onclick="addToCart('Aprieta Cuca')">Agregar al carrito</button>
       </div>
     </div>
-  </div>
-</div>
+  </section>
 
-</main> <!-- removed duplicate cart panel -->
+  <div id="cartOverlay" class="cart-overlay"></div>
 
-<footer style="background:#181818;color:#fff;padding:32px 0 0 0;margin-top:40px;">
-  <div style="max-width:1100px;margin:0 auto;display:flex;flex-wrap:wrap;gap:40px 60px;justify-content:center;padding:0 16px 24px 16px;">
-    <div style="min-width:180px;flex:1 1 220px;">
-      <h3 style="font-size:1.15em;font-weight:700;margin-bottom:10px;color:#d4af37;">Acerca de nosotros</h3>
-      <ul style="list-style:none;padding:0;margin:0;line-height:2;">
-        <li><a href="about.html" target="_blank" style="color:#fff;text-decoration:none;background:#333;padding:2px 10px;border-radius:10px;">Nosotros</a></li>
-        <li><a href="redes.html" target="_blank" style="color:#fff;text-decoration:none;background:#333;padding:2px 10px;border-radius:10px;">Redes sociales</a></li>
-        <li><a href="contacto.html" target="_blank" style="color:#fff;text-decoration:none;background:#333;padding:2px 10px;border-radius:10px;">Contacto</a></li>
-      </ul>
-    </div>
-    <div style="min-width:180px;flex:1 1 220px;">
-      <h3 style="font-size:1.15em;font-weight:700;margin-bottom:10px;color:#d4af37;">Legal</h3>
-      <ul style="list-style:none;padding:0;margin:0;line-height:2;">
-        <li><a href="terminos.html" target="_blank" style="color:#fff;text-decoration:none;background:#333;padding:2px 10px;border-radius:10px;">Términos y condiciones de uso</a></li>
-        <li><a href="privacidad.html" target="_blank" style="color:#fff;text-decoration:none;background:#333;padding:2px 10px;border-radius:10px;">Políticas de Privacidad</a></li>
-        <li><a href="cambios.html" target="_blank" style="color:#fff;text-decoration:none;background:#333;padding:2px 10px;border-radius:10px;">Cambios & Devoluciones</a></li>
-      </ul>
+  <div id="cartPanel" class="cart-panel">
+    <button id="closeCart" class="close-cart" type="button" aria-label="Cerrar carrito">&times;</button>
+    <h2>Tu carrito</h2>
+    <div id="cartItems"></div>
+    <p id="cartTotal">Total: RD$ 0</p>
+    <div class="cart-actions">
+      <button id="emptyCart">Vaciar</button>
+      <button id="checkoutBtn">Pagar</button>
     </div>
   </div>
-  <div style="border-top:1px solid #333;margin:0 16px 0 16px;padding:18px 0 0 0;text-align:center;font-size:1em;color:#d4af37;">
+
+  <div id="productModal" class="product-modal">
+    <div class="product-modal-content">
+      <button id="closeProductModal" class="close-product-modal">&times;</button>
+      <div class="product-detail">
+        <div class="product-detail-image">
+          <img id="productModalImage" src="" alt="Producto">
+        </div>
+        <div class="product-detail-info">
+          <h2 id="productModalTitle"></h2>
+          <p id="productModalDesc"></p>
+          <p id="productModalPrice" class="product-modal-price"></p>
+          <button id="productModalAddCart" class="btn-add-cart">Agregar al carrito</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-columns">
+    <div class="footer-column">
+      <h3>Acerca de nosotros</h3>
+      <ul class="footer-links">
+        <li><a href="about.html" target="_blank" class="footer-link-pill">Nosotros</a></li>
+        <li><a href="redes.html" target="_blank" class="footer-link-pill">Redes sociales</a></li>
+        <li><a href="contacto.html" target="_blank" class="footer-link-pill">Contacto</a></li>
+      </ul>
+    </div>
+    <div class="footer-column">
+      <h3>Legal</h3>
+      <ul class="footer-links">
+        <li><a href="terminos.html" target="_blank" class="footer-link-pill">Términos y condiciones de uso</a></li>
+        <li><a href="privacidad.html" target="_blank" class="footer-link-pill">Políticas de Privacidad</a></li>
+        <li><a href="cambios.html" target="_blank" class="footer-link-pill">Cambios & Devoluciones</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-meta">
     © 2026 El Secreto de Aris
     <br>
-    <span style="font-size:0.95em; color:#888;">Envía tu comprobante de pago por WhatsApp tras completar el pedido.</span>
+    <span>Envía tu comprobante de pago por WhatsApp tras completar el pedido.</span>
   </div>
-  <a href="https://wa.me/18493990014?text=Hola,%20quiero%20m%C3%A1s%20informaci%C3%B3n..." target="_blank" title="Contactar por WhatsApp" style="position:fixed;right:18px;bottom:18px;z-index:1000;">
-    <img src="img/Whatsapp.jpg" alt="WhatsApp" style="height:54px;width:54px;border-radius:50%;box-shadow:0 2px 8px #0006;">
+  <a href="https://wa.me/18493990014?text=Hola,%20quiero%20m%C3%A1s%20informaci%C3%B3n..." target="_blank" title="Contactar por WhatsApp" class="whatsapp-button">
+    <img src="img/Whatsapp.jpg" alt="WhatsApp">
   </a>
 </footer>
 

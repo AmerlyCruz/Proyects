@@ -1,450 +1,303 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-	<meta charset="UTF-8">
-	<title>El Secreto de Aris - Inicio</title>
-	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-	<link rel="stylesheet" href="beautyfast.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="El Secreto de Aris: línea capilar y productos de belleza naturales con compra rápida, carrito y atención por WhatsApp en República Dominicana.">
+  <meta name="theme-color" content="#606c38">
+  <title>El Secreto de Aris - Inicio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="beautyfast.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
 </head>
-<!-- Swiper.js CDN -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
-</head>
-<body>
-<header class="header" style="position:relative;">
-	<!-- ENLACE A HOME (opcional, puede omitirse aquí) -->
-	<button id="hamburger" class="hamburger" title="Menú">
-		<span></span>
-		<span></span>
-		<span></span>
-	</button>
-	<div class="brand">
-		<svg width="40" height="40" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" class="leaf-icon">
-			<path d="M 50 100 Q 30 70 40 40 Q 50 20 70 30 Q 90 40 85 70 Q 80 90 70 100 L 60 95 Q 50 75 55 55 L 50 100 Z" fill="#7CB342"/>
-			<path d="M 55 60 Q 60 75 65 90" stroke="#558B2F" stroke-width="2" stroke-linecap="round"/>
-			<path d="M 110 80 Q 130 50 150 45 Q 170 40 175 60 Q 180 80 165 100 Q 155 115 140 110 L 135 105 Q 145 90 145 70 L 110 80 Z" fill="#9CCC65"/>
-			<path d="M 140 70 Q 145 85 145 100" stroke="#689F38" stroke-width="2" stroke-linecap="round"/>
-			<path d="M 65 110 Q 40 120 25 140 Q 10 160 20 175 Q 30 185 50 175 Q 70 165 75 145 Q 80 125 70 115 L 67 120 Q 55 135 40 140 L 65 110 Z" fill="#8BC34A"/>
-			<path d="M 50 135 Q 55 145 60 155" stroke="#558B2F" stroke-width="2" stroke-linecap="round"/>
-			<path d="M 90 115 Q 85 140 90 165 Q 95 185 110 190 Q 120 192 125 180 Q 130 165 125 140 Q 120 120 110 115 L 105 120 Q 105 140 110 160 L 90 115 Z" fill="#AED581"/>
-			<path d="M 105 135 Q 108 150 110 165" stroke="#7CB342" stroke-width="2" stroke-linecap="round"/>
-			<path d="M 135 115 Q 155 125 170 145 Q 185 165 175 180 Q 165 190 150 180 Q 135 170 130 150 Q 125 130 130 120 L 133 125 Q 140 140 155 145 L 135 115 Z" fill="#9CCC65"/>
-			<path d="M 145 140 Q 148 150 150 165" stroke="#689F38" stroke-width="2" stroke-linecap="round"/>
-			<circle cx="100" cy="110" r="15" fill="#7CB342"/>
-			<circle cx="100" cy="110" r="10" fill="#9CCC65"/>
-		</svg>
-	 <h1>
-    <a href="index.html" class="brand-link" onclick="window.location='index.html'">
-      El Secreto de Aris
-    </a>
-  </h1>
-</div>
+<body class="home-shell">
+<header class="header header-relative">
+  <button id="hamburger" class="hamburger" type="button" title="Menú" aria-label="Abrir menú">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
 
-	<div class="header-right">
-		<div class="search-box">
-			<button id="searchToggle" class="search-toggle" type="button" title="Buscar">
-				<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-					<circle cx="11" cy="11" r="8"></circle>
-					<path d="m21 21-4.35-4.35"></path>
-				</svg>
-			</button>
-			<input type="text" id="search" placeholder="Buscar..." class="search-input">
-			<button id="clearSearch" type="button" class="clear-search">✕</button>
-		</div>
-		<div class="cart">
-			<svg class="cart-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="#e6d8b0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-				<circle cx="9" cy="21" r="1.5"></circle>
-				<circle cx="20" cy="21" r="1.5"></circle>
-				<path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-			</svg>
-			<span id="cartCount">0</span>
-		</div>
-	</div>
+  <div class="brand">
+    <svg width="40" height="40" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" class="leaf-icon">
+      <path d="M 50 100 Q 30 70 40 40 Q 50 20 70 30 Q 90 40 85 70 Q 80 90 70 100 L 60 95 Q 50 75 55 55 L 50 100 Z" fill="#7CB342"/>
+      <path d="M 55 60 Q 60 75 65 90" stroke="#558B2F" stroke-width="2" stroke-linecap="round"/>
+      <path d="M 110 80 Q 130 50 150 45 Q 170 40 175 60 Q 180 80 165 100 Q 155 115 140 110 L 135 105 Q 145 90 145 70 L 110 80 Z" fill="#9CCC65"/>
+      <path d="M 140 70 Q 145 85 145 100" stroke="#689F38" stroke-width="2" stroke-linecap="round"/>
+      <path d="M 65 110 Q 40 120 25 140 Q 10 160 20 175 Q 30 185 50 175 Q 70 165 75 145 Q 80 125 70 115 L 67 120 Q 55 135 40 140 L 65 110 Z" fill="#8BC34A"/>
+      <path d="M 50 135 Q 55 145 60 155" stroke="#558B2F" stroke-width="2" stroke-linecap="round"/>
+      <path d="M 90 115 Q 85 140 90 165 Q 95 185 110 190 Q 120 192 125 180 Q 130 165 125 140 Q 120 120 110 115 L 105 120 Q 105 140 110 160 L 90 115 Z" fill="#AED581"/>
+      <path d="M 105 135 Q 108 150 110 165" stroke="#7CB342" stroke-width="2" stroke-linecap="round"/>
+      <path d="M 135 115 Q 155 125 170 145 Q 185 165 175 180 Q 165 190 150 180 Q 135 170 130 150 Q 125 130 130 120 L 133 125 Q 140 140 155 145 L 135 115 Z" fill="#9CCC65"/>
+      <path d="M 145 140 Q 148 150 150 165" stroke="#689F38" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="100" cy="110" r="15" fill="#7CB342"/>
+      <circle cx="100" cy="110" r="10" fill="#9CCC65"/>
+    </svg>
+    <h1>
+      <a href="index.html" class="brand-link" onclick="window.location='index.html'">
+        El Secreto de Aris
+      </a>
+    </h1>
+  </div>
+
+  <div class="header-right">
+    <div class="search-box">
+      <button id="searchToggle" class="search-toggle" type="button" title="Buscar">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.35-4.35"></path>
+        </svg>
+      </button>
+      <input type="text" id="search" placeholder="Buscar..." class="search-input">
+      <button id="clearSearch" type="button" class="clear-search" aria-label="Limpiar búsqueda">×</button>
+    </div>
+
+    <div class="cart" role="button" tabindex="0" aria-label="Abrir carrito">
+      <svg class="cart-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="#e6d8b0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="9" cy="21" r="1.5"></circle>
+        <circle cx="20" cy="21" r="1.5"></circle>
+        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+      </svg>
+      <span id="cartCount">0</span>
+    </div>
+  </div>
 </header>
-<!-- SIDEBAR -->
+
 <div class="sidebar" id="sidebar">
-	<div class="sidebar-search-container">
-		<svg class="sidebar-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-			<circle cx="11" cy="11" r="8"></circle>
-			<path d="m21 21-4.35-4.35"></path>
-		</svg>
-		<input type="text" id="sidebarSearch" placeholder="Buscar..." class="sidebar-search-input">
-		<button id="clearSidebarSearch" class="sidebar-search-clear" title="Limpiar búsqueda">✕</button>
-	</div>
-	<div class="sidebar-categories" id="sidebarCategories"></div>
-	<div style="margin:12px 0 0 0;text-align:center;position:sticky;bottom:24px;z-index:10;">
-		<a href="index.html" class="sidebar-btn" style="display:inline-block;background:#bc6c25;color:#fff;padding:12px 28px;border-radius:8px;font-weight:700;text-decoration:none;font-size:1.1rem;box-shadow:0 2px 8px #0001;transition:background 0.2s;">Inicio</a>
-		<a href="beautyfast.html" class="sidebar-btn" id="btnIrProductos" style="display:inline-block;background:#d4af37;color:#111;padding:12px 28px;border-radius:8px;font-weight:700;text-decoration:none;font-size:1.1rem;box-shadow:0 2px 8px #0001;margin-left:10px;transition:background 0.2s;">Productos</a>
-	</div>
+  <div class="sidebar-search-container">
+    <svg class="sidebar-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="11" cy="11" r="8"></circle>
+      <path d="m21 21-4.35-4.35"></path>
+    </svg>
+    <input type="text" id="sidebarSearch" placeholder="Buscar..." class="sidebar-search-input">
+    <button id="clearSidebarSearch" class="sidebar-search-clear" type="button" title="Limpiar búsqueda" aria-label="Limpiar búsqueda">×</button>
+  </div>
+  <div class="sidebar-categories" id="sidebarCategories"></div>
+  <div class="sidebar-actions">
+    <a href="index.html" class="sidebar-btn sidebar-btn-primary">Inicio</a>
+    <a href="beautyfast.html" class="sidebar-btn sidebar-btn-secondary" id="btnIrProductos">Productos</a>
+  </div>
 </div>
 <div class="sidebar-overlay" id="sidebarOverlay"></div>
-<!-- HERO VISUAL PRINCIPAL -->
-<section class="hero-aris" style="width:100%;max-width:1100px;margin:32px auto 0 auto;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;">
-	<div style="width:100vw;max-width:100%;position:relative;left:50%;transform:translateX(-50%);">
-		<!-- Swiper -->
-		<div class="swiper hero-swiper" style="width:100vw;max-width:100%;min-height:320px;height:38vw;max-height:480px;border-radius:0 0 18px 18px;box-shadow:0 4px 32px #0002;overflow:hidden;">
-			<div class="swiper-wrapper">
-				<div class="swiper-slide">
-					<a href="beautyfast.html#capilar" style="display:block;width:100%;height:100%;">
-						<img src="img/aris hero.jpeg" alt="Aris Hero" class="hero-img-slide hero-img-contain hero-img-hero" style="cursor:pointer;margin-left:-10vw;">
-					</a>
-				</div>
-				<div class="swiper-slide">
-					<a href="beautyfast.html#capilar" style="display:block;width:100%;height:100%;">
-						<img src="img/linea.jpg" alt="Línea Capilar" class="hero-img-slide hero-img-contain" style="cursor:pointer;">
-					</a>
-				</div>
-				<div class="swiper-slide">
-					<a href="beautyfast.html#individuales" style="display:block;width:100%;height:100%;">
-						<img src="img/shampoo16oz.jpg" alt="Shampoo 16 OZ" class="hero-img-slide hero-img-contain" style="cursor:pointer;">
-					</a>
-				</div>
-				<div class="swiper-slide">
-					<a href="beautyfast.html#individuales" style="display:block;width:100%;height:100%;">
-						<img src="img/TratInt.jpg" alt="Tratamiento Intensivo" class="hero-img-slide hero-img-contain" style="cursor:pointer;">
-					</a>
-				</div>
-				<div class="swiper-slide">
-					<a href="beautyfast.html#individuales" style="display:block;width:100%;height:100%;">
-						<img src="img/gotero4oz.jpg" alt="Gotero Capilar" class="hero-img-slide hero-img-contain" style="cursor:pointer;">
-					</a>
-				</div>
-				<div class="swiper-slide">
-					<a href="beautyfast.html#individuales" style="display:block;width:100%;height:100%;">
-						<img src="img/SupMask.jpg" alt="Super Mascarilla" class="hero-img-slide hero-img-contain" style="cursor:pointer;">
-					</a>
-				</div>
-			</div>
-			<!-- Pagination and navigation -->
-			<div class="swiper-pagination"></div>
-			<div class="swiper-button-prev"></div>
-			<div class="swiper-button-next"></div>
-		</div>
-	</div>
-</section>
-<section class="hero-compra" style="width:100%;max-width:900px;margin:32px auto 0 auto;padding:32px 18px 24px 18px;background:#f5e9da;border-radius:18px;box-shadow:0 2px 16px #0001;text-align:center;">
-	<h2 style="font-size:2rem;color:#bc6c25;font-weight:800;margin-bottom:10px;">¡Compra hoy y siente la diferencia!</h2>
-	<p style="font-size:1.15rem;color:#444;max-width:600px;margin:0 auto 18px auto;">Nuestros productos cuidan tu cabello y piel con ingredientes naturales, amor y experiencia. ¡Haz tu pedido ahora y únete a la familia Aris!</p>
-	<a href="beautyfast.html" id="verProductosBtn" style="background:#bc6c25;color:#fff;border:none;border-radius:8px;padding:14px 38px;font-size:1.2rem;font-weight:700;cursor:pointer;transition:background 0.2s;text-decoration:none;display:inline-block;">Ver productos</a>
+
+<section class="hero-aris home-hero-wrap">
+  <div class="home-hero-stage">
+    <div class="swiper hero-swiper">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide">
+          <a href="beautyfast.html#capilar" class="hero-slide-link">
+            <img src="img/aris hero.jpeg" alt="Aris Hero" class="hero-img-slide hero-img-contain hero-img-hero">
+          </a>
+        </div>
+        <div class="swiper-slide">
+          <a href="beautyfast.html#capilar" class="hero-slide-link">
+            <img src="img/linea.jpg" alt="Línea Capilar" class="hero-img-slide hero-img-contain">
+          </a>
+        </div>
+        <div class="swiper-slide">
+          <a href="beautyfast.html#individuales" class="hero-slide-link">
+            <img src="img/shampoo16oz.jpg" alt="Shampoo 16 OZ" class="hero-img-slide hero-img-contain">
+          </a>
+        </div>
+        <div class="swiper-slide">
+          <a href="beautyfast.html#individuales" class="hero-slide-link">
+            <img src="img/TratInt.jpg" alt="Tratamiento Intensivo" class="hero-img-slide hero-img-contain">
+          </a>
+        </div>
+        <div class="swiper-slide">
+          <a href="beautyfast.html#individuales" class="hero-slide-link">
+            <img src="img/gotero4oz.jpg" alt="Gotero Capilar" class="hero-img-slide hero-img-contain">
+          </a>
+        </div>
+        <div class="swiper-slide">
+          <a href="beautyfast.html#individuales" class="hero-slide-link">
+            <img src="img/SupMask.jpg" alt="Super Mascarilla" class="hero-img-slide hero-img-contain">
+          </a>
+        </div>
+      </div>
+      <div class="swiper-pagination"></div>
+      <div class="swiper-button-prev"></div>
+      <div class="swiper-button-next"></div>
+    </div>
+  </div>
 </section>
 
-<!-- Beneficios -->
-<section style="max-width:900px;margin:36px auto 0 auto;padding:24px 18px;background:#fff7ef;border-radius:18px;box-shadow:0 2px 12px #0001;">
-	<h2 style="color:#bc6c25;font-weight:800;text-align:center;">¿Por qué elegir El Secreto de Aris?</h2>
-	<ul style="list-style:none;padding:0;max-width:700px;margin:24px auto 0 auto;display:grid;grid-template-columns:1fr 1fr;gap:18px;">
-		<li style="display:flex;align-items:center;gap:10px;"><span style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;background:#e6f9e6;border-radius:50%;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10" fill="#b7e4c7"/><path d="M7 14c2-2.5 4-7 4-7s2 4.5 4 7" stroke="#40916c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 14c.5 1 1.5 2 3 2s2.5-1 3-2" stroke="#40916c" stroke-width="1.2" stroke-linecap="round"/></svg></span>Ingredientes 100% naturales y seguros</li>
-		<li style="display:flex;align-items:center;gap:10px;"><span style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;background:#f3e6ff;border-radius:50%;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10" fill="#e9d8fd"/><path d="M12 7v5l3 3" stroke="#a259d9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="4" stroke="#a259d9" stroke-width="1.2"/></svg></span>Resultados visibles desde las primeras aplicaciones</li>
-		<li style="display:flex;align-items:center;gap:10px;"><span style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;background:#e0f7fa;border-radius:50%;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><ellipse cx="12" cy="12" rx="10" ry="10" fill="#b2ebf2"/><path d="M12 7c-2 3-4 5-4 7a4 4 0 0 0 8 0c0-2-2-4-4-7z" stroke="#0097a7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Hidratación profunda y reparación intensiva</li>
-		<li style="display:flex;align-items:center;gap:10px;"><span style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;background:#fffbe6;border-radius:50%;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="6" width="20" height="12" rx="6" fill="#ffe066"/><path d="M4 12h16" stroke="#e1a800" stroke-width="1.5" stroke-linecap="round"/><circle cx="18" cy="12" r="2" fill="#e1a800"/></svg></span>Envíos rápidos y atención personalizada</li>
-	</ul>
+<section class="hero-compra landing-card landing-card-peach">
+  <h2 class="landing-title landing-title-lg">¡Compra hoy y siente la diferencia!</h2>
+  <p class="landing-copy">Nuestros productos cuidan tu cabello y piel con ingredientes naturales, amor y experiencia. ¡Haz tu pedido ahora y únete a la familia Aris!</p>
+  <a href="beautyfast.html" id="verProductosBtn" class="landing-cta">Ver productos</a>
 </section>
 
-<!-- Testimonios -->
-<section style="max-width:900px;margin:36px auto 0 auto;padding:24px 18px;background:#f5e9da;border-radius:18px;box-shadow:0 2px 12px #0001;">
-	<h2 style="color:#bc6c25;font-weight:800;text-align:center;">Testimonios de clientes</h2>
-	<div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;max-width:700px;margin:24px auto 0 auto;">
-		<blockquote style="background:#fff;padding:18px 16px;border-radius:12px;box-shadow:0 2px 8px #0001;font-style:italic;">“¡Mi cabello nunca había estado tan suave y brillante! Recomiendo la línea capilar a todos.”<br><span style="font-weight:700;color:#bc6c25;">— Laura G.</span></blockquote>
-		<blockquote style="background:#fff;padding:18px 16px;border-radius:12px;box-shadow:0 2px 8px #0001;font-style:italic;">“El tratamiento intensivo salvó mi melena después de años de daño. ¡Gracias Aris!”<br><span style="font-weight:700;color:#bc6c25;">— Camila R.</span></blockquote>
-		<blockquote style="background:#fff;padding:18px 16px;border-radius:12px;box-shadow:0 2px 8px #0001;font-style:italic;">“Atención rápida y productos de calidad. ¡Volveré a comprar!”<br><span style="font-weight:700;color:#bc6c25;">— José M.</span></blockquote>
-		<blockquote style="background:#fff;padding:18px 16px;border-radius:12px;box-shadow:0 2px 8px #0001;font-style:italic;">“El gotero es mi favorito, noté menos caída en pocas semanas.”<br><span style="font-weight:700;color:#bc6c25;">— Paola S.</span></blockquote>
-	</div>
+<section class="landing-card landing-card-cream">
+  <h2 class="landing-title">¿Por qué elegir El Secreto de Aris?</h2>
+  <ul class="benefits-grid">
+    <li class="benefit-item"><span class="benefit-icon benefit-icon-green"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10" fill="#b7e4c7"/><path d="M7 14c2-2.5 4-7 4-7s2 4.5 4 7" stroke="#40916c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 14c.5 1 1.5 2 3 2s2.5-1 3-2" stroke="#40916c" stroke-width="1.2" stroke-linecap="round"/></svg></span>Ingredientes 100% naturales y seguros</li>
+    <li class="benefit-item"><span class="benefit-icon benefit-icon-lavender"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10" fill="#e9d8fd"/><path d="M12 7v5l3 3" stroke="#a259d9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="4" stroke="#a259d9" stroke-width="1.2"/></svg></span>Resultados visibles desde las primeras aplicaciones</li>
+    <li class="benefit-item"><span class="benefit-icon benefit-icon-blue"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><ellipse cx="12" cy="12" rx="10" ry="10" fill="#b2ebf2"/><path d="M12 7c-2 3-4 5-4 7a4 4 0 0 0 8 0c0-2-2-4-4-7z" stroke="#0097a7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Hidratación profunda y reparación intensiva</li>
+    <li class="benefit-item"><span class="benefit-icon benefit-icon-yellow"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="6" width="20" height="12" rx="6" fill="#ffe066"/><path d="M4 12h16" stroke="#e1a800" stroke-width="1.5" stroke-linecap="round"/><circle cx="18" cy="12" r="2" fill="#e1a800"/></svg></span>Envíos rápidos y atención personalizada</li>
+  </ul>
 </section>
 
-<!-- Preguntas Frecuentes -->
-<section style="max-width:900px;margin:36px auto 0 auto;padding:24px 18px;background:#fff7ef;border-radius:18px;box-shadow:0 2px 12px #0001;">
-	<h2 style="color:#bc6c25;font-weight:800;text-align:center;">Preguntas Frecuentes</h2>
-	<div style="max-width:700px;margin:24px auto 0 auto;">
-		<details style="margin-bottom:12px;"><summary style="font-weight:700;color:#bc6c25;cursor:pointer;">¿Los productos son aptos para todo tipo de cabello?</summary><div style="margin-top:8px;">Sí, están formulados para adaptarse a cualquier tipo de cabello, incluso teñido o tratado químicamente.</div></details>
-		<details style="margin-bottom:12px;"><summary style="font-weight:700;color:#bc6c25;cursor:pointer;">¿Cuánto tardan en llegar los pedidos?</summary><div style="margin-top:8px;">El envío es rápido: de 1 a 3 días laborables en República Dominicana.</div></details>
-		<details style="margin-bottom:12px;"><summary style="font-weight:700;color:#bc6c25;cursor:pointer;">¿Puedo pagar contra entrega?</summary><div style="margin-top:8px;">Sí, aceptamos pago contra entrega y transferencias.</div></details>
-		<details style="margin-bottom:12px;"><summary style="font-weight:700;color:#bc6c25;cursor:pointer;">¿Cómo contacto para dudas o asesoría?</summary><div style="margin-top:8px;">Puedes escribirnos por WhatsApp o usar el formulario de contacto rápido abajo.</div></details>
-	</div>
+<section class="landing-card landing-card-peach">
+  <h2 class="landing-title">Testimonios de clientes</h2>
+  <div class="testimonials-grid">
+    <blockquote class="testimonial-card">"¡Mi cabello nunca había estado tan suave y brillante! Recomiendo la línea capilar a todos."<br><span>- Laura G.</span></blockquote>
+    <blockquote class="testimonial-card">"El tratamiento intensivo salvó mi melena después de años de daño. ¡Gracias Aris!"<br><span>- Camila R.</span></blockquote>
+    <blockquote class="testimonial-card">"Atención rápida y productos de calidad. ¡Volveré a comprar!"<br><span>- José M.</span></blockquote>
+    <blockquote class="testimonial-card">"El gotero es mi favorito, noté menos caída en pocas semanas."<br><span>- Paola S.</span></blockquote>
+  </div>
 </section>
 
-<!-- Contacto Rápido -->
-<section style="max-width:900px;margin:36px auto 0 auto;padding:24px 18px;background:#f5e9da;border-radius:18px;box-shadow:0 2px 12px #0001;">
-	<h2 style="color:#bc6c25;font-weight:800;text-align:center;">¿Tienes dudas? ¡Contáctanos!</h2>
-	<form onsubmit="enviarWhatsApp(event)" style="max-width:500px;margin:0 auto;display:flex;flex-direction:column;gap:14px;">
-		<input type="text" name="nombre" id="nombreContacto" placeholder="Tu nombre" required style="padding:10px;border-radius:6px;border:1px solid #ccc;">
-		<input type="tel" name="whatsapp" id="whatsappContacto" placeholder="Tu WhatsApp" required pattern="[0-9\+ ]{8,}" style="padding:10px;border-radius:6px;border:1px solid #ccc;">
-		<textarea name="mensaje" id="mensajeContacto" placeholder="¿En qué podemos ayudarte?" required style="padding:10px;border-radius:6px;border:1px solid #ccc;"></textarea>
-		<button type="submit" style="background:#25d366;color:#fff;border:none;border-radius:8px;padding:12px 0;font-size:1.1rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;">
-			Enviar por WhatsApp
-		</button>
-	</form>
-	<script>
-	function enviarWhatsApp(e) {
-		e.preventDefault();
-		const nombre = document.getElementById('nombreContacto').value.trim();
-		const whatsapp = document.getElementById('whatsappContacto').value.trim();
-		const mensaje = document.getElementById('mensajeContacto').value.trim();
-		const texto = `Hola, soy ${nombre}. Mi WhatsApp es ${whatsapp}. Quiero consultar: ${mensaje}`;
-		const url = `https://wa.me/18493990014?text=${encodeURIComponent(texto)}`;
-		window.open(url, '_blank');
-	}
-	</script>
+<section class="landing-card landing-card-cream">
+  <h2 class="landing-title">Preguntas frecuentes</h2>
+  <div class="faq-list">
+    <details class="faq-item"><summary>¿Los productos son aptos para todo tipo de cabello?</summary><div>Sí, están formulados para adaptarse a cualquier tipo de cabello, incluso teñido o tratado químicamente.</div></details>
+    <details class="faq-item"><summary>¿Cuánto tardan en llegar los pedidos?</summary><div>El envío es rápido: de 1 a 3 días laborables en República Dominicana.</div></details>
+    <details class="faq-item"><summary>¿Puedo pagar contra entrega?</summary><div>Sí, aceptamos pago contra entrega y transferencias.</div></details>
+    <details class="faq-item"><summary>¿Cómo contacto para dudas o asesoría?</summary><div>Puedes escribirnos por WhatsApp o usar el formulario de contacto rápido abajo.</div></details>
+  </div>
 </section>
-<!-- Fondo para clic afuera -->
+
+<section class="landing-card landing-card-peach">
+  <h2 class="landing-title">¿Tienes dudas? ¡Contáctanos!</h2>
+  <form onsubmit="enviarWhatsApp(event)" class="contact-form">
+    <input type="text" name="nombre" id="nombreContacto" placeholder="Tu nombre" required>
+    <input type="tel" name="whatsapp" id="whatsappContacto" placeholder="Tu WhatsApp" required pattern="[0-9\\+ ]{8,}">
+    <textarea name="mensaje" id="mensajeContacto" placeholder="¿En qué podemos ayudarte?" required></textarea>
+    <button type="submit" class="contact-submit">Enviar por WhatsApp</button>
+  </form>
+  <script>
+    function enviarWhatsApp(e) {
+      e.preventDefault();
+      const nombre = document.getElementById('nombreContacto').value.trim();
+      const whatsapp = document.getElementById('whatsappContacto').value.trim();
+      const mensaje = document.getElementById('mensajeContacto').value.trim();
+      const texto = `Hola, soy ${nombre}. Mi WhatsApp es ${whatsapp}. Quiero consultar: ${mensaje}`;
+      const url = `https://wa.me/18493990014?text=${encodeURIComponent(texto)}`;
+      window.open(url, '_blank');
+    }
+  </script>
+</section>
+
 <div id="cartOverlay" class="cart-overlay"></div>
 
 <div id="cartPanel" class="cart-panel">
-	<button id="closeCart" class="close-cart">&times;</button>
-	<h2>Tu carrito</h2>
-	<div id="cartItems"></div>
-	<p id="cartTotal">Total: RD$ 0</p>
-	<div class="cart-actions">
-		<button id="emptyCart">Vaciar</button>
-		<button id="checkoutBtn">Pagar</button>
-	</div>
+  <button id="closeCart" class="close-cart" type="button" aria-label="Cerrar carrito">&times;</button>
+  <h2>Tu carrito</h2>
+  <div id="cartItems"></div>
+  <p id="cartTotal">Total: RD$ 0</p>
+  <div class="cart-actions">
+    <button id="emptyCart">Vaciar</button>
+    <button id="checkoutBtn">Pagar</button>
+  </div>
 </div>
 
-<!-- MODAL DEL PRODUCTO -->
 <div id="productModal" class="product-modal">
-	<div class="product-modal-content">
-		<button id="closeProductModal" class="close-product-modal">&times;</button>
-		<div class="product-detail">
-			<div class="product-detail-image">
-				<img id="productModalImage" src="" alt="Producto">
-			</div>
-			<div class="product-detail-info">
-				<h2 id="productModalTitle"></h2>
-				<p id="productModalDesc"></p>
-				<p id="productModalPrice" class="product-modal-price"></p>
-				<button id="productModalAddCart" class="btn-add-cart">Agregar al carrito</button>
-			</div>
-		</div>
-	</div>
+  <div class="product-modal-content">
+    <button id="closeProductModal" class="close-product-modal">&times;</button>
+    <div class="product-detail">
+      <div class="product-detail-image">
+        <img id="productModalImage" src="" alt="Producto">
+      </div>
+      <div class="product-detail-info">
+        <h2 id="productModalTitle"></h2>
+        <p id="productModalDesc"></p>
+        <p id="productModalPrice" class="product-modal-price"></p>
+        <button id="productModalAddCart" class="btn-add-cart">Agregar al carrito</button>
+      </div>
+    </div>
+  </div>
 </div>
 
-<footer style="background:#181818;color:#fff;padding:32px 0 0 0;margin-top:40px;">
-	<div style="max-width:1100px;margin:0 auto;display:flex;flex-wrap:wrap;gap:40px 60px;justify-content:center;padding:0 16px 24px 16px;">
-		<div style="min-width:180px;flex:1 1 220px;">
-			<h3 style="font-size:1.15em;font-weight:700;margin-bottom:10px;color:#d4af37;">Acerca de nosotros</h3>
-			<ul style="list-style:none;padding:0;margin:0;line-height:2;">
-				<li><a href="about.html" target="_blank" style="color:#fff;text-decoration:none;background:#333;padding:2px 10px;border-radius:10px;">Nosotros</a></li>
-				<li><a href="redes.html" target="_blank" style="color:#fff;text-decoration:none;background:#333;padding:2px 10px;border-radius:10px;">Redes sociales</a></li>
-				<li><a href="contacto.html" target="_blank" style="color:#fff;text-decoration:none;background:#333;padding:2px 10px;border-radius:10px;">Contacto</a></li>
-			</ul>
-		</div>
-		<div style="min-width:180px;flex:1 1 220px;">
-			<h3 style="font-size:1.15em;font-weight:700;margin-bottom:10px;color:#d4af37;">Legal</h3>
-			<ul style="list-style:none;padding:0;margin:0;line-height:2;">
-				<li><a href="terminos.html" target="_blank" style="color:#fff;text-decoration:none;background:#333;padding:2px 10px;border-radius:10px;">Términos y condiciones de uso</a></li>
-				<li><a href="privacidad.html" target="_blank" style="color:#fff;text-decoration:none;background:#333;padding:2px 10px;border-radius:10px;">Políticas de Privacidad</a></li>
-				<li><a href="cambios.html" target="_blank" style="color:#fff;text-decoration:none;background:#333;padding:2px 10px;border-radius:10px;">Cambios & Devoluciones</a></li>
-			</ul>
-		</div>
-	</div>
-	<div style="border-top:1px solid #333;margin:0 16px 0 16px;padding:18px 0 0 0;text-align:center;font-size:1em;color:#d4af37;">
-		© 2026 El Secreto de Aris
-		<br>
-		<span style="font-size:0.95em; color:#888;">Envía tu comprobante de pago por WhatsApp tras completar el pedido.</span>
-	</div>
-	<a href="https://wa.me/18493990014" target="_blank" title="Contactar por WhatsApp" style="position:fixed;right:18px;bottom:18px;z-index:1000;">
-		<img src="img/Whatsapp.jpg" alt="WhatsApp" style="height:54px;width:54px;border-radius:50%;box-shadow:0 2px 8px #0006;">
-	</a>
+<footer class="site-footer">
+  <div class="footer-columns">
+    <div class="footer-column">
+      <h3>Acerca de nosotros</h3>
+      <ul class="footer-links">
+        <li><a href="about.html" target="_blank" class="footer-link-pill">Nosotros</a></li>
+        <li><a href="redes.html" target="_blank" class="footer-link-pill">Redes sociales</a></li>
+        <li><a href="contacto.html" target="_blank" class="footer-link-pill">Contacto</a></li>
+      </ul>
+    </div>
+    <div class="footer-column">
+      <h3>Legal</h3>
+      <ul class="footer-links">
+        <li><a href="terminos.html" target="_blank" class="footer-link-pill">Términos y condiciones de uso</a></li>
+        <li><a href="privacidad.html" target="_blank" class="footer-link-pill">Políticas de Privacidad</a></li>
+        <li><a href="cambios.html" target="_blank" class="footer-link-pill">Cambios &amp; Devoluciones</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-meta">
+    © 2026 El Secreto de Aris
+    <br>
+    <span>Envía tu comprobante de pago por WhatsApp tras completar el pedido.</span>
+  </div>
 </footer>
+
 <script src="beautyfast.js"></script>
-<!-- Swiper.js CDN -->
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-<style>
-	.hero-swiper {
-		width: 100vw !important;
-		max-width: 100% !important;
-		min-height: 320px;
-		height: 38vw;
-		max-height: 480px;
-		border-radius: 0 0 18px 18px;
-		box-shadow: 0 4px 32px #0002;
-		overflow: hidden;
-	}
-	.hero-img-slide {
-		width: 100vw;
-		max-width: 100vw;
-		height: 38vw;
-		max-height: 480px;
-		min-height: 320px;
-		display: block;
-		margin-left: -4vw;
-		margin-right: auto;
-		margin-top: 0;
-		margin-bottom: 0;
-		border-radius: 0 0 18px 18px;
-		background: #fff;
-		transition: filter 0.3s;
-		object-fit: contain;
-		box-sizing: border-box;
-		padding: 0 8vw 0 0;
-	}
-	.hero-img-contain {
-		object-fit: contain !important;
-		background: #fff !important;
-	}
-	.hero-img-hero {
-		background: #fff !important;
-		padding: 0 !important;
-	}
-	.hero-slide-caption {
-		position: absolute;
-		left: 50%;
-		top: 50%;
-		transform: translate(-50%, -50%);
-		background: rgba(0,0,0,0.45);
-		color: #fff;
-		padding: 32px 18px 24px 18px;
-		border-radius: 18px;
-		text-align: center;
-		max-width: 90vw;
-		width: 90vw;
-		box-shadow: 0 2px 16px #0003;
-		z-index: 2;
-	}
-	.hero-slide-caption h2 {
-		font-size: 2.2rem;
-		font-weight: 800;
-		margin-bottom: 10px;
-		color: #ffe;
-		text-shadow: 0 2px 12px #000a;
-	}
-	.hero-slide-caption p {
-		font-size: 1.25rem;
-		color: #ffe;
-		line-height: 1.3;
-		text-shadow: 0 2px 8px #000a;
-		font-weight: 600;
-		margin-bottom: 18px;
-	}
-	.hero-cta {
-		background: #d4af37;
-		color: #181818;
-		border: none;
-		border-radius: 8px;
-		padding: 14px 38px;
-		font-size: 1.2rem;
-		font-weight: 700;
-		cursor: pointer;
-		text-decoration: none;
-		box-shadow: 0 2px 8px #0002;
-		transition: background 0.2s, color 0.2s;
-		display: inline-block;
-	}
-	.hero-cta:hover {
-		background: #bc6c25;
-		color: #fff;
-	}
-	@media (max-width: 900px) {
-		.hero-swiper, .hero-img-slide {
-			height: 48vw;
-			min-height: 220px;
-			max-height: 340px;
-		}
-		.hero-slide-caption {
-			padding: 18px 8px 14px 8px;
-			font-size: 1rem;
-		}
-		.hero-slide-caption h2 {
-			font-size: 1.3rem;
-		}
-		.hero-slide-caption p {
-			font-size: 1rem;
-		}
-	}
-	@media (max-width: 600px) {
-		.hero-swiper, .hero-img-slide {
-			height: 60vw;
-			min-height: 120px;
-			max-height: 220px;
-		}
-		.hero-slide-caption {
-			padding: 10px 2vw 10px 2vw;
-			font-size: 0.95rem;
-		}
-		.hero-slide-caption h2 {
-			font-size: 1.1rem;
-		}
-		.hero-slide-caption p {
-			font-size: 0.95rem;
-		}
-	}
-</style>
 <script>
-	// Swiper slider para el hero
-	const swiper = new Swiper('.hero-swiper', {
-		loop: true,
-		   autoplay: {
-			   delay: 3000,
-			   disableOnInteraction: false,
-		   },
-		pagination: {
-			el: '.swiper-pagination',
-			clickable: true,
-		},
-		navigation: {
-			nextEl: '.swiper-button-next',
-			prevEl: '.swiper-button-prev',
-		},
-		effect: 'slide',
-		speed: 700,
-		grabCursor: true,
-		centeredSlides: true,
-		slidesPerView: 1,
-		spaceBetween: 0,
-		breakpoints: {
-			900: {
-				slidesPerView: 1,
-				spaceBetween: 0
-			}
-		}
-	});
+  const swiper = new Swiper('.hero-swiper', {
+    loop: true,
+    autoplay: {
+      delay: 3000,
+      disableOnInteraction: false,
+    },
+    pagination: {
+      el: '.swiper-pagination',
+      clickable: true,
+    },
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
+    },
+    effect: 'slide',
+    speed: 700,
+    grabCursor: true,
+    centeredSlides: true,
+    slidesPerView: 1,
+    spaceBetween: 0,
+    breakpoints: {
+      900: {
+        slidesPerView: 1,
+        spaceBetween: 0
+      }
+    }
+  });
 </script>
 <script>
-// Forzar productos y categorías en el sidebar y búsqueda aunque no estén en el contenido principal
-window.addEventListener('DOMContentLoaded', function() {
-	if (typeof initializeSidebarMenu === 'function') {
-		initializeSidebarMenu();
-	}
-	if (typeof updateCartCount === 'function') {
-		updateCartCount();
-	}
-	if (typeof renderCart === 'function') {
-		renderCart();
-	}
-	// Mostrar categorías y productos en el sidebar aunque no haya cards en el main
-	// (esto ya lo hace initializeSidebarMenu usando el array products de beautyfast.js)
-});
+  window.addEventListener('DOMContentLoaded', function() {
+    if (typeof initializeSidebarMenu === 'function') {
+      initializeSidebarMenu();
+    }
+    if (typeof updateCartCount === 'function') {
+      updateCartCount();
+    }
+    if (typeof renderCart === 'function') {
+      renderCart();
+    }
+  });
 </script>
 <script>
-// Inicialización para asegurar funcionalidad en index.html
-window.addEventListener('DOMContentLoaded', function() {
-	if (typeof initializeSidebarMenu === 'function') {
-		initializeSidebarMenu();
-	}
-	if (typeof updateCartCount === 'function') {
-		updateCartCount();
-	}
-	if (typeof renderCart === 'function') {
-		renderCart();
-	}
-});
+  function fadeOutAndGo(url) {
+    document.body.style.transition = 'opacity 0.4s';
+    document.body.style.opacity = '0';
+    setTimeout(() => { window.location.href = url; }, 400);
+  }
+  document.getElementById('verProductosBtn').addEventListener('click', function(e) {
+    e.preventDefault();
+    fadeOutAndGo('beautyfast.html');
+  });
+  document.getElementById('btnIrProductos').addEventListener('click', function(e) {
+    e.preventDefault();
+    fadeOutAndGo('beautyfast.html');
+  });
 </script>
-<script>
-// Transición fade al navegar a productos
-function fadeOutAndGo(url) {
-	document.body.style.transition = 'opacity 0.4s';
-	document.body.style.opacity = '0';
-	setTimeout(()=>{ window.location.href = url; }, 400);
-}
-document.getElementById('verProductosBtn').addEventListener('click', function(e) {
-	e.preventDefault();
-	fadeOutAndGo('beautyfast.html');
-});
-document.getElementById('btnIrProductos').addEventListener('click', function(e) {
-	e.preventDefault();
-	fadeOutAndGo('beautyfast.html');
-});
-</script>
- <!-- Botón flotante de WhatsApp soporte -->
-  <a href="https://wa.me/18493990014?text=Hola,%20quiero%20m%C3%A1s%20informaci%C3%B3n..." class="whatsapp-button" title="Contactar por WhatsApp" target="_blank" style="position:fixed;right:18px;bottom:18px;z-index:1000;">
-    <img src="img/Whatsapp.jpg" alt="WhatsApp" style="height:54px;width:54px;border-radius:50%;box-shadow:0 2px 8px #0006;">
-  </a>
+<a href="https://wa.me/18493990014?text=Hola,%20quiero%20m%C3%A1s%20informaci%C3%B3n..." class="whatsapp-button" title="Contactar por WhatsApp" target="_blank">
+  <img src="img/Whatsapp.jpg" alt="WhatsApp">
+</a>
 </body>
 </html>
