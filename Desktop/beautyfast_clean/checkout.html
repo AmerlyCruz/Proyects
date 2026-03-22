@@ -58,14 +58,17 @@
       font-weight: 600;
       text-align: center;
     }
-    .checkout-section { margin-bottom: 24px; }
+    .checkout-section {
+      margin-bottom: 24px;
+    }
     .checkout-label {
       display: block;
       font-weight: 700;
       margin-bottom: 8px;
       color: #344226;
     }
-    .checkout-input, .checkout-select {
+    .checkout-input,
+    .checkout-select {
       width: 100%;
       padding: 12px 14px;
       border: 1px solid #d9d6cf;
@@ -76,10 +79,18 @@
       box-sizing: border-box;
       transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
     }
-    .checkout-input:focus, .checkout-select:focus {
+    .checkout-input:focus,
+    .checkout-select:focus {
       outline: none;
       border-color: #bc6c25;
       box-shadow: 0 0 0 4px rgba(188, 108, 37, 0.12);
+    }
+    .field-help {
+      margin-top: -4px;
+      margin-bottom: 12px;
+      font-size: 0.9rem;
+      color: #7c7c7c;
+      line-height: 1.45;
     }
     .checkout-summary {
       background: linear-gradient(180deg, #fffaf2 0%, #f8f4ee 100%);
@@ -99,6 +110,11 @@
       color: #bc6c25;
       margin-top: 10px;
     }
+    .checkout-total-note {
+      margin-top: 8px;
+      font-size: 0.92rem;
+      color: #7c7c7c;
+    }
     .checkout-radio-group {
       display: grid;
       gap: 12px;
@@ -114,15 +130,44 @@
       background: #fff;
       font-weight: 600;
     }
-    .checkout-radio { accent-color: #bc6c25; }
+    .checkout-radio {
+      accent-color: #bc6c25;
+    }
+    .delivery-card {
+      display: grid;
+      gap: 4px;
+      width: 100%;
+    }
+    .delivery-card small {
+      color: #7c7c7c;
+      font-weight: 500;
+      line-height: 1.4;
+    }
+    .pickup-note {
+      display: none;
+      margin-top: 12px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: linear-gradient(180deg, #fff8ee 0%, #f8f1e5 100%);
+      border: 1px solid #efd9b8;
+      color: #7c5a28;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+    .pickup-note.show {
+      display: block;
+    }
+    #addressFields.is-hidden {
+      display: none;
+    }
     .bank-info {
       background: #fff;
       border: 1.5px solid #e6d8b0;
       border-radius: 18px;
-      padding: 18px 16px 10px 16px;
+      padding: 18px 16px 10px;
       margin-top: 14px;
       margin-bottom: 14px;
-      box-shadow: 0 2px 12px #e6d8b033;
+      box-shadow: 0 2px 12px rgba(230, 216, 176, 0.2);
       font-size: 1.05em;
     }
     .bank-info .bank-row {
@@ -130,10 +175,12 @@
       align-items: center;
       gap: 12px;
       margin-bottom: 12px;
-      padding: 8px 0 8px 0;
+      padding: 8px 0;
       border-bottom: 1px solid #f0e6d0;
     }
-    .bank-info .bank-row:last-child { border-bottom: none; }
+    .bank-info .bank-row:last-child {
+      border-bottom: none;
+    }
     .bank-info .bank-logo-img {
       height: 38px;
       width: 38px;
@@ -141,7 +188,7 @@
       min-height: 38px;
       border-radius: 8px;
       background: #fff;
-      box-shadow: 0 1px 4px #0001;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
       padding: 2px;
       object-fit: contain;
       object-position: center;
@@ -203,53 +250,85 @@
       transform: translateY(-1px);
       filter: brightness(1.02);
     }
-    .checkout-note { font-size: 0.95em; color: #7c7c7c; margin-bottom: 10px; line-height: 1.5; }
-    .azul-logo { height: 28px; vertical-align: middle; margin-right: 8px; }
-    .bank-logo { height: 22px; vertical-align: middle; margin-right: 8px; }
-    .checkout-row { display: flex; gap: 10px; }
-    .checkout-row > * { flex: 1; }
-    .bank-info .copy-btn.copied svg rect:first-child { fill: #7CB342 !important; }
-    .copy-check { font-size: 1.1em; vertical-align: middle; transition: opacity 0.2s; }
+    .checkout-btn:disabled {
+      cursor: not-allowed;
+      opacity: 0.65;
+      box-shadow: none;
+      filter: none;
+      transform: none;
+    }
+    .checkout-note {
+      font-size: 0.95em;
+      color: #7c7c7c;
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+    .checkout-assurance {
+      margin-top: 12px;
+      text-align: center;
+    }
+    .azul-logo {
+      height: 28px;
+      vertical-align: middle;
+      margin-right: 8px;
+    }
+    .bank-logo {
+      height: 22px;
+      vertical-align: middle;
+      margin-right: 8px;
+    }
+    .checkout-row {
+      display: flex;
+      gap: 10px;
+    }
+    .checkout-row > * {
+      flex: 1;
+    }
+    .copy-check {
+      font-size: 1.1em;
+      vertical-align: middle;
+      transition: opacity 0.2s;
+    }
     .checkout-header {
-      background:#606c38;
-      color:#fff;
-      padding:15px 20px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      gap:10px;
-      position:relative;
+      background: #606c38;
+      color: #fff;
+      padding: 15px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      position: relative;
     }
     .checkout-back {
-      position:absolute;
-      left:12px;
-      top:50%;
-      transform:translateY(-50%);
-      display:flex;
-      align-items:center;
-      z-index:2;
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      align-items: center;
+      z-index: 2;
       color: inherit;
     }
     .checkout-brand {
-      font-size:26px;
-      margin:0 0 0 8px;
-      font-weight:700;
-      letter-spacing:1px;
+      font-size: 26px;
+      margin: 0 0 0 8px;
+      font-weight: 700;
+      letter-spacing: 1px;
     }
     .checkout-brand a {
-      color:inherit;
-      text-decoration:none;
-      cursor:pointer;
+      color: inherit;
+      text-decoration: none;
+      cursor: pointer;
     }
     .order-num-box {
-      text-align:center;
-      font-weight:600;
-      color:#bc6c25;
-      margin-bottom:10px;
-      display:none;
+      text-align: center;
+      font-weight: 600;
+      color: #bc6c25;
+      margin-bottom: 10px;
+      display: none;
     }
     .checkout-checkline {
-      font-size:0.95em;
+      font-size: 0.95em;
     }
     .bank-info-hidden {
       display: none;
@@ -266,6 +345,58 @@
     .checkout-summary-line span:last-child {
       white-space: nowrap;
       font-weight: 700;
+    }
+    .checkout-summary-items {
+      display: grid;
+      gap: 10px;
+    }
+    .checkout-summary-item {
+      display: grid;
+      grid-template-columns: 56px minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(124, 90, 40, 0.08);
+    }
+    .checkout-summary-item:last-child {
+      border-bottom: none;
+    }
+    .checkout-summary-thumb {
+      width: 56px;
+      height: 56px;
+      border-radius: 14px;
+      object-fit: cover;
+      background: #fff;
+      border: 1px solid rgba(96, 108, 56, 0.1);
+    }
+    .checkout-summary-copy {
+      min-width: 0;
+      display: grid;
+      gap: 4px;
+    }
+    .checkout-summary-name {
+      font-weight: 700;
+      color: #283618;
+      line-height: 1.25;
+    }
+    .checkout-summary-meta {
+      font-size: 0.92rem;
+      color: #7c7c7c;
+    }
+    .checkout-summary-price {
+      font-weight: 800;
+      color: #bc6c25;
+      white-space: nowrap;
+    }
+    .checkout-urgency {
+      margin-top: 14px;
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: linear-gradient(180deg, rgba(255, 248, 238, 0.95) 0%, rgba(248, 241, 229, 0.95) 100%);
+      border: 1px solid rgba(239, 217, 184, 0.9);
+      color: #7c5a28;
+      font-size: 0.93rem;
+      line-height: 1.5;
     }
     @media (max-width: 640px) {
       .checkout-container {
@@ -362,62 +493,93 @@
       <a href="index.html">El Secreto de Aris</a>
     </h1>
   </header>
+
   <div class="checkout-container">
     <div class="checkout-title">Pantalla de pago</div>
     <p class="checkout-subtitle">Completa tus datos de entrega y confirma tu pedido en pocos pasos. Diseñado para una compra clara, rápida y confiable.</p>
+
     <div class="trust-strip">
       <div class="trust-pill">Compra segura</div>
       <div class="trust-pill">Entrega local</div>
       <div class="trust-pill">Soporte por WhatsApp</div>
     </div>
+
+    <div id="checkoutAccountBanner" class="checkout-note">Inicia sesión en <a href="orders.html">Mis pedidos</a> para guardar esta compra en tu historial.</div>
     <div id="orderNumBox" class="order-num-box"></div>
+
     <form id="checkoutForm" autocomplete="off">
       <div class="checkout-section checkout-summary">
         <div class="checkout-summary-title">Resumen del pedido</div>
         <div id="checkoutCartItems"></div>
         <div class="checkout-total" id="checkoutTotal"></div>
+        <div class="checkout-urgency">Los pedidos confirmados hoy se priorizan para despacho o coordinación de retiro por WhatsApp.</div>
       </div>
+
       <div class="checkout-section">
         <div class="checkout-label">Correo electrónico</div>
-        <input type="email" class="checkout-input" name="email" required>
+        <input type="email" class="checkout-input" name="email" required autocomplete="email" inputmode="email">
+        <div class="field-help">Usaremos tu correo para enviarte confirmación y dar seguimiento a tu pedido.</div>
         <label class="checkout-checkline"><input type="checkbox" name="newsletter"> Enviarme novedades y ofertas por correo electrónico</label>
       </div>
+
       <div class="checkout-section">
-        <div class="checkout-label">Entrega</div>
+        <div class="checkout-label">Datos del cliente</div>
         <div class="checkout-row">
-          <input type="text" class="checkout-input" name="nombre" placeholder="Nombre" required>
-          <input type="text" class="checkout-input" name="apellidos" placeholder="Apellidos" required>
+          <input type="text" class="checkout-input" name="nombre" placeholder="Nombre" required autocomplete="given-name">
+          <input type="text" class="checkout-input" name="apellidos" placeholder="Apellidos" required autocomplete="family-name">
         </div>
-        <input type="text" class="checkout-input" name="direccion" placeholder="Dirección" required>
-        <input type="text" class="checkout-input" name="extra" placeholder="Casa, apartamento, etc. (opcional)">
+        <input type="text" class="checkout-input" name="telefono" placeholder="Teléfono" required inputmode="tel" autocomplete="tel">
+        <div class="field-help">Tu teléfono nos permite confirmar entrega, retiro o cualquier incidencia rápida.</div>
+      </div>
+
+      <div class="checkout-section">
+        <div class="checkout-label">Método de entrega</div>
+        <div class="checkout-radio-group" id="deliveryMethodGroup">
+          <label>
+            <input type="radio" class="checkout-radio" name="envio" value="delivery" checked>
+            <span class="delivery-card">
+              <span>Delivery</span>
+              <small>Recíbelo en tu dirección por RD$ 200.00.</small>
+            </span>
+          </label>
+          <label>
+            <input type="radio" class="checkout-radio" name="envio" value="pickup">
+            <span class="delivery-card">
+              <span>Retiro en local</span>
+              <small>Recógelo sin costo de envío.</small>
+            </span>
+          </label>
+        </div>
+        <div id="pickupNote" class="pickup-note">Retiro disponible en local. Te confirmaremos por WhatsApp la dirección exacta y el horario de recogida cuando completes el pedido.</div>
+        <div id="deliveryNote" class="checkout-note">Plazos de entrega a domicilio según la zona.</div>
+      </div>
+
+      <div id="addressFields" class="checkout-section">
+        <div class="checkout-label">Dirección de entrega</div>
+        <input type="text" class="checkout-input" name="direccion" placeholder="Dirección" required autocomplete="street-address">
+        <input type="text" class="checkout-input" name="extra" placeholder="Casa, apartamento, etc. (opcional)" autocomplete="address-line2">
         <div class="checkout-row">
-          <input type="text" class="checkout-input" name="ciudad" placeholder="Ciudad" required>
-          <input type="text" class="checkout-input" name="postal" placeholder="Código postal (opcional)">
+          <input type="text" class="checkout-input" name="ciudad" placeholder="Ciudad" required autocomplete="address-level2">
+          <input type="text" class="checkout-input" name="postal" placeholder="Código postal (opcional)" autocomplete="postal-code">
         </div>
-        <input type="text" class="checkout-input" name="telefono" placeholder="Teléfono" required>
-        <select class="checkout-select" name="pais" required>
+        <select class="checkout-select" name="pais" required autocomplete="country-name">
           <option value="">Selecciona país</option>
           <option value="República Dominicana" selected>República Dominicana</option>
         </select>
         <label class="checkout-checkline"><input type="checkbox" name="guardar"> Guardar mi información y consultar más rápidamente la próxima vez</label>
       </div>
-      <div class="checkout-section">
-        <div class="checkout-label">Método de envío</div>
-        <select class="checkout-select" name="envio" required>
-          <option value="delivery">Delivery (RD$ 200.00)</option>
-        </select>
-        <div class="checkout-note">Plazos de entrega a domicilio según la zona</div>
-      </div>
+
       <div class="checkout-section">
         <div class="checkout-label">Pago</div>
         <div class="checkout-radio-group">
           <label><input type="radio" class="checkout-radio" name="pago" value="azul" checked> <img src="img/icono azul.jpg" class="azul-logo" alt="AZUL"> Tarjeta (AZUL)</label>
-          <label><input type="radio" class="checkout-radio" name="pago" value="banco"> <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" class="bank-logo" alt="Banco"> Depósito Bancario</label>
+          <label><input type="radio" class="checkout-radio" name="pago" value="banco"> <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" class="bank-logo" alt="Banco"> Depósito bancario</label>
         </div>
+
         <div id="bankInfo" class="bank-info bank-info-hidden">
           <b>Datos bancarios:</b><br>
           <div class="bank-row">
-            <img src="img/icono popular.jpg" alt="Popular" class="bank-logo-img"> 
+            <img src="img/icono popular.jpg" alt="Popular" class="bank-logo-img">
             <span class="bank-name">Banco Popular</span>
             <span class="bank-account" id="popNum">00000</span>
             <button type="button" class="copy-btn" data-copy="00000" title="Copiar cuenta Popular">
@@ -425,7 +587,7 @@
             </button>
           </div>
           <div class="bank-row">
-            <img src="img/icono bhd.jpg" alt="BHD" class="bank-logo-img"> 
+            <img src="img/icono bhd.jpg" alt="BHD" class="bank-logo-img">
             <span class="bank-name">BHD</span>
             <span class="bank-account" id="bhdNum">00000</span>
             <button type="button" class="copy-btn" data-copy="00000" title="Copiar cuenta BHD">
@@ -443,156 +605,384 @@
           <div class="bank-meta">Nombre: <b>El Secreto de Aris</b> | RNC: <b>00000</b></div>
           <span class="bank-meta">Envía tu comprobante de pago por WhatsApp tras completar el pedido.</span>
         </div>
+
         <div class="checkout-note">Todas las transacciones son seguras y están encriptadas.</div>
       </div>
+
       <button type="submit" class="checkout-btn" id="checkoutBtn">Pagar ahora</button>
+      <p class="checkout-note checkout-assurance">Recibirás confirmación del pedido y, si aplica, coordinaremos entrega o retiro por WhatsApp.</p>
     </form>
   </div>
+
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script src="supabase-client.js"></script>
+  <script src="checkout-supabase.js"></script>
   <script src="beautyfast.js"></script>
-<script>
-// Cargar carrito desde localStorage
-let cart = [];
-if(localStorage.getItem("cart")) cart = JSON.parse(localStorage.getItem("cart"));
-// Mostrar resumen del pedido
-function renderCheckoutCart() {
-  const itemsDiv = document.getElementById('checkoutCartItems');
-  const totalDiv = document.getElementById('checkoutTotal');
-  if(!cart.length) {
-    itemsDiv.innerHTML = '<em>No hay productos en el carrito.</em>';
-    totalDiv.textContent = '';
-    document.getElementById('checkoutBtn').disabled = true;
-    return;
-  }
-  let total = 0;
-  let html = '<ul class="checkout-summary-list">';
-  cart.forEach(item => {
-    html += `<li class="checkout-summary-line"><span>${item.name} <b>x${item.quantity}</b></span><span>RD$ ${(item.price*item.quantity).toLocaleString('es-DO',{minimumFractionDigits:2})}</span></li>`;
-    total += item.price * item.quantity;
-  });
-  html += '</ul>';
-  itemsDiv.innerHTML = html;
-  totalDiv.textContent = 'Total: RD$ ' + (total+200).toLocaleString('es-DO',{minimumFractionDigits:2});
-  document.getElementById('checkoutBtn').disabled = false;
-}
-renderCheckoutCart();
-// Mostrar/ocultar info bancaria y mostrar número de pedido
-let currentOrderNum = '';
-function showOrderNum(num) {
-  const box = document.getElementById('orderNumBox');
-  box.textContent = 'Número de pedido: ' + num;
-  box.style.display = 'block';
-}
-function hideOrderNum() {
-  const box = document.getElementById('orderNumBox');
-  box.textContent = '';
-  box.style.display = 'none';
-}
-document.addEventListener('DOMContentLoaded', function() {
-  function updateBankInfoVisibility() {
-    const radioBanco = document.querySelector('input[name="pago"][value="banco"]');
-    const bankInfo = document.getElementById('bankInfo');
-    if (radioBanco && radioBanco.checked) {
-      bankInfo.style.display = 'block';
-      document.getElementById('checkoutBtn').textContent = 'Completar pedido';
-    } else {
-      bankInfo.style.display = 'none';
-      document.getElementById('checkoutBtn').textContent = 'Pagar ahora';
+  <script>
+    let cart = [];
+    if (localStorage.getItem("cart")) cart = JSON.parse(localStorage.getItem("cart"));
+
+    function getShippingCost() {
+      const selectedDelivery = document.querySelector('input[name="envio"]:checked')?.value || 'delivery';
+      return selectedDelivery === 'pickup' ? 0 : 200;
     }
-  }
-  const radios = document.querySelectorAll('input[name="pago"]');
-  radios.forEach(radio => {
-    radio.addEventListener('change', updateBankInfoVisibility);
-  });
-  updateBankInfoVisibility();
-});
-// Copiar número de cuenta
-function setCopyButtons() {
-  document.querySelectorAll('.copy-btn').forEach(btn => {
-    btn.addEventListener('click', function(e) {
-      e.preventDefault();
-      const val = btn.getAttribute('data-copy');
-      navigator.clipboard.writeText(val);
-      let check = btn.querySelector('.copy-check');
-      if (!check) {
-        check = document.createElement('span');
-        check.className = 'copy-check';
-        check.textContent = '✔';
-        check.style.marginLeft = '6px';
-        check.style.color = '#7CB342';
-        check.style.fontWeight = 'bold';
-        btn.appendChild(check);
+
+    function getDeliveryLabel() {
+      const selectedDelivery = document.querySelector('input[name="envio"]:checked')?.value || 'delivery';
+      return selectedDelivery === 'pickup' ? 'Retiro en local' : 'Delivery';
+    }
+
+    function currency(value) {
+      return value.toLocaleString('es-DO', { minimumFractionDigits: 2 });
+    }
+
+    function getItemImage(item) {
+      if (item.image) return item.image;
+      return 'img/linea.jpg';
+    }
+
+    function renderCheckoutCart() {
+      const itemsDiv = document.getElementById('checkoutCartItems');
+      const totalDiv = document.getElementById('checkoutTotal');
+      const shippingCost = getShippingCost();
+
+      if (!cart.length) {
+        itemsDiv.innerHTML = '<em>No hay productos en el carrito.</em>';
+        totalDiv.textContent = '';
+        document.getElementById('checkoutBtn').disabled = true;
+        return;
       }
-      check.style.display = 'inline';
-      setTimeout(() => { check.style.display = 'none'; }, 1000);
-    });
-  });
-}
-document.addEventListener('DOMContentLoaded', setCopyButtons);
-// Generar número de pedido único
-function generateOrderNumber() {
-  let n = localStorage.getItem('lastOrderNum') || 0;
-  n = parseInt(n)+1;
-  localStorage.setItem('lastOrderNum', n);
-  return 'PED-' + n.toString().padStart(6,'0');
-}
-// Mostrar número de pedido al cargar
-currentOrderNum = generateOrderNumber();
-showOrderNum(currentOrderNum);
-// Manejar submit
-document.getElementById('checkoutForm').addEventListener('submit', function(e) {
-  e.preventDefault();
-  const form = e.target;
-  const pago = form.pago.value;
-  const orderNum = currentOrderNum;
-  if(pago==='azul') {
-    Swal.fire({
-      title: 'Redirigiendo a AZUL...',
-      text: 'Procesando pago seguro.',
-      icon: 'info',
-      timer: 1800,
-      showConfirmButton: false,
-      willClose: () => {
-        setTimeout(()=>{
-          Swal.fire({
-            icon: 'success',
-            title: '¡Pago realizado!',
-            text: 'Tu pedido ' + orderNum + ' ha sido procesado.',
-            timer: 2200,
-            showConfirmButton: false,
-            didOpen: () => { confetti(); }
-          });
-          localStorage.removeItem('cart');
-          setTimeout(()=>{ window.location.href = 'index.html'; }, 2200);
-        }, 500);
-      }
-    });
-  } else {
-    Swal.fire({
-      icon: 'success',
-      title: 'Pedido registrado',
-      html: 'Envía tu comprobante de pago por WhatsApp.<br><b>Número de pedido:</b> ' + orderNum,
-      showConfirmButton: true,
-      confirmButtonText: 'Enviar comprobante',
-      didOpen: () => { confetti(); }
-    }).then(() => {
-      // Generar mensaje con detalles del pedido
-      let resumen = '';
-      cart.forEach(item => {
-        resumen += `- ${item.name} x${item.quantity} (RD$ ${(item.price*item.quantity).toLocaleString('es-DO',{minimumFractionDigits:2})})\n`;
+
+      let total = 0;
+      let html = '<div class="checkout-summary-items">';
+      cart.forEach((item) => {
+        html += `
+          <div class="checkout-summary-item">
+            <img src="${getItemImage(item)}" alt="${item.name}" class="checkout-summary-thumb">
+            <div class="checkout-summary-copy">
+              <div class="checkout-summary-name">${item.name}</div>
+              <div class="checkout-summary-meta">Cantidad: ${item.quantity}</div>
+            </div>
+            <div class="checkout-summary-price">RD$ ${currency(item.price * item.quantity)}</div>
+          </div>
+        `;
+        total += item.price * item.quantity;
       });
-      let total = cart.reduce((acc, item) => acc + item.price * item.quantity, 0) + 200;
-      const msg = encodeURIComponent(
-        `Hola, adjunto comprobante de pago para el pedido ${orderNum}.\n\nResumen del pedido:\n${resumen}\nTotal: RD$ ${total.toLocaleString('es-DO',{minimumFractionDigits:2})}`
-      );
-      window.open('https://wa.me/18493990014?text=' + msg, '_blank');
-      localStorage.removeItem('cart');
-      setTimeout(()=>{ window.location.href = 'index.html'; }, 2000);
+      html += '</div>';
+      html += `<div class="checkout-total-note">Entrega: ${shippingCost === 0 ? 'Retiro en local (gratis)' : 'Delivery (RD$ 200.00)'}</div>`;
+
+      itemsDiv.innerHTML = html;
+      totalDiv.textContent = 'Total: RD$ ' + currency(total + shippingCost);
+      document.getElementById('checkoutBtn').disabled = false;
+    }
+
+    let currentOrderNum = '';
+
+    function showOrderNum(num) {
+      const box = document.getElementById('orderNumBox');
+      box.textContent = 'Número de pedido: ' + num;
+      box.style.display = 'block';
+    }
+
+    function setCheckoutButtonText() {
+      const checkoutBtn = document.getElementById('checkoutBtn');
+      const bankSelected = document.querySelector('input[name="pago"][value="banco"]')?.checked;
+      const pickupSelected = document.querySelector('input[name="envio"][value="pickup"]')?.checked;
+
+      if (bankSelected) {
+        checkoutBtn.textContent = pickupSelected ? 'Confirmar retiro' : 'Completar pedido';
+        return;
+      }
+
+      checkoutBtn.textContent = pickupSelected ? 'Pagar y reservar retiro' : 'Pagar ahora';
+    }
+
+    function updateBankInfoVisibility() {
+      const radioBanco = document.querySelector('input[name="pago"][value="banco"]');
+      const bankInfo = document.getElementById('bankInfo');
+      bankInfo.style.display = radioBanco && radioBanco.checked ? 'block' : 'none';
+      setCheckoutButtonText();
+    }
+
+    function updateDeliveryMethod() {
+      const addressFields = document.getElementById('addressFields');
+      const pickupNote = document.getElementById('pickupNote');
+      const deliveryNote = document.getElementById('deliveryNote');
+      const pickupSelected = document.querySelector('input[name="envio"][value="pickup"]')?.checked;
+      const requiredFields = addressFields.querySelectorAll('input[name="direccion"], input[name="ciudad"], select[name="pais"]');
+
+      addressFields.classList.toggle('is-hidden', pickupSelected);
+      pickupNote.classList.toggle('show', pickupSelected);
+      deliveryNote.textContent = pickupSelected
+        ? 'Seleccionaste retiro en local. No se sumará costo de envío.'
+        : 'Plazos de entrega a domicilio según la zona.';
+
+      requiredFields.forEach((field) => {
+        field.required = !pickupSelected;
+      });
+
+      renderCheckoutCart();
+      setCheckoutButtonText();
+    }
+
+    function normalizePhone(value) {
+      return value.replace(/[^\d+\s()-]/g, '').trim();
+    }
+
+    function validateCheckoutForm(form) {
+      const email = form.email.value.trim();
+      const nombre = form.nombre.value.trim();
+      const apellidos = form.apellidos.value.trim();
+      const telefono = normalizePhone(form.telefono.value);
+      const pickupSelected = form.envio.value === 'pickup';
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const phoneDigits = telefono.replace(/\D/g, '');
+
+      if (!emailRegex.test(email)) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Correo no válido',
+          text: 'Revisa el correo electrónico antes de continuar.'
+        });
+        form.email.focus();
+        return false;
+      }
+
+      if (!nombre || !apellidos) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Completa tu nombre',
+          text: 'Necesitamos nombre y apellidos para identificar el pedido.'
+        });
+        form.nombre.focus();
+        return false;
+      }
+
+      if (phoneDigits.length < 8) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Teléfono incompleto',
+          text: 'Introduce un número válido para poder contactarte.'
+        });
+        form.telefono.focus();
+        return false;
+      }
+
+      if (!pickupSelected) {
+        if (!form.direccion.value.trim() || !form.ciudad.value.trim() || !form.pais.value.trim()) {
+          Swal.fire({
+            icon: 'warning',
+            title: 'Faltan datos de entrega',
+            text: 'Completa dirección, ciudad y país para el delivery.'
+          });
+          form.direccion.focus();
+          return false;
+        }
+      }
+
+      form.telefono.value = telefono;
+      return true;
+    }
+
+    function buildOrderSummaryText() {
+      return cart.map((item) => `- ${item.name} x${item.quantity} (RD$ ${currency(item.price * item.quantity)})`).join('\n');
+    }
+
+    function buildNextStepsHtml(deliveryLabel, bankFlow) {
+      const stepOne = bankFlow
+        ? 'Envía tu comprobante por WhatsApp para validar el pedido.'
+        : 'Recibirás confirmación del pago y validación del pedido.';
+      const stepTwo = deliveryLabel === 'Retiro en local'
+        ? 'Te escribiremos para compartir dirección exacta y horario de retiro.'
+        : 'Te contactaremos para confirmar entrega y referencia si hace falta.';
+
+      return `<div style="text-align:left; margin-top:10px;">
+        <b>Próximos pasos</b>
+        <div style="margin-top:8px;">1. ${stepOne}</div>
+        <div style="margin-top:6px;">2. ${stepTwo}</div>
+      </div>`;
+    }
+
+    function buildOrderPayload(form, orderNum, total, deliveryLabel, shippingCost) {
+      const pickupSelected = form.envio.value === 'pickup';
+      const customerName = `${form.nombre.value.trim()} ${form.apellidos.value.trim()}`.trim();
+
+      return {
+        order_number: orderNum,
+        customer_name: customerName,
+        email: form.email.value.trim(),
+        phone: form.telefono.value.trim(),
+        delivery_method: deliveryLabel,
+        shipping_cost: shippingCost,
+        total_amount: total,
+        payment_method: form.pago.value,
+        payment_status: form.pago.value === 'azul' ? 'paid' : 'pending_proof',
+        status: form.pago.value === 'azul' ? 'paid_pending_fulfillment' : 'pending_payment',
+        notes: form.newsletter.checked ? 'Cliente suscrito a novedades.' : '',
+        items: cart.map((item) => ({
+          name: item.name,
+          quantity: item.quantity,
+          price: item.price,
+          image: item.image || '',
+          lineTotal: item.price * item.quantity
+        })),
+        delivery_address: pickupSelected ? null : {
+          direccion: form.direccion.value.trim(),
+          extra: form.extra.value.trim(),
+          ciudad: form.ciudad.value.trim(),
+          postal: form.postal.value.trim(),
+          pais: form.pais.value.trim()
+        }
+      };
+    }
+
+    function buildNextStepsHtml(deliveryLabel, bankFlow, historySaved) {
+      const stepOne = bankFlow
+        ? 'Envía tu comprobante por WhatsApp para validar el pedido.'
+        : 'Recibirás confirmación del pago y validación del pedido.';
+      const stepTwo = deliveryLabel === 'Retiro en local'
+        ? 'Te escribiremos para compartir dirección exacta y horario de retiro.'
+        : 'Te contactaremos para confirmar entrega y referencia si hace falta.';
+      const historyStep = historySaved
+        ? '3. Tu pedido quedó guardado en Mis pedidos.'
+        : '3. Inicia sesión en Mis pedidos para guardar futuras compras.';
+
+      return `<div style="text-align:left; margin-top:10px;">
+        <b>Próximos pasos</b>
+        <div style="margin-top:8px;">1. ${stepOne}</div>
+        <div style="margin-top:6px;">2. ${stepTwo}</div>
+        <div style="margin-top:6px;">${historyStep}</div>
+      </div>`;
+    }
+
+    function setCopyButtons() {
+      document.querySelectorAll('.copy-btn').forEach((btn) => {
+        btn.addEventListener('click', function (e) {
+          e.preventDefault();
+          const val = btn.getAttribute('data-copy');
+          navigator.clipboard.writeText(val);
+          let check = btn.querySelector('.copy-check');
+          if (!check) {
+            check = document.createElement('span');
+            check.className = 'copy-check';
+            check.textContent = '✓';
+            check.style.marginLeft = '6px';
+            check.style.color = '#7CB342';
+            check.style.fontWeight = 'bold';
+            btn.appendChild(check);
+          }
+          check.style.display = 'inline';
+          setTimeout(() => {
+            check.style.display = 'none';
+          }, 1000);
+        });
+      });
+    }
+
+    function generateOrderNumber() {
+      let n = localStorage.getItem('lastOrderNum') || 0;
+      n = parseInt(n, 10) + 1;
+      localStorage.setItem('lastOrderNum', n);
+      return 'PED-' + n.toString().padStart(6, '0');
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      renderCheckoutCart();
+      currentOrderNum = generateOrderNumber();
+      showOrderNum(currentOrderNum);
+      setCopyButtons();
+
+      const phoneInput = document.querySelector('input[name="telefono"]');
+      phoneInput.addEventListener('input', () => {
+        phoneInput.value = normalizePhone(phoneInput.value);
+      });
+
+      document.querySelectorAll('input[name="pago"]').forEach((radio) => {
+        radio.addEventListener('change', updateBankInfoVisibility);
+      });
+
+      document.querySelectorAll('input[name="envio"]').forEach((radio) => {
+        radio.addEventListener('change', updateDeliveryMethod);
+      });
+
+      updateDeliveryMethod();
+      updateBankInfoVisibility();
+      if (window.refreshCheckoutAccountBanner) {
+        window.refreshCheckoutAccountBanner();
+      }
     });
-  }
-});
-</script>
+
+    document.getElementById('checkoutForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      const form = e.target;
+      if (!validateCheckoutForm(form)) return;
+
+      const checkoutBtn = document.getElementById('checkoutBtn');
+      const originalButtonText = checkoutBtn.textContent;
+      const pago = form.pago.value;
+      const orderNum = currentOrderNum;
+      const shippingCost = getShippingCost();
+      const deliveryLabel = getDeliveryLabel();
+      const total = cart.reduce((acc, item) => acc + item.price * item.quantity, 0) + shippingCost;
+      const customerName = `${form.nombre.value.trim()} ${form.apellidos.value.trim()}`.trim();
+      const summaryText = buildOrderSummaryText();
+      const orderPayload = buildOrderPayload(form, orderNum, total, deliveryLabel, shippingCost);
+      const persistenceResult = window.persistCheckoutOrderSupabase
+        ? await window.persistCheckoutOrderSupabase(orderPayload)
+        : { saved: false, message: 'Historial no disponible por ahora.' };
+
+      checkoutBtn.disabled = true;
+      checkoutBtn.textContent = pago === 'azul' ? 'Procesando pago...' : 'Registrando pedido...';
+
+      if (pago === 'azul') {
+        Swal.fire({
+          title: 'Redirigiendo a AZUL...',
+          text: 'Estamos preparando tu pago seguro.',
+          icon: 'info',
+          timer: 1800,
+          showConfirmButton: false,
+          willClose: () => {
+            setTimeout(() => {
+              Swal.fire({
+                icon: 'success',
+                title: '¡Pago realizado!',
+                html: `<b>${customerName}</b>, tu pedido <b>${orderNum}</b> fue confirmado.<br>Entrega: <b>${deliveryLabel}</b><br>Total: <b>RD$ ${currency(total)}</b><br><br>${persistenceResult.message}${buildNextStepsHtml(deliveryLabel, false, persistenceResult.saved)}`,
+                timer: 3200,
+                showConfirmButton: false,
+                didOpen: () => { confetti(); }
+              });
+              localStorage.removeItem('cart');
+              setTimeout(() => { window.location.href = persistenceResult.saved ? 'orders.html' : 'index.html'; }, 2800);
+            }, 500);
+          }
+        });
+        return;
+      }
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Pedido registrado',
+        html: `Tu pedido <b>${orderNum}</b> quedó reservado.<br>Entrega: <b>${deliveryLabel}</b><br>Total: <b>RD$ ${currency(total)}</b><br><br>${persistenceResult.message}${buildNextStepsHtml(deliveryLabel, true, persistenceResult.saved)}`,
+        showConfirmButton: true,
+        confirmButtonText: 'Enviar comprobante',
+        didOpen: () => { confetti(); }
+      }).then(() => {
+        const msg = encodeURIComponent(
+          `Hola, adjunto comprobante de pago para el pedido ${orderNum}.\n\nCliente: ${customerName}\nMétodo de entrega: ${deliveryLabel}\nTotal: RD$ ${currency(total)}\n\nResumen del pedido:\n${summaryText}`
+        );
+
+        window.open('https://wa.me/18493990014?text=' + msg, '_blank');
+        localStorage.removeItem('cart');
+        setTimeout(() => { window.location.href = persistenceResult.saved ? 'orders.html' : 'index.html'; }, 2000);
+      }).finally(() => {
+        checkoutBtn.disabled = false;
+        checkoutBtn.textContent = originalButtonText;
+      });
+    });
+  </script>
 </body>
 </html>
-

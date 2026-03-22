@@ -101,7 +101,6 @@ let cart = [];
 if(localStorage.getItem("cart")){
   cart = JSON.parse(localStorage.getItem("cart"));
   updateCartCount();
-  renderCart();
 }
 
 // Normalize text for search (remove accents, lowercase)
@@ -117,7 +116,7 @@ window.addToCart = function(name){
   }
   const existing = cart.find(i=>i.name===name);
   if(existing) existing.quantity++;
-  else cart.push({name, price: product.price, quantity:1});
+  else cart.push({name, price: product.price, quantity:1, image: product.image || ""});
   saveCart(); updateCartCount(); renderCart();
   Swal.fire({ 
     icon:'success', 
@@ -157,57 +156,93 @@ function updateWhatsappLink(cliente = null, pedido = null){
 
 // ---------------- Renderizar carrito ----------------
 
+function getCartItemImage(item) {
+  if (item.image) return item.image;
+  const product = products.find(p => p.name === item.name);
+  if (product && product.image) return product.image;
+  const card = [...document.querySelectorAll(".card")].find((cardEl) => {
+    const titleEl = cardEl.querySelector(".card-title, h3");
+    return titleEl && titleEl.textContent.trim() === item.name;
+  });
+  return card?.querySelector("img")?.getAttribute("src") || "";
+}
+
 function renderCart(){
-  const container = document.getElementById("cartItems"); // contenedor de items
-  const totalEl = document.getElementById("cartTotal");  // elemento del total
+  const container = document.getElementById("cartItems");
+  const totalEl = document.getElementById("cartTotal");
   const actions = document.querySelector('.cart-actions');
   if (!container || !totalEl) return;
+
   container.innerHTML = "";
   let total = 0;
 
-  if(cart.length === 0){
-    container.innerHTML = '<div style="text-align:center;color:#888;font-size:1.1em;padding:18px 0;">Carrito vacío 🛒</div>';
+  if (cart.length === 0) {
+    container.innerHTML = '<div class="cart-empty">Carrito vacio</div>';
     totalEl.innerText = "Total: RD$ 0.00";
-    if(actions) actions.style.display = 'none';
+    if (actions) actions.style.display = 'none';
     return;
-  } else {
-    if(actions) actions.style.display = '';
   }
+
+  if (actions) actions.style.display = '';
 
   cart.forEach((item,index)=>{
     const div = document.createElement("div");
     div.classList.add("cart-item");
-    div.innerHTML=`
-      <span>${item.name}</span>
+    const itemImage = getCartItemImage(item);
+    div.innerHTML = `
+      <div class="cart-item-main">
+        ${itemImage ? `<img src="${itemImage}" alt="${item.name}" class="cart-item-image">` : ""}
+        <div class="cart-item-copy">
+          <span class="cart-item-name">${item.name}</span>
+          <span class="cart-item-line-total">${formatRD(item.price * item.quantity)}</span>
+        </div>
+      </div>
       <div class="qty-control">
         <button class="qty-btn trash"></button>
-        <button class="qty-btn minus">−</button>
+        <button class="qty-btn minus">-</button>
         <input type="text" value="${item.quantity}" readonly>
         <button class="qty-btn plus">+</button>
       </div>
-      <span>${formatRD(item.price*item.quantity)}</span>
     `;
     container.appendChild(div);
-    total += item.price*item.quantity;
+    total += item.price * item.quantity;
 
     const btnTrash = div.querySelector(".trash");
     const btnMinus = div.querySelector(".minus");
     const btnPlus = div.querySelector(".plus");
 
-    if(item.quantity===1){ 
-      btnMinus.style.display="none"; 
-      btnTrash.style.display="flex"; 
-    } else { 
-      btnMinus.style.display="flex"; 
-      btnTrash.style.display="none"; 
+    if (item.quantity === 1) {
+      btnMinus.style.display = "none";
+      btnTrash.style.display = "flex";
+    } else {
+      btnMinus.style.display = "flex";
+      btnTrash.style.display = "none";
     }
 
-    btnPlus.addEventListener("click", e=>{ e.stopPropagation(); item.quantity++; saveCart(); updateCartCount(); renderCart(); });
-    btnMinus.addEventListener("click", e=>{ e.stopPropagation(); item.quantity--; if(item.quantity<1)item.quantity=1; saveCart(); updateCartCount(); renderCart(); });
-    btnTrash.addEventListener("click", e=>{ e.stopPropagation(); removeFromCart(index); });
+    btnPlus.addEventListener("click", (e) => {
+      e.stopPropagation();
+      item.quantity++;
+      saveCart();
+      updateCartCount();
+      renderCart();
+    });
+
+    btnMinus.addEventListener("click", (e) => {
+      e.stopPropagation();
+      item.quantity--;
+      if (item.quantity < 1) item.quantity = 1;
+      saveCart();
+      updateCartCount();
+      renderCart();
+    });
+
+    btnTrash.addEventListener("click", (e) => {
+      e.stopPropagation();
+      removeFromCart(index);
+    });
   });
 
-  totalEl.innerText = "Total: "+formatRD(total);
+  totalEl.innerText = "Total: " + formatRD(total);
 }
 
 // ---------------- Abrir / Cerrar panel y overlay ----------------
@@ -357,6 +392,14 @@ const products = Object.freeze([
   { id: 10, name: 'Aprieta Cuca', price: 1000, image: 'img/linea.jpg', description: 'Producto especial con efectos reafirmantes. Úsalo regularmente para mejores resultados.', category: 'otros' }
 ]);
 
+cart = cart.map((item) => {
+  if (item.image) return item;
+  const product = products.find((p) => p.name === item.name);
+  return product?.image ? { ...item, image: product.image } : item;
+});
+saveCart();
+renderCart();
+
 const productModal = document.getElementById('productModal');
 const closeProductModalBtn = document.getElementById('closeProductModal');
 const productModalAddCartBtn = document.getElementById('productModalAddCart');
@@ -440,6 +483,8 @@ function initializeSidebarMenu() {
   const overlay = document.getElementById('sidebarOverlay');
   const sidebarCategories = document.getElementById('sidebarCategories');
   const sidebarSearch = document.getElementById('sidebarSearch');
+  const sidebarAccount = document.getElementById('sidebarAccount');
+  const headerAccount = document.getElementById('headerAccount');
   if (!hamburger || !sidebar || !overlay || !sidebarCategories || !sidebarSearch) return;
   
   // Group products by category
@@ -515,6 +560,69 @@ function initializeSidebarMenu() {
     sidebar.classList.remove('open');
     overlay.classList.remove('open');
   }
+
+  async function renderSidebarAccount() {
+    if (!sidebarAccount) return;
+
+    if (!window.isBeautyfastSupabaseConfigured || !window.isBeautyfastSupabaseConfigured()) {
+      sidebarAccount.innerHTML = `
+        <div class="sidebar-account-card">
+          <p class="sidebar-account-label">Cuenta</p>
+          <h3 class="sidebar-account-title">Mis pedidos</h3>
+          <p class="sidebar-account-copy">Activa Supabase para que tus clientes puedan iniciar sesión y ver su historial.</p>
+          <div class="sidebar-account-actions">
+            <a href="orders.html" class="sidebar-account-link secondary">Abrir perfil</a>
+          </div>
+        </div>
+      `;
+      return;
+    }
+
+    const sessionResult = await window.getBeautyfastSession();
+    if (!sessionResult.user) {
+      sidebarAccount.innerHTML = `
+        <div class="sidebar-account-card">
+          <p class="sidebar-account-label">Cuenta</p>
+          <h3 class="sidebar-account-title">Inicia sesión</h3>
+          <p class="sidebar-account-copy">Accede para consultar pedidos, guardar compras y revisar tu historial.</p>
+          <div class="sidebar-account-actions">
+            <a href="orders.html" class="sidebar-account-link primary">Entrar / Crear cuenta</a>
+          </div>
+        </div>
+      `;
+      return;
+    }
+
+    sidebarAccount.innerHTML = `
+      <div class="sidebar-account-card">
+        <p class="sidebar-account-label">Cuenta</p>
+        <h3 class="sidebar-account-title">Sesión activa</h3>
+        <p class="sidebar-account-meta">${sessionResult.user.email}</p>
+        <div class="sidebar-account-actions">
+          <a href="orders.html" class="sidebar-account-link primary">Ver mis pedidos</a>
+          <button type="button" class="sidebar-account-button" id="sidebarLogoutBtn">Cerrar sesión</button>
+        </div>
+      </div>
+    `;
+
+    const logoutBtn = document.getElementById('sidebarLogoutBtn');
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', async () => {
+        const result = await window.signOutBeautyfastCustomer();
+        if (!result.ok) {
+          if (window.Swal) {
+            Swal.fire({ icon: 'error', title: 'No pudimos cerrar sesión', text: result.error || 'Inténtalo de nuevo.' });
+          }
+          return;
+        }
+
+        await renderSidebarAccount();
+        if (window.Swal) {
+          Swal.fire({ icon: 'success', title: 'Sesión cerrada', toast: true, position: 'top-end', showConfirmButton: false, timer: 1400 });
+        }
+      });
+    }
+  }
   
   function toggleSidebar() {
     if (sidebar.classList.contains('open')) {
@@ -524,16 +632,13 @@ function initializeSidebarMenu() {
     }
   }
   
-  // Event listeners
   hamburger.addEventListener('click', toggleSidebar);
   overlay.addEventListener('click', closeSidebar);
   
-  // Search filter
   sidebarSearch.addEventListener('input', (e) => {
     renderSidebarMenu(e.target.value);
   });
   
-  // Clear search button
   const clearSearchBtn = document.getElementById('clearSidebarSearch');
   if (clearSearchBtn) {
     clearSearchBtn.addEventListener('click', () => {
@@ -543,8 +648,7 @@ function initializeSidebarMenu() {
     });
   }
   
-  // Render initial menu
   renderSidebarMenu();
+  renderSidebarAccount();
 }
 });
-

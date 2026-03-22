@@ -1,0 +1,1 @@
+Backup de imágenes de ambas carpetas img antes de limpiar duplicados.

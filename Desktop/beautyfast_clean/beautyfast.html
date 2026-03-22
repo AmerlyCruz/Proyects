@@ -42,6 +42,7 @@
   </div>
 
   <div class="header-right">
+    <div id="headerAccount" class="header-account"></div>
     <div class="search-box">
       <button id="searchToggle" class="search-toggle" type="button" title="Buscar">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -92,6 +93,7 @@
     <a href="index.html" class="sidebar-btn sidebar-btn-primary">Inicio</a>
     <a href="beautyfast.html" class="sidebar-btn sidebar-btn-secondary">Productos</a>
   </div>
+  <div id="sidebarAccount" class="sidebar-account"></div>
 
   <div id="loader" class="product-loader">
     <div class="product-loader-card">
@@ -265,6 +267,7 @@
         <li><a href="about.html" target="_blank" class="footer-link-pill">Nosotros</a></li>
         <li><a href="redes.html" target="_blank" class="footer-link-pill">Redes sociales</a></li>
         <li><a href="contacto.html" target="_blank" class="footer-link-pill">Contacto</a></li>
+        <li><a href="orders.html" class="footer-link-pill">Mis pedidos</a></li>
       </ul>
     </div>
     <div class="footer-column">
@@ -288,6 +291,9 @@
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script src="supabase-client.js"></script>
 <script src="beautyfast.js"></script>
 
 </body>

@@ -1,0 +1,1 @@
+Se ha realizado un backup de todos los archivos de la subcarpeta Desktop/beautyfast_clean y de las imágenes antes de limpiar duplicados. Puedes restaurar cualquier archivo desde la carpeta backup si lo necesitas.

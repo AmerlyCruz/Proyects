@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Inicia sesión para ver tu historial de pedidos de El Secreto de Aris.">
+  <meta name="theme-color" content="#606c38">
+  <title>Mis pedidos - El Secreto de Aris</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="beautyfast.css">
+</head>
+<body class="account-shell">
+  <header class="header header-relative">
+    <a href="index.html" class="sidebar-btn sidebar-btn-secondary">Inicio</a>
+
+    <div class="brand">
+      <svg width="40" height="40" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" class="leaf-icon">
+        <path d="M 50 100 Q 30 70 40 40 Q 50 20 70 30 Q 90 40 85 70 Q 80 90 70 100 L 60 95 Q 50 75 55 55 L 50 100 Z" fill="#7CB342"/>
+        <path d="M 55 60 Q 60 75 65 90" stroke="#558B2F" stroke-width="2" stroke-linecap="round"/>
+        <path d="M 110 80 Q 130 50 150 45 Q 170 40 175 60 Q 180 80 165 100 Q 155 115 140 110 L 135 105 Q 145 90 145 70 L 110 80 Z" fill="#9CCC65"/>
+        <path d="M 140 70 Q 145 85 145 100" stroke="#689F38" stroke-width="2" stroke-linecap="round"/>
+        <path d="M 65 110 Q 40 120 25 140 Q 10 160 20 175 Q 30 185 50 175 Q 70 165 75 145 Q 80 125 70 115 L 67 120 Q 55 135 40 140 L 65 110 Z" fill="#8BC34A"/>
+        <path d="M 50 135 Q 55 145 60 155" stroke="#558B2F" stroke-width="2" stroke-linecap="round"/>
+        <path d="M 90 115 Q 85 140 90 165 Q 95 185 110 190 Q 120 192 125 180 Q 130 165 125 140 Q 120 120 110 115 L 105 120 Q 105 140 110 160 L 90 115 Z" fill="#AED581"/>
+        <path d="M 105 135 Q 108 150 110 165" stroke="#7CB342" stroke-width="2" stroke-linecap="round"/>
+        <path d="M 135 115 Q 155 125 170 145 Q 185 165 175 180 Q 165 190 150 180 Q 135 170 130 150 Q 125 130 130 120 L 133 125 Q 140 140 155 145 L 135 115 Z" fill="#9CCC65"/>
+        <path d="M 145 140 Q 148 150 150 165" stroke="#689F38" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="100" cy="110" r="15" fill="#7CB342"/>
+        <circle cx="100" cy="110" r="10" fill="#9CCC65"/>
+      </svg>
+      <h1><a href="index.html" class="brand-link">El Secreto de Aris</a></h1>
+    </div>
+
+    <div class="header-right">
+      <div id="headerAccount" class="header-account"></div>
+      <a href="checkout.html" class="sidebar-btn sidebar-btn-secondary">Checkout</a>
+    </div>
+  </header>
+
+  <main class="account-main">
+    <section class="account-hero">
+      <p class="account-eyebrow">Área del cliente</p>
+      <h1 class="account-title">Mis pedidos</h1>
+      <p class="account-copy">Crea tu cuenta o inicia sesión para ver el historial de tus pedidos. Cuando compres con la sesión iniciada, tus órdenes aparecerán aquí automáticamente.</p>
+    </section>
+
+    <section class="account-grid">
+      <!-- Login/Signup Card -->
+      <article class="account-card">
+        <h2 style="margin-bottom: 6px;">Acceso simple</h2>
+        <p style="margin-bottom: 12px; color: #b6a47a;">Usa tu correo y contraseña para entrar. Si es tu primera vez, crea la cuenta y luego realiza tus compras con esa sesión abierta.</p>
+
+        <div class="auth-toggle">
+          <button type="button" class="active" data-auth-mode="login">Entrar</button>
+          <button type="button" data-auth-mode="signup">Crear cuenta</button>
+        </div>
+
+        <form id="authForm" class="account-form">
+          <input type="text" id="authName" placeholder="Nombre completo" autocomplete="name" hidden>
+          <input type="email" id="authEmail" placeholder="Correo electrónico" autocomplete="email" required>
+          <input type="password" id="authPassword" placeholder="Contraseña" autocomplete="current-password" required>
+          <button type="submit" class="checkout-btn account-submit" id="authSubmitBtn">Entrar</button>
+        </form>
+
+        <div id="authStatus" class="account-status">Inicia sesión para consultar tu historial de pedidos.</div>
+      </article>
+
+      <!-- Orders/History Card -->
+      <article class="account-card">
+        <div class="account-toolbar">
+          <div>
+            <h2 style="margin-bottom: 2px;">Historial</h2>
+            <div id="accountUser" class="account-user">Sin sesión activa.</div>
+          </div>
+          <button type="button" class="sidebar-btn sidebar-btn-secondary" id="logoutBtn" hidden>Cerrar sesión</button>
+        </div>
+
+        <div id="ordersList" class="orders-list">
+          <div class="orders-empty">Tus pedidos aparecerán aquí cuando inicies sesión y completes compras con tu cuenta activa.</div>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script src="supabase-client.js"></script>
+  <script>
+    const authForm = document.getElementById('authForm');
+    const authName = document.getElementById('authName');
+    const authEmail = document.getElementById('authEmail');
+    const authPassword = document.getElementById('authPassword');
+    const authSubmitBtn = document.getElementById('authSubmitBtn');
+    const authStatus = document.getElementById('authStatus');
+    const ordersList = document.getElementById('ordersList');
+    const accountUser = document.getElementById('accountUser');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const toggleButtons = document.querySelectorAll('[data-auth-mode]');
+    let authMode = 'login';
+
+    function setStatus(message, type) {
+      authStatus.textContent = message;
+      authStatus.className = 'account-status';
+      if (type) authStatus.classList.add(type);
+    }
+
+    function setAuthMode(mode) {
+      authMode = mode;
+      toggleButtons.forEach((button) => {
+        button.classList.toggle('active', button.dataset.authMode === mode);
+      });
+      authSubmitBtn.textContent = mode === 'signup' ? 'Crear cuenta' : 'Entrar';
+      authName.hidden = mode !== 'signup';
+      authName.required = mode === 'signup';
+      authPassword.autocomplete = mode === 'signup' ? 'new-password' : 'current-password';
+    }
+
+    function escapeHtml(value) {
+      return String(value || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function currency(value) {
+      return Number(value || 0).toLocaleString('es-DO', { minimumFractionDigits: 2 });
+    }
+
+    function formatDate(value) {
+      if (!value) return 'Sin fecha';
+      const date = new Date(value);
+      return date.toLocaleString('es-DO', {
+        dateStyle: 'medium',
+        timeStyle: 'short'
+      });
+    }
+
+    function friendlyStatus(status) {
+      switch ((status || '').toLowerCase()) {
+        case 'paid_pending_fulfillment': return 'Pagado, pendiente de entrega';
+        case 'pending': return 'Pendiente';
+        case 'completed': return 'Completado';
+        case 'cancelled': return 'Cancelado';
+        case 'processing': return 'Procesando';
+        default: return status;
+      }
+    }
+    function statusClass(status) {
+      switch ((status || '').toLowerCase()) {
+        case 'completed': return 'status-completed';
+        case 'cancelled': return 'status-cancelled';
+        case 'pending': return 'status-pending';
+        default: return '';
+      }
+    }
+    function paymentClass() { return 'payment'; }
+    function deliveryClass() { return 'delivery'; }
+
+    function renderOrders(orders) {
+      if (!orders.length) {
+        ordersList.innerHTML = '<div class="orders-empty">Todavía no tienes pedidos guardados. Cuando compres con la sesión iniciada, aparecerán aquí.</div>';
+        return;
+      }
+
+      ordersList.innerHTML = orders.map((order) => {
+        const items = Array.isArray(order.items) ? order.items : [];
+        const deliveryAddress = order.delivery_address || {};
+
+        return `
+          <article class="order-card">
+            <div class="order-head">
+              <div class="order-number">${escapeHtml(order.order_number)}</div>
+              <div class="order-date">${formatDate(order.created_at)}</div>
+            </div>
+            <div class="order-badges">
+              <span class="order-badge ${deliveryClass()}">${escapeHtml(order.delivery_method || 'Sin método')}</span>
+              <span class="order-badge ${paymentClass()}">${escapeHtml(order.payment_method || 'Sin pago')}</span>
+              <span class="order-badge status ${statusClass(order.status)}">${friendlyStatus(order.status || 'pending')}</span>
+            </div>
+            <div class="order-meta">
+              <div><strong>Cliente:</strong> ${escapeHtml(order.customer_name)}</div>
+              <div><strong>Teléfono:</strong> ${escapeHtml(order.phone)}</div>
+              ${deliveryAddress?.direccion ? `<div><strong>Dirección:</strong> ${escapeHtml(deliveryAddress.direccion)}${deliveryAddress.ciudad ? ', ' + escapeHtml(deliveryAddress.ciudad) : ''}</div>` : ''}
+            </div>
+            <div class="order-items">
+              ${items.map((item) => `<div class="order-item"><span>${escapeHtml(item.name)} x${escapeHtml(item.quantity)}</span><span>RD$ ${currency(item.lineTotal || (item.price * item.quantity))}</span></div>`).join('')}
+            </div>
+            <div class="order-total">Total: RD$ ${currency(order.total_amount)}</div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    async function refreshOrders() {
+      if (!window.isBeautyfastSupabaseConfigured()) {
+        setStatus('Completa supabase-config.js para activar login e historial.', 'is-error');
+        ordersList.innerHTML = '<div class="orders-empty">Supabase todavía no está configurado en este proyecto.</div>';
+        return;
+      }
+
+      const sessionResult = await window.getBeautyfastSession();
+      if (!sessionResult.user) {
+        accountUser.textContent = 'Sin sesión activa.';
+        logoutBtn.hidden = true;
+        renderOrders([]);
+        return;
+      }
+
+      accountUser.textContent = `Sesión activa: ${sessionResult.user.email}`;
+      logoutBtn.hidden = false;
+
+      const ordersResult = await window.fetchBeautyfastOrders();
+      if (!ordersResult.ok) {
+        ordersList.innerHTML = `<div class="orders-empty">${escapeHtml(ordersResult.error || 'No pudimos cargar tus pedidos.')}</div>`;
+        return;
+      }
+
+      renderOrders(ordersResult.data);
+    }
+
+    toggleButtons.forEach((button) => {
+      button.addEventListener('click', () => setAuthMode(button.dataset.authMode));
+    });
+
+    authForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      if (!window.isBeautyfastSupabaseConfigured()) {
+        setStatus('Completa supabase-config.js antes de usar esta pantalla.', 'is-error');
+        return;
+      }
+
+      authSubmitBtn.disabled = true;
+      authSubmitBtn.textContent = authMode === 'signup' ? 'Creando cuenta...' : 'Entrando...';
+
+      let result;
+      if (authMode === 'signup') {
+        result = await window.signUpBeautyfastCustomer(
+          authEmail.value.trim(),
+          authPassword.value,
+          { full_name: authName.value.trim() }
+        );
+      } else {
+        result = await window.signInBeautyfastCustomer(authEmail.value.trim(), authPassword.value);
+      }
+
+      if (!result.ok) {
+        setStatus(result.error || 'No pudimos completar la autenticación.', 'is-error');
+        authSubmitBtn.disabled = false;
+        authSubmitBtn.textContent = authMode === 'signup' ? 'Crear cuenta' : 'Entrar';
+        return;
+      }
+
+      setStatus(
+        authMode === 'signup'
+          ? 'Cuenta creada. Si tu proyecto exige confirmación por correo, revisa tu bandeja antes de entrar.'
+          : 'Sesión iniciada correctamente.',
+        'is-success'
+      );
+
+      authSubmitBtn.disabled = false;
+      authSubmitBtn.textContent = authMode === 'signup' ? 'Crear cuenta' : 'Entrar';
+      await refreshOrders();
+    });
+
+    logoutBtn.addEventListener('click', async () => {
+      const result = await window.signOutBeautyfastCustomer();
+      if (!result.ok) {
+        setStatus(result.error || 'No pudimos cerrar sesión.', 'is-error');
+        return;
+      }
+
+      setStatus('Sesión cerrada.', 'is-success');
+      await refreshOrders();
+    });
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      setAuthMode('login');
+      await refreshOrders();
+    });
+  </script>
+</body>
+</html>

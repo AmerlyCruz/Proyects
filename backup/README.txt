@@ -1,0 +1,1 @@
+Backup de archivos de la subcarpeta Desktop/beautyfast_clean antes de limpiar duplicados. Puedes restaurar cualquier archivo desde aquí si lo necesitas.
