@@ -35,7 +35,7 @@
 
     <div class="header-right">
       <div id="headerAccount" class="header-account"></div>
-      <a href="checkout.html" class="sidebar-btn sidebar-btn-secondary">Checkout</a>
+      <a href="checkout.html" class="sidebar-btn sidebar-btn-secondary" id="ordersCheckoutLink">Checkout</a>
     </div>
   </header>
 
@@ -50,7 +50,7 @@
       <!-- Login/Signup Card -->
       <article class="account-card">
         <h2 style="margin-bottom: 6px;">Acceso simple</h2>
-        <p style="margin-bottom: 12px; color: #b6a47a;">Usa tu correo y contraseña para entrar. Si es tu primera vez, crea la cuenta y luego realiza tus compras con esa sesión abierta.</p>
+        <p style="margin-bottom: 12px; color: #b6a47a;">Usa tu correo o tu usuario de acceso para entrar. Si es tu primera vez, crea la cuenta con tu correo y luego realiza tus compras con esa sesión abierta.</p>
 
         <div class="auth-toggle">
           <button type="button" class="active" data-auth-mode="login">Entrar</button>
@@ -59,7 +59,7 @@
 
         <form id="authForm" class="account-form">
           <input type="text" id="authName" placeholder="Nombre completo" autocomplete="name" hidden>
-          <input type="email" id="authEmail" placeholder="Correo electrónico" autocomplete="email" required>
+          <input type="text" id="authEmail" placeholder="Correo o usuario" autocomplete="username" required>
           <input type="password" id="authPassword" placeholder="Contraseña" autocomplete="current-password" required>
           <button type="submit" class="checkout-btn account-submit" id="authSubmitBtn">Entrar</button>
         </form>
@@ -97,13 +97,25 @@
     const ordersList = document.getElementById('ordersList');
     const accountUser = document.getElementById('accountUser');
     const logoutBtn = document.getElementById('logoutBtn');
+    const ordersCheckoutLink = document.getElementById('ordersCheckoutLink');
     const toggleButtons = document.querySelectorAll('[data-auth-mode]');
+    const authCard = authForm.closest('.account-card');
     let authMode = 'login';
+    let adminRedirectScheduled = false;
 
     function setStatus(message, type) {
       authStatus.textContent = message;
       authStatus.className = 'account-status';
       if (type) authStatus.classList.add(type);
+    }
+
+    function redirectAdminToPanel() {
+      if (adminRedirectScheduled) return;
+      adminRedirectScheduled = true;
+      setStatus('Sesión de administrador detectada. Te estamos llevando al panel.', 'is-success');
+      window.setTimeout(() => {
+        window.location.href = 'admin.html';
+      }, 250);
     }
 
     function setAuthMode(mode) {
@@ -115,6 +127,32 @@
       authName.hidden = mode !== 'signup';
       authName.required = mode === 'signup';
       authPassword.autocomplete = mode === 'signup' ? 'new-password' : 'current-password';
+      authEmail.type = mode === 'signup' ? 'email' : 'text';
+      authEmail.autocomplete = mode === 'signup' ? 'email' : 'username';
+      authEmail.inputMode = mode === 'signup' ? 'email' : 'text';
+      authEmail.placeholder = mode === 'signup' ? 'Correo electrónico' : 'Correo o usuario';
+    }
+
+    function getAdminLoginConfig() {
+      const config = window.BEAUTYFAST_SUPABASE_CONFIG || {};
+      const loginConfig = config.adminLogin || {};
+      return {
+        username: String(loginConfig.username || 'admin').trim().toLowerCase(),
+        email: String(loginConfig.email || '').trim().toLowerCase()
+      };
+    }
+
+    function resolveLoginIdentifier(value) {
+      const identifier = String(value || '').trim();
+      if (!identifier) return '';
+
+      const normalizedIdentifier = identifier.toLowerCase();
+      const adminLoginConfig = getAdminLoginConfig();
+      if (normalizedIdentifier === adminLoginConfig.username && adminLoginConfig.email) {
+        return adminLoginConfig.email;
+      }
+
+      return identifier;
     }
 
     function escapeHtml(value) {
@@ -142,6 +180,7 @@
     function friendlyStatus(status) {
       switch ((status || '').toLowerCase()) {
         case 'paid_pending_fulfillment': return 'Pagado, pendiente de entrega';
+        case 'pending_payment': return 'Pendiente de comprobante';
         case 'pending': return 'Pendiente';
         case 'completed': return 'Completado';
         case 'cancelled': return 'Cancelado';
@@ -151,6 +190,7 @@
     }
     function statusClass(status) {
       switch ((status || '').toLowerCase()) {
+        case 'pending_payment': return 'status-pending';
         case 'completed': return 'status-completed';
         case 'cancelled': return 'status-cancelled';
         case 'pending': return 'status-pending';
@@ -179,7 +219,7 @@
             <div class="order-badges">
               <span class="order-badge ${deliveryClass()}">${escapeHtml(order.delivery_method || 'Sin método')}</span>
               <span class="order-badge ${paymentClass()}">${escapeHtml(order.payment_method || 'Sin pago')}</span>
-              <span class="order-badge status ${statusClass(order.status)}">${friendlyStatus(order.status || 'pending')}</span>
+              <span class="order-badge status ${statusClass(order.status)}">${escapeHtml(friendlyStatus(order.status || 'pending'))}</span>
             </div>
             <div class="order-meta">
               <div><strong>Cliente:</strong> ${escapeHtml(order.customer_name)}</div>
@@ -206,12 +246,27 @@
       if (!sessionResult.user) {
         accountUser.textContent = 'Sin sesión activa.';
         logoutBtn.hidden = true;
+        if (ordersCheckoutLink) ordersCheckoutLink.hidden = false;
+        if (authCard) authCard.hidden = false;
         renderOrders([]);
+        return;
+      }
+
+      const adminResult = window.isBeautyfastAdmin ? await window.isBeautyfastAdmin() : { ok: false, isAdmin: false };
+      if (adminResult.ok && adminResult.isAdmin) {
+        if (authCard) authCard.hidden = true;
+        accountUser.textContent = 'Sesión de administrador activa.';
+        logoutBtn.hidden = false;
+        if (ordersCheckoutLink) ordersCheckoutLink.hidden = true;
+        ordersList.innerHTML = '<div class="orders-empty">Abriendo panel de administración...</div>';
+        redirectAdminToPanel();
         return;
       }
 
       accountUser.textContent = `Sesión activa: ${sessionResult.user.email}`;
       logoutBtn.hidden = false;
+      if (ordersCheckoutLink) ordersCheckoutLink.hidden = false;
+      if (authCard) authCard.hidden = false;
 
       const ordersResult = await window.fetchBeautyfastOrders();
       if (!ordersResult.ok) {
@@ -245,7 +300,7 @@
           { full_name: authName.value.trim() }
         );
       } else {
-        result = await window.signInBeautyfastCustomer(authEmail.value.trim(), authPassword.value);
+        result = await window.signInBeautyfastCustomer(resolveLoginIdentifier(authEmail.value), authPassword.value);
       }
 
       if (!result.ok) {

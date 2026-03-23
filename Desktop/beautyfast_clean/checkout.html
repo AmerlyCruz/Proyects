@@ -620,10 +620,46 @@
   <script src="supabase-config.js"></script>
   <script src="supabase-client.js"></script>
   <script src="checkout-supabase.js"></script>
+  <script src="catalog-fallback.js"></script>
   <script src="beautyfast.js"></script>
   <script>
     let cart = [];
-    if (localStorage.getItem("cart")) cart = JSON.parse(localStorage.getItem("cart"));
+
+    function loadStoredCart() {
+      const rawCart = localStorage.getItem("cart");
+      if (!rawCart) return [];
+
+      try {
+        const parsedCart = JSON.parse(rawCart);
+        if (!Array.isArray(parsedCart)) throw new Error('Invalid cart payload');
+
+        const sanitizedCart = parsedCart
+          .map((item) => {
+            if (!item || typeof item !== 'object') return null;
+
+            const name = typeof item.name === 'string' ? item.name.trim() : '';
+            const image = typeof item.image === 'string' ? item.image : '';
+            const price = Number(item.price);
+            const quantity = Math.max(1, Math.floor(Number(item.quantity) || 0));
+
+            if (!name || !Number.isFinite(price) || price < 0) return null;
+
+            return { name, image, price, quantity };
+          })
+          .filter(Boolean);
+
+        if (sanitizedCart.length !== parsedCart.length) {
+          localStorage.setItem('cart', JSON.stringify(sanitizedCart));
+        }
+
+        return sanitizedCart;
+      } catch (error) {
+        localStorage.removeItem('cart');
+        return [];
+      }
+    }
+
+    cart = loadStoredCart();
 
     function getShippingCost() {
       const selectedDelivery = document.querySelector('input[name="envio"]:checked')?.value || 'delivery';
@@ -639,6 +675,15 @@
       return value.toLocaleString('es-DO', { minimumFractionDigits: 2 });
     }
 
+    function escapeHtml(value) {
+      return String(value || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
     function getItemImage(item) {
       if (item.image) return item.image;
       return 'img/linea.jpg';
@@ -650,31 +695,60 @@
       const shippingCost = getShippingCost();
 
       if (!cart.length) {
-        itemsDiv.innerHTML = '<em>No hay productos en el carrito.</em>';
+        itemsDiv.replaceChildren();
+        const emptyState = document.createElement('em');
+        emptyState.textContent = 'No hay productos en el carrito.';
+        itemsDiv.appendChild(emptyState);
         totalDiv.textContent = '';
         document.getElementById('checkoutBtn').disabled = true;
         return;
       }
 
       let total = 0;
-      let html = '<div class="checkout-summary-items">';
+      itemsDiv.replaceChildren();
+      const summaryItems = document.createElement('div');
+      summaryItems.className = 'checkout-summary-items';
+
       cart.forEach((item) => {
-        html += `
-          <div class="checkout-summary-item">
-            <img src="${getItemImage(item)}" alt="${item.name}" class="checkout-summary-thumb">
-            <div class="checkout-summary-copy">
-              <div class="checkout-summary-name">${item.name}</div>
-              <div class="checkout-summary-meta">Cantidad: ${item.quantity}</div>
-            </div>
-            <div class="checkout-summary-price">RD$ ${currency(item.price * item.quantity)}</div>
-          </div>
-        `;
+        const summaryItem = document.createElement('div');
+        summaryItem.className = 'checkout-summary-item';
+
+        const image = document.createElement('img');
+        image.src = getItemImage(item);
+        image.alt = item.name;
+        image.className = 'checkout-summary-thumb';
+
+        const copy = document.createElement('div');
+        copy.className = 'checkout-summary-copy';
+
+        const name = document.createElement('div');
+        name.className = 'checkout-summary-name';
+        name.textContent = item.name;
+
+        const meta = document.createElement('div');
+        meta.className = 'checkout-summary-meta';
+        meta.textContent = `Cantidad: ${item.quantity}`;
+
+        const price = document.createElement('div');
+        price.className = 'checkout-summary-price';
+        price.textContent = `RD$ ${currency(item.price * item.quantity)}`;
+
+        copy.appendChild(name);
+        copy.appendChild(meta);
+        summaryItem.appendChild(image);
+        summaryItem.appendChild(copy);
+        summaryItem.appendChild(price);
+        summaryItems.appendChild(summaryItem);
+
         total += item.price * item.quantity;
       });
-      html += '</div>';
-      html += `<div class="checkout-total-note">Entrega: ${shippingCost === 0 ? 'Retiro en local (gratis)' : 'Delivery (RD$ 200.00)'}</div>`;
 
-      itemsDiv.innerHTML = html;
+      const deliveryNote = document.createElement('div');
+      deliveryNote.className = 'checkout-total-note';
+      deliveryNote.textContent = `Entrega: ${shippingCost === 0 ? 'Retiro en local (gratis)' : 'Delivery (RD$ 200.00)'}`;
+
+      itemsDiv.appendChild(summaryItems);
+      itemsDiv.appendChild(deliveryNote);
       totalDiv.textContent = 'Total: RD$ ' + currency(total + shippingCost);
       document.getElementById('checkoutBtn').disabled = false;
     }
@@ -791,21 +865,6 @@
       return cart.map((item) => `- ${item.name} x${item.quantity} (RD$ ${currency(item.price * item.quantity)})`).join('\n');
     }
 
-    function buildNextStepsHtml(deliveryLabel, bankFlow) {
-      const stepOne = bankFlow
-        ? 'Envía tu comprobante por WhatsApp para validar el pedido.'
-        : 'Recibirás confirmación del pago y validación del pedido.';
-      const stepTwo = deliveryLabel === 'Retiro en local'
-        ? 'Te escribiremos para compartir dirección exacta y horario de retiro.'
-        : 'Te contactaremos para confirmar entrega y referencia si hace falta.';
-
-      return `<div style="text-align:left; margin-top:10px;">
-        <b>Próximos pasos</b>
-        <div style="margin-top:8px;">1. ${stepOne}</div>
-        <div style="margin-top:6px;">2. ${stepTwo}</div>
-      </div>`;
-    }
-
     function buildOrderPayload(form, orderNum, total, deliveryLabel, shippingCost) {
       const pickupSelected = form.envio.value === 'pickup';
       const customerName = `${form.nombre.value.trim()} ${form.apellidos.value.trim()}`.trim();
@@ -918,8 +977,30 @@
     document.getElementById('checkoutForm').addEventListener('submit', async function (e) {
       e.preventDefault();
 
+      if (window.isBeautyfastAdmin) {
+        const adminResult = await window.isBeautyfastAdmin();
+        if (adminResult.ok && adminResult.isAdmin) {
+          Swal.fire({
+            icon: 'info',
+            title: 'Cuenta de administrador',
+            text: 'La cuenta de administrador no puede realizar compras desde esta pantalla.',
+            confirmButtonText: 'Entendido'
+          });
+          return;
+        }
+      }
+
       const form = e.target;
       if (!validateCheckoutForm(form)) return;
+
+      if (!cart.length) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Carrito vacío',
+          text: 'Agrega productos antes de continuar con el pago.'
+        });
+        return;
+      }
 
       const checkoutBtn = document.getElementById('checkoutBtn');
       const originalButtonText = checkoutBtn.textContent;
@@ -931,12 +1012,17 @@
       const customerName = `${form.nombre.value.trim()} ${form.apellidos.value.trim()}`.trim();
       const summaryText = buildOrderSummaryText();
       const orderPayload = buildOrderPayload(form, orderNum, total, deliveryLabel, shippingCost);
-      const persistenceResult = window.persistCheckoutOrderSupabase
-        ? await window.persistCheckoutOrderSupabase(orderPayload)
-        : { saved: false, message: 'Historial no disponible por ahora.' };
 
       checkoutBtn.disabled = true;
       checkoutBtn.textContent = pago === 'azul' ? 'Procesando pago...' : 'Registrando pedido...';
+
+      const persistenceResult = window.persistCheckoutOrderSupabase
+        ? await window.persistCheckoutOrderSupabase(orderPayload)
+        : { saved: false, message: 'Historial no disponible por ahora.' };
+      const safeCustomerName = escapeHtml(customerName);
+      const safeOrderNum = escapeHtml(orderNum);
+      const safeDeliveryLabel = escapeHtml(deliveryLabel);
+      const safePersistenceMessage = escapeHtml(persistenceResult.message);
 
       if (pago === 'azul') {
         Swal.fire({
@@ -950,7 +1036,7 @@
               Swal.fire({
                 icon: 'success',
                 title: '¡Pago realizado!',
-                html: `<b>${customerName}</b>, tu pedido <b>${orderNum}</b> fue confirmado.<br>Entrega: <b>${deliveryLabel}</b><br>Total: <b>RD$ ${currency(total)}</b><br><br>${persistenceResult.message}${buildNextStepsHtml(deliveryLabel, false, persistenceResult.saved)}`,
+                html: `<b>${safeCustomerName}</b>, tu pedido <b>${safeOrderNum}</b> fue confirmado.<br>Entrega: <b>${safeDeliveryLabel}</b><br>Total: <b>RD$ ${currency(total)}</b><br><br>${safePersistenceMessage}${buildNextStepsHtml(deliveryLabel, false, persistenceResult.saved)}`,
                 timer: 3200,
                 showConfirmButton: false,
                 didOpen: () => { confetti(); }
@@ -966,7 +1052,7 @@
       Swal.fire({
         icon: 'success',
         title: 'Pedido registrado',
-        html: `Tu pedido <b>${orderNum}</b> quedó reservado.<br>Entrega: <b>${deliveryLabel}</b><br>Total: <b>RD$ ${currency(total)}</b><br><br>${persistenceResult.message}${buildNextStepsHtml(deliveryLabel, true, persistenceResult.saved)}`,
+        html: `Tu pedido <b>${safeOrderNum}</b> quedó reservado.<br>Entrega: <b>${safeDeliveryLabel}</b><br>Total: <b>RD$ ${currency(total)}</b><br><br>${safePersistenceMessage}${buildNextStepsHtml(deliveryLabel, true, persistenceResult.saved)}`,
         showConfirmButton: true,
         confirmButtonText: 'Enviar comprobante',
         didOpen: () => { confetti(); }

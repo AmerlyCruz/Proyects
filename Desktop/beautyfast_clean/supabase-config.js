@@ -2,6 +2,13 @@ window.BEAUTYFAST_SUPABASE_CONFIG = {
   url: "https://xmipcqspotmfljleamcw.supabase.co",
   anonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhtaXBjcXNwb3RtZmxqbGVhbWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg5MzYyODcsImV4cCI6MjA4NDUxMjI4N30.602dHefAPXTMcJsz4ncSiqiFHDhWer43SST3RFa8_JU",
   ordersTable: "orders",
+  productsTable: "products",
+  profilesTable: "user_profiles",
+  productImagesBucket: "product-images",
+  adminLogin: {
+    username: "admin",
+    email: "admin@elsecretodearis.local"
+  },
   storageKey: "beautyfast.auth"
 };
 

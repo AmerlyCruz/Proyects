@@ -34,29 +34,37 @@ create table if not exists public.orders (
 alter table public.orders enable row level security;
 
 -- Políticas de seguridad completas
-create policy "Users can read their own orders"
-on public.orders
-for select
-to authenticated
-using (auth.uid() = user_id);
+do $$
+begin
+  if not exists (
+    select 1 from pg_policies
+    where schemaname = 'public' and tablename = 'orders' and policyname = 'Users can read their own orders'
+  ) then
+    execute 'create policy "Users can read their own orders" on public.orders for select to authenticated using (auth.uid() = user_id)';
+  end if;
 
-create policy "Users can insert their own orders"
-on public.orders
-for insert
-to authenticated
-with check (auth.uid() = user_id);
+  if not exists (
+    select 1 from pg_policies
+    where schemaname = 'public' and tablename = 'orders' and policyname = 'Users can insert their own orders'
+  ) then
+    execute 'create policy "Users can insert their own orders" on public.orders for insert to authenticated with check (auth.uid() = user_id)';
+  end if;
 
-create policy "Users can update their own orders"
-on public.orders
-for update
-to authenticated
-using (auth.uid() = user_id);
+  if not exists (
+    select 1 from pg_policies
+    where schemaname = 'public' and tablename = 'orders' and policyname = 'Users can update their own orders'
+  ) then
+    execute 'create policy "Users can update their own orders" on public.orders for update to authenticated using (auth.uid() = user_id)';
+  end if;
 
-create policy "Users can delete their own orders"
-on public.orders
-for delete
-to authenticated
-using (auth.uid() = user_id);
+  if not exists (
+    select 1 from pg_policies
+    where schemaname = 'public' and tablename = 'orders' and policyname = 'Users can delete their own orders'
+  ) then
+    execute 'create policy "Users can delete their own orders" on public.orders for delete to authenticated using (auth.uid() = user_id)';
+  end if;
+end
+$$;
 
 -- Índices útiles
 create index if not exists orders_user_id_created_at_idx

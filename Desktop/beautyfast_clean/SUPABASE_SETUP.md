@@ -29,3 +29,8 @@
 
 ## 7. Siguiente mejora recomendada
 - Añadir estados internos del pedido: `pending_payment`, `paid`, `preparing`, `ready_for_pickup`, `out_for_delivery`, `completed`.
+
+## 8. Catálogo administrable
+- Ejecuta también `supabase-admin.sql` para crear productos, perfiles, `site_settings` y storage.
+- En `admin.html`, usa `Importar catálogo base` una sola vez si quieres migrar los productos históricos al panel.
+- Después de esa importación, Supabase queda como fuente oficial del catálogo público y el fallback solo queda como respaldo si la base no responde.

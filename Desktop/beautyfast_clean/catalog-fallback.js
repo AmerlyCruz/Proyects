@@ -1,0 +1,14 @@
+(function () {
+  window.BEAUTYFAST_FALLBACK_PRODUCTS = [
+    { id: 1, name: 'Línea Pequeña', slug: 'linea-pequena', price: 1050, offer_price: null, image: 'img/linea.jpg', description: 'Producto de línea capilar en formato pequeño. Ideal para pruebas y viajes.', category: 'capilar', active: true, featured: true, sort_order: 1 },
+    { id: 2, name: 'Línea Mediana', slug: 'linea-mediana', price: 1350, offer_price: null, image: 'img/linea.jpg', description: 'Formato mediano de nuestra línea capilar. Perfecto para uso regular.', category: 'capilar', active: true, featured: false, sort_order: 2 },
+    { id: 3, name: 'Línea Grande', slug: 'linea-grande', price: 1850, offer_price: null, image: 'img/linea.jpg', description: 'Formato grande para uso prolongado. Mayor rendimiento.', category: 'capilar', active: true, featured: false, sort_order: 3 },
+    { id: 4, name: 'Línea Jumbo', slug: 'linea-jumbo', price: 2000, offer_price: null, image: 'img/linea.jpg', description: 'Formato gigante. La mejor opción para clientes frecuentes.', category: 'capilar', active: true, featured: false, sort_order: 4 },
+    { id: 5, name: 'Shampoo 16 OZ', slug: 'shampoo-16-oz', price: 1200, offer_price: null, image: 'img/shampoo16oz.jpg', description: 'Champú premium de 16 oz. Nutre y limpia profundamente tu cabello.', category: 'individuales', active: true, featured: false, sort_order: 5 },
+    { id: 6, name: 'Shampoo 32 OZ', slug: 'shampoo-32-oz', price: 900, offer_price: 850, image: 'img/shampoo32oz.jpg', description: 'Champú de 32 oz. Oferta especial con mayor volumen a mejor precio.', category: 'individuales', active: true, featured: true, sort_order: 6 },
+    { id: 7, name: 'Tratamiento Intensivo', slug: 'tratamiento-intensivo', price: 500, offer_price: null, image: 'img/TratInt.jpg', description: 'Tratamiento reparador e intensivo. Restaura la salud de tu cabello.', category: 'individuales', active: true, featured: false, sort_order: 7 },
+    { id: 8, name: 'Gotero', slug: 'gotero', price: 800, offer_price: null, image: 'img/gotero4oz.jpg', description: 'Esencia capilar en gotero de 4 oz. Concentrado y de larga duración.', category: 'individuales', active: true, featured: false, sort_order: 8 },
+    { id: 9, name: 'Super Mascarilla', slug: 'super-mascarilla', price: 800, offer_price: null, image: 'img/SupMask.jpg', description: 'Mascarilla ultra nutritiva. Hidrata y fortalece en profundidad.', category: 'individuales', active: true, featured: false, sort_order: 9 },
+    { id: 10, name: 'Aprieta Cuca', slug: 'aprieta-cuca', price: 1000, offer_price: null, image: 'img/linea.jpg', description: 'Producto especial con efectos reafirmantes. Úsalo regularmente para mejores resultados.', category: 'otros', active: true, featured: false, sort_order: 10 }
+  ];
+})();

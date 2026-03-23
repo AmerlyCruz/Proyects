@@ -1,0 +1,1761 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Panel de administración de El Secreto de Aris para estadísticas, gestión de productos y control operativo.">
+  <meta name="theme-color" content="#606c38">
+  <title>Admin - El Secreto de Aris</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="beautyfast.css">
+</head>
+<body class="admin-shell">
+  <header class="header header-relative">
+    <a href="index.html" class="sidebar-btn sidebar-btn-secondary">Inicio</a>
+
+    <div class="brand">
+      <svg width="40" height="40" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" class="leaf-icon">
+        <path d="M 50 100 Q 30 70 40 40 Q 50 20 70 30 Q 90 40 85 70 Q 80 90 70 100 L 60 95 Q 50 75 55 55 L 50 100 Z" fill="#7CB342"/>
+        <path d="M 55 60 Q 60 75 65 90" stroke="#558B2F" stroke-width="2" stroke-linecap="round"/>
+        <path d="M 110 80 Q 130 50 150 45 Q 170 40 175 60 Q 180 80 165 100 Q 155 115 140 110 L 135 105 Q 145 90 145 70 L 110 80 Z" fill="#9CCC65"/>
+        <path d="M 140 70 Q 145 85 145 100" stroke="#689F38" stroke-width="2" stroke-linecap="round"/>
+        <path d="M 65 110 Q 40 120 25 140 Q 10 160 20 175 Q 30 185 50 175 Q 70 165 75 145 Q 80 125 70 115 L 67 120 Q 55 135 40 140 L 65 110 Z" fill="#8BC34A"/>
+        <path d="M 50 135 Q 55 145 60 155" stroke="#558B2F" stroke-width="2" stroke-linecap="round"/>
+        <path d="M 90 115 Q 85 140 90 165 Q 95 185 110 190 Q 120 192 125 180 Q 130 165 125 140 Q 120 120 110 115 L 105 120 Q 105 140 110 160 L 90 115 Z" fill="#AED581"/>
+        <path d="M 105 135 Q 108 150 110 165" stroke="#7CB342" stroke-width="2" stroke-linecap="round"/>
+        <path d="M 135 115 Q 155 125 170 145 Q 185 165 175 180 Q 165 190 150 180 Q 135 170 130 150 Q 125 130 130 120 L 133 125 Q 140 140 155 145 L 135 115 Z" fill="#9CCC65"/>
+        <path d="M 145 140 Q 148 150 150 165" stroke="#689F38" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="100" cy="110" r="15" fill="#7CB342"/>
+        <circle cx="100" cy="110" r="10" fill="#9CCC65"/>
+      </svg>
+      <h1><a href="index.html" class="brand-link">El Secreto de Aris</a></h1>
+    </div>
+
+    <div class="header-right">
+      <a href="beautyfast.html" class="sidebar-btn sidebar-btn-secondary">Ver tienda</a>
+      <button type="button" class="sidebar-btn sidebar-btn-secondary" id="adminLogoutBtn" hidden>Cerrar sesión</button>
+    </div>
+  </header>
+
+  <main class="admin-main">
+    <section class="admin-hero">
+      <p class="admin-eyebrow">Panel privado</p>
+      <h1 class="admin-title">Administrador único</h1>
+      <p class="admin-copy">Controla ventas, productos, precios, ofertas e imágenes desde una sola pantalla. Todo está pensado para que puedas administrar la tienda sin entrar en detalles técnicos.</p>
+    </section>
+
+    <section class="admin-panel admin-gate" id="adminGate">
+      <h2>Acceso administrador</h2>
+      <p class="admin-panel-copy">Inicia sesión con tu cuenta de administrador para entrar al panel de control.</p>
+      <form id="adminAuthForm" class="admin-form">
+        <div class="admin-field">
+          <label for="adminUsername">Usuario</label>
+          <input type="text" id="adminUsername" autocomplete="username" placeholder="admin" required>
+        </div>
+        <div class="admin-field">
+          <label for="adminPassword">Contraseña</label>
+          <input type="password" id="adminPassword" autocomplete="current-password" required>
+        </div>
+        <div class="admin-form-actions">
+          <button type="submit" class="checkout-btn" id="adminLoginBtn">Entrar al panel</button>
+        </div>
+      </form>
+      <div id="adminGateStatus" class="account-status">El panel verificará si tu perfil tiene rol de administrador.</div>
+    </section>
+
+    <section id="adminDashboard" hidden>
+      <div id="adminOverview">
+        <div class="stats-grid" id="adminStatsGrid"></div>
+
+        <div class="admin-grid" id="adminMainGrid" style="margin-top: 24px;">
+        <div class="admin-stack">
+          <section class="admin-panel">
+            <div class="admin-toolbar">
+              <div>
+                <h2>Productos</h2>
+                <p class="admin-panel-copy">Crea, edita y organiza los productos que se muestran en la tienda.</p>
+              </div>
+              <div class="admin-form-actions">
+                <button type="button" class="sidebar-btn sidebar-btn-secondary" id="adminSeedCatalogBtn">Importar catálogo base</button>
+                <button type="button" class="sidebar-btn sidebar-btn-secondary" id="adminResetProductBtn">Nuevo producto</button>
+              </div>
+            </div>
+
+            <div id="adminProductComposer" class="admin-product-composer" hidden>
+              <form id="adminProductForm" class="admin-form">
+                <input type="hidden" id="adminProductId">
+
+                <div class="admin-form-grid">
+                  <div class="admin-field">
+                    <label for="adminProductName">Nombre</label>
+                    <input type="text" id="adminProductName" required>
+                  </div>
+                  <div class="admin-field">
+                    <label for="adminProductSlug">Nombre corto del enlace</label>
+                    <input type="text" id="adminProductSlug" required>
+                  </div>
+                  <div class="admin-field">
+                    <label for="adminProductCategory">Categoría</label>
+                    <select id="adminProductCategory" required>
+                      <option value="capilar">Línea Capilar</option>
+                      <option value="individuales">Individuales</option>
+                      <option value="otros">Otros</option>
+                    </select>
+                  </div>
+                  <div class="admin-field">
+                    <label for="adminProductSort">Orden</label>
+                    <input type="number" id="adminProductSort" min="0" step="1" value="0">
+                  </div>
+                  <div class="admin-field">
+                    <label for="adminProductPrice">Precio base</label>
+                    <input type="number" id="adminProductPrice" min="0" step="0.01" required>
+                  </div>
+                  <div class="admin-field">
+                    <label for="adminProductOfferPrice">Precio oferta</label>
+                    <input type="number" id="adminProductOfferPrice" min="0" step="0.01" placeholder="Opcional">
+                  </div>
+                  <div class="admin-field admin-field-full">
+                    <label for="adminProductImageUrl">URL de imagen</label>
+                    <input type="url" id="adminProductImageUrl" placeholder="https://...">
+                  </div>
+                  <div class="admin-field admin-field-full">
+                    <label for="adminProductImageFile">O subir imagen</label>
+                    <input type="file" id="adminProductImageFile" accept="image/*">
+                  </div>
+                  <div class="admin-field admin-field-full">
+                    <label for="adminProductDescription">Descripción</label>
+                    <textarea id="adminProductDescription" required></textarea>
+                  </div>
+                </div>
+
+                <div class="admin-inline-checks">
+                  <label><input type="checkbox" id="adminProductActive" checked> Producto activo</label>
+                  <label><input type="checkbox" id="adminProductFeatured"> Destacado</label>
+                </div>
+
+                <div class="admin-preview" id="adminImagePreview">Vista previa de imagen</div>
+
+                <div class="admin-form-actions">
+                  <button type="submit" class="checkout-btn" id="adminSaveProductBtn">Guardar producto</button>
+                  <button type="button" class="sidebar-btn sidebar-btn-secondary" id="adminClearProductBtn">Limpiar</button>
+                </div>
+              </form>
+
+              <div id="adminProductStatus" class="account-status">Listo para crear tu primer producto.</div>
+            </div>
+          </section>
+
+          <section class="admin-panel">
+            <div class="admin-toolbar admin-toolbar-collapsible">
+              <div>
+                <h2>Productos activos</h2>
+                <p class="admin-panel-copy">Aquí ves los productos actuales de la tienda y puedes revisarlos rápidamente.</p>
+              </div>
+              <button type="button" class="admin-collapse-btn" id="adminProductsToggleBtn" aria-expanded="false" aria-controls="adminProductsSectionBody">
+                <span>Mostrar productos</span>
+                <span class="admin-collapse-icon">▾</span>
+              </button>
+            </div>
+            <div id="adminProductsSectionBody" class="admin-collapsible-body" hidden>
+              <div id="adminProductsList" class="admin-products-grid"></div>
+            </div>
+          </section>
+
+          <section class="admin-panel">
+            <h2>Carga rápida de productos</h2>
+            <p class="admin-panel-copy">Si quieres cargar muchos productos de una vez, puedes subir un CSV de Excel o pegar aquí una tabla preparada.</p>
+            <div class="admin-field admin-field-full">
+              <label for="adminBulkFile">Archivo CSV</label>
+              <div id="adminBulkDropzone" class="admin-bulk-dropzone" tabindex="0" role="button" aria-label="Arrastra aquí un archivo CSV o pulsa para seleccionarlo">
+                <strong>Arrastra tu CSV aquí</strong>
+                <span>o pulsa para elegir un archivo guardado desde Excel</span>
+              </div>
+              <input type="file" id="adminBulkFile" accept=".csv,.txt">
+              <div class="admin-field-help" id="adminBulkFileHelp">Puedes usar un archivo CSV guardado desde Excel con columnas como nombre, categoría, precio y descripción.</div>
+            </div>
+            <div class="admin-field admin-field-full">
+              <label for="adminBulkJson">Lista de productos</label>
+              <textarea id="adminBulkJson" placeholder="Pega aquí una tabla o una lista preparada de productos"></textarea>
+              <div class="admin-field-help">Si pegas texto, también aceptamos columnas separadas por comas, punto y coma o tabulaciones.</div>
+            </div>
+            <div class="admin-form-actions">
+              <button type="button" class="sidebar-btn sidebar-btn-secondary" id="adminBulkTemplateBtn">Descargar plantilla CSV</button>
+              <button type="button" class="checkout-btn" id="adminBulkImportBtn">Cargar productos</button>
+            </div>
+            <div id="adminBulkStatus" class="account-status">Cuando cargues un archivo o una tabla, aquí verás el resultado.</div>
+          </section>
+        </div>
+
+        <div class="admin-stack">
+          <section class="admin-panel">
+            <div class="admin-toolbar admin-orders-toolbar">
+              <div>
+                <h2>Pedidos</h2>
+                <p class="admin-panel-copy">Abre una vista dedicada para ver pedidos vigentes o revisar el histórico sin cargar el panel principal.</p>
+              </div>
+            </div>
+
+            <div class="admin-orders-launch-grid">
+              <button type="button" class="admin-orders-launch-card" id="adminOrdersOpenActiveBtn" data-open-orders-view="active">
+                <span class="admin-orders-launch-eyebrow">Seguimiento</span>
+                <strong class="admin-orders-launch-title">En curso</strong>
+                <span class="admin-orders-launch-copy">Pedidos que todavía están en movimiento y necesitan revisión o cierre.</span>
+                <span class="admin-orders-launch-count" id="adminOrdersActiveCount">0 pedidos</span>
+              </button>
+              <button type="button" class="admin-orders-launch-card" id="adminOrdersOpenCompletedBtn" data-open-orders-view="completed">
+                <span class="admin-orders-launch-eyebrow">Histórico</span>
+                <strong class="admin-orders-launch-title">Completados</strong>
+                <span class="admin-orders-launch-copy">Ventas cerradas para revisar desempeño, montos y seguimiento histórico.</span>
+                <span class="admin-orders-launch-count" id="adminOrdersCompletedCount">0 pedidos</span>
+              </button>
+            </div>
+          </section>
+
+          <section class="admin-panel">
+            <h2>Notas del panel</h2>
+            <div class="admin-alert">
+              Si todavía no ves productos aquí, usa el botón de cargar productos iniciales o revisa la configuración básica de la tienda.
+            </div>
+          </section>
+        </div>
+      </div>
+      </div>
+
+      <section class="admin-panel admin-orders-workspace" id="adminOrdersWorkspace" hidden>
+        <div class="admin-toolbar admin-orders-workspace-head">
+          <div>
+            <p class="admin-eyebrow">Pedidos</p>
+            <h2 id="adminOrdersWorkspaceTitle">Pedidos en curso</h2>
+            <p class="admin-panel-copy" id="adminOrdersWorkspaceCopy">Aquí ves primero un resumen compacto y puedes abrir cada pedido solo cuando lo necesites.</p>
+          </div>
+          <div class="admin-form-actions">
+            <button type="button" class="checkout-btn" id="adminOrdersExportBtn">Exportar CSV</button>
+            <button type="button" class="sidebar-btn sidebar-btn-secondary" id="adminOrdersBackBtn">Volver al panel</button>
+          </div>
+        </div>
+
+        <div class="admin-toolbar admin-orders-toolbar">
+          <div class="admin-orders-view-switch" role="tablist" aria-label="Cambiar vista de pedidos">
+            <button type="button" class="admin-segment-btn is-active" id="adminOrdersActiveBtn" data-orders-view="active" aria-selected="true">En curso</button>
+            <button type="button" class="admin-segment-btn" id="adminOrdersCompletedBtn" data-orders-view="completed" aria-selected="false">Completados</button>
+          </div>
+        </div>
+
+        <div class="admin-orders-filters">
+          <div class="admin-period-pills" id="adminOrdersPeriodFilters">
+            <button type="button" class="admin-filter-pill" data-orders-range="day">Día</button>
+            <button type="button" class="admin-filter-pill" data-orders-range="week">Semana</button>
+            <button type="button" class="admin-filter-pill is-active" data-orders-range="month">Mes</button>
+            <button type="button" class="admin-filter-pill" data-orders-range="year">Año</button>
+          </div>
+          <div id="adminOrdersPeriodLabel" class="admin-orders-period-label">Mostrando el mes actual.</div>
+        </div>
+
+        <div id="adminOrdersSummary" class="admin-orders-summary-grid"></div>
+        <div id="adminOrdersList" class="admin-orders-groups"></div>
+      </section>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="supabase-config.js"></script>
+  <script src="catalog-fallback.js"></script>
+  <script src="supabase-client.js"></script>
+  <script>
+    const adminAuthForm = document.getElementById('adminAuthForm');
+    const adminUsernameInput = document.getElementById('adminUsername');
+    const adminPasswordInput = document.getElementById('adminPassword');
+    const adminLoginBtn = document.getElementById('adminLoginBtn');
+    const adminLogoutBtn = document.getElementById('adminLogoutBtn');
+    const adminGate = document.getElementById('adminGate');
+    const adminGateStatus = document.getElementById('adminGateStatus');
+    const adminDashboard = document.getElementById('adminDashboard');
+    const adminOverview = document.getElementById('adminOverview');
+    const adminStatsGrid = document.getElementById('adminStatsGrid');
+    const adminMainGrid = document.getElementById('adminMainGrid');
+    const adminProductsList = document.getElementById('adminProductsList');
+    const adminProductsToggleBtn = document.getElementById('adminProductsToggleBtn');
+    const adminProductsSectionBody = document.getElementById('adminProductsSectionBody');
+    const adminOrdersOpenActiveBtn = document.getElementById('adminOrdersOpenActiveBtn');
+    const adminOrdersOpenCompletedBtn = document.getElementById('adminOrdersOpenCompletedBtn');
+    const adminOrdersActiveCount = document.getElementById('adminOrdersActiveCount');
+    const adminOrdersCompletedCount = document.getElementById('adminOrdersCompletedCount');
+    const adminOrdersWorkspace = document.getElementById('adminOrdersWorkspace');
+    const adminOrdersWorkspaceTitle = document.getElementById('adminOrdersWorkspaceTitle');
+    const adminOrdersWorkspaceCopy = document.getElementById('adminOrdersWorkspaceCopy');
+    const adminOrdersExportBtn = document.getElementById('adminOrdersExportBtn');
+    const adminOrdersBackBtn = document.getElementById('adminOrdersBackBtn');
+    const adminOrdersActiveBtn = document.getElementById('adminOrdersActiveBtn');
+    const adminOrdersCompletedBtn = document.getElementById('adminOrdersCompletedBtn');
+    const adminOrdersPeriodFilters = document.getElementById('adminOrdersPeriodFilters');
+    const adminOrdersPeriodLabel = document.getElementById('adminOrdersPeriodLabel');
+    const adminOrdersSummary = document.getElementById('adminOrdersSummary');
+    const adminOrdersList = document.getElementById('adminOrdersList');
+    const adminCatalogModeValue = document.getElementById('adminCatalogModeValue');
+    const adminCatalogModeHint = document.getElementById('adminCatalogModeHint');
+    const adminForceSupabaseBtn = document.getElementById('adminForceSupabaseBtn');
+    const adminForceHybridBtn = document.getElementById('adminForceHybridBtn');
+    const adminProductComposer = document.getElementById('adminProductComposer');
+    const adminProductForm = document.getElementById('adminProductForm');
+    const adminProductStatus = document.getElementById('adminProductStatus');
+    const adminSeedCatalogBtn = document.getElementById('adminSeedCatalogBtn');
+    const adminResetProductBtn = document.getElementById('adminResetProductBtn');
+    const adminClearProductBtn = document.getElementById('adminClearProductBtn');
+    const adminSaveProductBtn = document.getElementById('adminSaveProductBtn');
+    const adminImagePreview = document.getElementById('adminImagePreview');
+    const adminProductImageUrl = document.getElementById('adminProductImageUrl');
+    const adminProductImageFile = document.getElementById('adminProductImageFile');
+    const adminBulkDropzone = document.getElementById('adminBulkDropzone');
+    const adminBulkFile = document.getElementById('adminBulkFile');
+    const adminBulkFileHelp = document.getElementById('adminBulkFileHelp');
+    const adminBulkJson = document.getElementById('adminBulkJson');
+    const adminBulkStatus = document.getElementById('adminBulkStatus');
+    const adminBulkTemplateBtn = document.getElementById('adminBulkTemplateBtn');
+    const adminBulkImportBtn = document.getElementById('adminBulkImportBtn');
+
+    const CATALOG_SOURCE_SETTING_KEY = 'catalog_source';
+
+    let adminProducts = [];
+    let adminOrders = [];
+    let currentCatalogMode = 'hybrid';
+    let areAdminProductsExpanded = false;
+    let adminOrdersView = 'active';
+    let adminOrdersRange = 'month';
+    let isOrdersWorkspaceOpen = false;
+
+    function getAdminLoginConfig() {
+      const config = window.BEAUTYFAST_SUPABASE_CONFIG || {};
+      const loginConfig = config.adminLogin || {};
+
+      return {
+        username: String(loginConfig.username || 'admin').trim().toLowerCase(),
+        email: String(loginConfig.email || '').trim().toLowerCase()
+      };
+    }
+
+    function escapeHtml(value) {
+      return String(value || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function currency(value) {
+      return Number(value || 0).toLocaleString('es-DO', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function formatDate(value) {
+      if (!value) return 'Sin fecha';
+      return new Date(value).toLocaleString('es-DO', { dateStyle: 'medium', timeStyle: 'short' });
+    }
+
+    function formatMonthYear(value) {
+      if (!value) return 'Sin fecha';
+      return new Date(value).toLocaleDateString('es-DO', { month: 'long', year: 'numeric' });
+    }
+
+    function slugify(value) {
+      return String(value || '')
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+    }
+
+    function currentProductPrice(product) {
+      const basePrice = Number(product.price || 0);
+      const offerPrice = Number(product.offer_price || 0);
+      if (Number.isFinite(offerPrice) && offerPrice > 0 && offerPrice < basePrice) return offerPrice;
+      return basePrice;
+    }
+
+    function getFallbackCatalog() {
+      return Array.isArray(window.BEAUTYFAST_FALLBACK_PRODUCTS) ? window.BEAUTYFAST_FALLBACK_PRODUCTS : [];
+    }
+
+    function getFallbackCatalogSlugs() {
+      return getFallbackCatalog()
+        .map((product, index) => normalizeImportProduct(product, index).slug)
+        .filter(Boolean);
+    }
+
+    function normalizeImportProduct(product, index) {
+      return {
+        name: String(product.name || '').trim(),
+        slug: String(product.slug || slugify(product.name || `producto-${index + 1}`)).trim(),
+        category: ['capilar', 'individuales', 'otros'].includes(product.category) ? product.category : 'otros',
+        description: String(product.description || 'Producto disponible en El Secreto de Aris.').trim(),
+        image_url: String(product.image_url || product.image || '').trim(),
+        price: Number(product.price || 0),
+        offer_price: product.offer_price === '' || product.offer_price === null || typeof product.offer_price === 'undefined'
+          ? null
+          : Number(product.offer_price),
+        active: product.active !== false,
+        featured: Boolean(product.featured),
+        sort_order: Number.isFinite(Number(product.sort_order)) ? Number(product.sort_order) : index + 1
+      };
+    }
+
+    function parseBooleanLike(value, fallback = false) {
+      const normalizedValue = String(value ?? '').trim().toLowerCase();
+      if (!normalizedValue) return fallback;
+      return ['1', 'true', 'si', 'sí', 'yes', 'activo', 'activa', 'destacado'].includes(normalizedValue);
+    }
+
+    function detectBulkDelimiter(headerLine) {
+      const delimiters = [',', ';', '\t'];
+      let bestDelimiter = ',';
+      let bestScore = 0;
+
+      delimiters.forEach((delimiter) => {
+        const score = String(headerLine || '').split(delimiter).length;
+        if (score > bestScore) {
+          bestScore = score;
+          bestDelimiter = delimiter;
+        }
+      });
+
+      return bestDelimiter;
+    }
+
+    function splitDelimitedRow(line, delimiter) {
+      const result = [];
+      let current = '';
+      let inQuotes = false;
+
+      for (let index = 0; index < line.length; index += 1) {
+        const character = line[index];
+        const nextCharacter = line[index + 1];
+
+        if (character === '"') {
+          if (inQuotes && nextCharacter === '"') {
+            current += '"';
+            index += 1;
+          } else {
+            inQuotes = !inQuotes;
+          }
+          continue;
+        }
+
+        if (character === delimiter && !inQuotes) {
+          result.push(current.trim());
+          current = '';
+          continue;
+        }
+
+        current += character;
+      }
+
+      result.push(current.trim());
+      return result;
+    }
+
+    function mapBulkHeader(header) {
+      const normalizedHeader = String(header || '')
+        .trim()
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '');
+
+      const headerMap = {
+        name: 'name',
+        nombre: 'name',
+        slug: 'slug',
+        enlace: 'slug',
+        category: 'category',
+        categoria: 'category',
+        descripcion: 'description',
+        description: 'description',
+        image: 'image_url',
+        imagen: 'image_url',
+        image_url: 'image_url',
+        precio: 'price',
+        price: 'price',
+        oferta: 'offer_price',
+        offer_price: 'offer_price',
+        precio_oferta: 'offer_price',
+        activo: 'active',
+        active: 'active',
+        destacado: 'featured',
+        featured: 'featured',
+        orden: 'sort_order',
+        sort_order: 'sort_order'
+      };
+
+      return headerMap[normalizedHeader] || normalizedHeader;
+    }
+
+    function parseBulkDelimitedText(rawText) {
+      const lines = String(rawText || '')
+        .split(/\r?\n/)
+        .map((line) => line.trim())
+        .filter(Boolean);
+
+      if (lines.length < 2) {
+        throw new Error('Necesitas al menos una fila de encabezados y una fila de productos.');
+      }
+
+      const delimiter = detectBulkDelimiter(lines[0]);
+      const headers = splitDelimitedRow(lines[0], delimiter).map(mapBulkHeader);
+
+      return lines.slice(1).map((line, index) => {
+        const values = splitDelimitedRow(line, delimiter);
+        const row = {};
+
+        headers.forEach((header, headerIndex) => {
+          row[header] = values[headerIndex] ?? '';
+        });
+
+        return {
+          name: row.name,
+          slug: row.slug,
+          category: row.category,
+          description: row.description,
+          image_url: row.image_url,
+          price: row.price,
+          offer_price: row.offer_price,
+          active: parseBooleanLike(row.active, true),
+          featured: parseBooleanLike(row.featured, false),
+          sort_order: row.sort_order || index + 1
+        };
+      });
+    }
+
+    async function readBulkImportSource() {
+      const [bulkFile] = adminBulkFile?.files || [];
+      if (bulkFile) {
+        return bulkFile.text();
+      }
+
+      return String(adminBulkJson.value || '');
+    }
+
+    function parseBulkProducts(rawText) {
+      const trimmedText = String(rawText || '').trim();
+      if (!trimmedText) {
+        throw new Error('Agrega un archivo CSV o pega una lista de productos antes de cargar.');
+      }
+
+      if (trimmedText.startsWith('[') || trimmedText.startsWith('{')) {
+        const parsedJson = JSON.parse(trimmedText);
+        return Array.isArray(parsedJson) ? parsedJson : [];
+      }
+
+      return parseBulkDelimitedText(trimmedText);
+    }
+
+    function syncBulkFileLabel() {
+      if (!adminBulkFileHelp) return;
+
+      const [bulkFile] = adminBulkFile?.files || [];
+      adminBulkFileHelp.textContent = bulkFile
+        ? `Archivo seleccionado: ${bulkFile.name}`
+        : 'Puedes usar un archivo CSV guardado desde Excel con columnas como nombre, categoría, precio y descripción.';
+    }
+
+    function assignBulkFileList(fileList) {
+      if (!adminBulkFile || !fileList?.length) return;
+
+      const dataTransfer = new DataTransfer();
+      Array.from(fileList).forEach((file) => dataTransfer.items.add(file));
+      adminBulkFile.files = dataTransfer.files;
+      syncBulkFileLabel();
+    }
+
+    function downloadBulkTemplate() {
+      const templateLines = [
+        'nombre,categoria,descripcion,precio,precio_oferta,imagen,activo,destacado,orden',
+        'Shampoo Reparador,capilar,Limpia y ayuda a reparar el cabello,950,790,https://tusitio.com/shampoo.jpg,si,si,1',
+        'Mascarilla Nutritiva,capilar,Nutricion intensiva para el cabello,1200,,https://tusitio.com/mascarilla.jpg,si,no,2'
+      ];
+
+      const blob = new Blob([`\uFEFF${templateLines.join('\r\n')}`], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const anchor = document.createElement('a');
+      anchor.href = url;
+      anchor.download = 'plantilla-productos.csv';
+      document.body.appendChild(anchor);
+      anchor.click();
+      anchor.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    function hasSeededFallbackCatalog(productsList) {
+      const fallbackSlugs = getFallbackCatalogSlugs();
+      if (!fallbackSlugs.length) return false;
+
+      const productSlugs = new Set((productsList || []).map((product) => String(product.slug || '').trim()).filter(Boolean));
+      return fallbackSlugs.every((slug) => productSlugs.has(slug));
+    }
+
+    async function enableSupabaseCatalogMode() {
+      if (typeof window.upsertBeautyfastPublicSetting !== 'function') {
+        return { ok: false, error: 'No pudimos leer la configuración de publicación.' };
+      }
+
+      return window.upsertBeautyfastPublicSetting(CATALOG_SOURCE_SETTING_KEY, {
+        mode: 'supabase',
+        activated_at: new Date().toISOString()
+      });
+    }
+
+    async function enableHybridCatalogMode() {
+      if (typeof window.upsertBeautyfastPublicSetting !== 'function') {
+        return { ok: false, error: 'No pudimos cambiar la forma de publicación.' };
+      }
+
+      return window.upsertBeautyfastPublicSetting(CATALOG_SOURCE_SETTING_KEY, {
+        mode: 'hybrid',
+        activated_at: new Date().toISOString()
+      });
+    }
+
+    async function ensureCatalogSourceMode(productsList) {
+      if (typeof window.fetchBeautyfastPublicSetting !== 'function') {
+        return { ok: true, mode: 'hybrid' };
+      }
+
+      const settingResult = await window.fetchBeautyfastPublicSetting(CATALOG_SOURCE_SETTING_KEY);
+      if (!settingResult.ok) {
+        return settingResult;
+      }
+
+      const currentMode = String(settingResult.data?.mode || '').trim().toLowerCase();
+      if (currentMode === 'supabase') {
+        return { ok: true, mode: 'supabase' };
+      }
+
+      if (!hasSeededFallbackCatalog(productsList)) {
+        return { ok: true, mode: 'hybrid' };
+      }
+
+      const enableResult = await enableSupabaseCatalogMode();
+      if (!enableResult.ok) {
+        return enableResult;
+      }
+
+      return { ok: true, mode: 'supabase', autoEnabled: true };
+    }
+
+    async function updateCatalogMode(mode) {
+      const normalizedMode = mode === 'supabase' ? 'supabase' : 'hybrid';
+      setCatalogModeButtonsBusy(true, normalizedMode);
+
+      const result = normalizedMode === 'supabase'
+        ? await enableSupabaseCatalogMode()
+        : await enableHybridCatalogMode();
+
+      setCatalogModeButtonsBusy(false);
+
+      if (!result.ok) {
+        setProductStatus(result.error || 'No pudimos actualizar la forma de publicación.', 'is-error');
+        return;
+      }
+
+      setProductStatus(
+        normalizedMode === 'supabase'
+          ? 'La tienda quedó usando los productos guardados en este panel.'
+          : 'La tienda volvió a la configuración de respaldo disponible.',
+        'is-success'
+      );
+
+      await loadDashboardData();
+    }
+
+    function setGateStatus(message, type) {
+      adminGateStatus.textContent = message;
+      adminGateStatus.className = 'account-status';
+      if (type) adminGateStatus.classList.add(type);
+    }
+
+    function setProductStatus(message, type) {
+      adminProductStatus.textContent = message;
+      adminProductStatus.className = 'account-status';
+      if (type) adminProductStatus.classList.add(type);
+    }
+
+    function setBulkStatus(message, type) {
+      if (!adminBulkStatus) return;
+      adminBulkStatus.textContent = message;
+      adminBulkStatus.className = 'account-status';
+      if (type) adminBulkStatus.classList.add(type);
+    }
+
+    function renderProductsSectionState() {
+      if (!adminProductsToggleBtn || !adminProductsSectionBody) return;
+
+      adminProductsSectionBody.hidden = !areAdminProductsExpanded;
+      adminProductsToggleBtn.setAttribute('aria-expanded', String(areAdminProductsExpanded));
+      adminProductsToggleBtn.classList.toggle('is-open', areAdminProductsExpanded);
+      adminProductsToggleBtn.querySelector('span').textContent = areAdminProductsExpanded ? 'Ocultar productos' : 'Mostrar productos';
+    }
+
+    function renderCatalogMode(mode, options = {}) {
+      currentCatalogMode = mode === 'supabase' ? 'supabase' : 'hybrid';
+      if (adminCatalogModeValue) {
+        adminCatalogModeValue.textContent = currentCatalogMode === 'supabase' ? 'Solo panel' : 'Combinado';
+        adminCatalogModeValue.className = `admin-mode-badge ${currentCatalogMode === 'supabase' ? 'is-supabase' : 'is-hybrid'}`;
+      }
+      if (adminCatalogModeHint) {
+        adminCatalogModeHint.textContent = options.hint || (
+          currentCatalogMode === 'supabase'
+            ? 'La tienda usará los productos guardados en este panel.'
+            : 'La tienda usará la configuración de respaldo disponible.'
+        );
+      }
+      if (adminForceSupabaseBtn) adminForceSupabaseBtn.disabled = currentCatalogMode === 'supabase';
+      if (adminForceHybridBtn) adminForceHybridBtn.disabled = currentCatalogMode === 'hybrid';
+    }
+
+    function setCatalogModeButtonsBusy(isBusy, mode) {
+      if (adminForceSupabaseBtn) {
+        adminForceSupabaseBtn.disabled = isBusy || currentCatalogMode === 'supabase';
+        adminForceSupabaseBtn.textContent = isBusy && mode === 'supabase' ? 'Cambiando...' : 'Usar productos del panel';
+      }
+      if (adminForceHybridBtn) {
+        adminForceHybridBtn.disabled = isBusy || currentCatalogMode === 'hybrid';
+        adminForceHybridBtn.textContent = isBusy && mode === 'hybrid' ? 'Cambiando...' : 'Usar respaldo';
+      }
+    }
+
+    function renderImagePreview(imageUrl) {
+      if (!imageUrl) {
+        adminImagePreview.textContent = 'Vista previa de imagen';
+        return;
+      }
+
+      adminImagePreview.innerHTML = `<img src="${escapeHtml(imageUrl)}" alt="Vista previa del producto">`;
+    }
+
+    function setProductComposerOpen(isOpen) {
+      if (!adminProductComposer) return;
+
+      adminProductComposer.hidden = !isOpen;
+      if (isOpen) {
+        adminProductComposer.removeAttribute('hidden');
+        adminProductComposer.style.setProperty('display', 'grid', 'important');
+        adminResetProductBtn.textContent = 'Ocultar formulario';
+      } else {
+        adminProductComposer.setAttribute('hidden', 'hidden');
+        adminProductComposer.style.setProperty('display', 'none', 'important');
+        adminResetProductBtn.textContent = 'Nuevo producto';
+      }
+    }
+
+    function resetProductForm(options = {}) {
+      adminProductForm.reset();
+      document.getElementById('adminProductId').value = '';
+      document.getElementById('adminProductSort').value = '0';
+      document.getElementById('adminProductActive').checked = true;
+      renderImagePreview('');
+      setProductStatus('Formulario listo para un producto nuevo.', 'is-success');
+
+      if (options.openComposer) {
+        setProductComposerOpen(true);
+      }
+    }
+
+    function fillProductForm(product) {
+      setProductComposerOpen(true);
+      document.getElementById('adminProductId').value = product.id || '';
+      document.getElementById('adminProductName').value = product.name || '';
+      document.getElementById('adminProductSlug').value = product.slug || '';
+      document.getElementById('adminProductCategory').value = product.category || 'otros';
+      document.getElementById('adminProductPrice').value = Number(product.price || 0);
+      document.getElementById('adminProductOfferPrice').value = product.offer_price || '';
+      document.getElementById('adminProductImageUrl').value = product.image_url || '';
+      document.getElementById('adminProductDescription').value = product.description || '';
+      document.getElementById('adminProductSort').value = Number(product.sort_order || 0);
+      document.getElementById('adminProductActive').checked = product.active !== false;
+      document.getElementById('adminProductFeatured').checked = Boolean(product.featured);
+      renderImagePreview(product.image_url || '');
+      setProductStatus(`Editando: ${product.name}`, 'is-success');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function renderStats(stats) {
+      const cards = [
+        { label: 'Pedidos totales', value: stats.totalOrders },
+        { label: 'Ventas acumuladas', value: `RD$ ${currency(stats.totalSales)}` },
+        { label: 'Pendientes', value: stats.pendingOrders },
+        { label: 'Productos activos', value: stats.activeProducts }
+      ];
+
+      adminStatsGrid.innerHTML = cards.map((card) => `
+        <article class="stat-card">
+          <p class="stat-label">${card.label}</p>
+          <p class="stat-value">${card.value}</p>
+        </article>
+      `).join('');
+    }
+
+    function renderProducts() {
+      if (!adminProducts.length) {
+        adminProductsList.innerHTML = '<div class="orders-empty">No hay productos guardados todavía. Crea el primero desde el formulario.</div>';
+        return;
+      }
+
+      adminProductsList.innerHTML = adminProducts.map((product) => `
+        <article class="admin-product-card">
+          <div class="admin-product-top">
+            <div>
+              <h3 class="admin-product-name">${escapeHtml(product.name)}</h3>
+              <div class="admin-product-meta">${escapeHtml(product.category)} · RD$ ${currency(currentProductPrice(product))}</div>
+            </div>
+            ${product.image_url ? `<img src="${escapeHtml(product.image_url)}" alt="${escapeHtml(product.name)}" style="width:72px;height:72px;object-fit:cover;border-radius:14px;">` : ''}
+          </div>
+          <div class="admin-badge-row">
+            <span class="admin-chip ${product.active !== false ? 'is-success' : 'is-muted'}">${product.active !== false ? 'Activo' : 'Oculto'}</span>
+            ${product.featured ? '<span class="admin-chip">Destacado</span>' : ''}
+            ${product.offer_price ? `<span class="admin-chip">Oferta RD$ ${currency(product.offer_price)}</span>` : ''}
+          </div>
+          <div class="admin-product-meta" style="margin-top:10px;">${escapeHtml(product.description || 'Sin descripción')}</div>
+          <div class="admin-product-actions">
+            <button type="button" class="sidebar-btn sidebar-btn-secondary" data-edit-product="${escapeHtml(product.id)}">Editar</button>
+            <button type="button" class="sidebar-btn sidebar-btn-secondary" data-delete-product="${escapeHtml(product.id)}">Eliminar</button>
+          </div>
+        </article>
+      `).join('');
+
+      adminProductsList.querySelectorAll('[data-edit-product]').forEach((button) => {
+        button.addEventListener('click', () => {
+          const product = adminProducts.find((entry) => String(entry.id) === button.dataset.editProduct);
+          if (product) fillProductForm(product);
+        });
+      });
+
+      adminProductsList.querySelectorAll('[data-delete-product]').forEach((button) => {
+        button.addEventListener('click', async () => {
+          const product = adminProducts.find((entry) => String(entry.id) === button.dataset.deleteProduct);
+          if (!product) return;
+
+          const confirmation = await Swal.fire({
+            icon: 'warning',
+            title: 'Eliminar producto',
+            text: `Se eliminará ${product.name}. Esta acción no se puede deshacer.`,
+            showCancelButton: true,
+            confirmButtonText: 'Eliminar',
+            cancelButtonText: 'Cancelar'
+          });
+
+          if (!confirmation.isConfirmed) return;
+
+          const result = await window.deleteBeautyfastProduct(product.id);
+          if (!result.ok) {
+            setProductStatus(result.error || 'No pudimos eliminar el producto.', 'is-error');
+            return;
+          }
+
+          setProductStatus('Producto eliminado correctamente.', 'is-success');
+          await loadDashboardData();
+          resetProductForm();
+          setProductComposerOpen(false);
+        });
+      });
+    }
+
+    function formatOrderStatus(status) {
+      switch (String(status || '').toLowerCase()) {
+        case 'pending_payment': return 'Pendiente de pago';
+        case 'pending_review': return 'Pendiente de revisión';
+        case 'pending': return 'Pendiente';
+        case 'processing': return 'En preparación';
+        case 'paid': return 'Pagado';
+        case 'paid_pending_fulfillment': return 'Pagado, por entregar';
+        case 'delivered': return 'Entregado';
+        case 'completed': return 'Completado';
+        case 'cancelled': return 'Cancelado';
+        default: return 'Sin estado';
+      }
+    }
+
+    function getOrderStatusTone(status) {
+      switch (String(status || '').toLowerCase()) {
+        case 'paid':
+        case 'paid_pending_fulfillment':
+        case 'delivered':
+        case 'completed':
+          return 'is-success';
+        case 'pending_payment':
+        case 'pending_review':
+        case 'pending':
+        case 'processing':
+          return 'is-warning';
+        case 'cancelled':
+          return 'is-muted';
+        default:
+          return 'is-muted';
+      }
+    }
+
+    function formatPaymentMethod(value) {
+      switch (String(value || '').toLowerCase()) {
+        case 'azul': return 'Tarjeta';
+        case 'banco': return 'Transferencia o depósito';
+        case 'cash': return 'Efectivo';
+        default: return value ? String(value) : 'Sin definir';
+      }
+    }
+
+    function formatDeliveryMethod(value) {
+      switch (String(value || '').toLowerCase()) {
+        case 'delivery': return 'Entrega a domicilio';
+        case 'pickup': return 'Retiro en tienda';
+        default: return value ? String(value) : 'Sin definir';
+      }
+    }
+
+    function getEditableOrderStatuses() {
+      return [
+        { value: 'pending', label: 'Pendiente' },
+        { value: 'pending_payment', label: 'Pendiente de pago' },
+        { value: 'pending_review', label: 'Pendiente de revisión' },
+        { value: 'processing', label: 'En preparación' },
+        { value: 'paid', label: 'Pagado' },
+        { value: 'paid_pending_fulfillment', label: 'Pagado, por entregar' },
+        { value: 'delivered', label: 'Entregado' },
+        { value: 'completed', label: 'Completado' },
+        { value: 'cancelled', label: 'Cancelado' }
+      ];
+    }
+
+    function renderOrderStatusOptions(selectedStatus) {
+      const normalizedStatus = String(selectedStatus || 'pending_payment').toLowerCase();
+      return getEditableOrderStatuses().map((statusOption) => `
+        <option value="${escapeHtml(statusOption.value)}" ${statusOption.value === normalizedStatus ? 'selected' : ''}>${escapeHtml(statusOption.label)}</option>
+      `).join('');
+    }
+
+    function formatDeliveryAddress(address) {
+      if (!address || typeof address !== 'object') return 'Sin dirección registrada';
+
+      const parts = [
+        address.direccion,
+        address.sector,
+        address.ciudad,
+        address.referencia
+      ].filter(Boolean);
+
+      return parts.length ? parts.join(', ') : 'Sin dirección registrada';
+    }
+
+    function renderOrderItemsDetail(order) {
+      const items = Array.isArray(order.items) ? order.items : [];
+      if (!items.length) {
+        return '<div class="admin-order-items-empty">No se guardó el detalle de productos en este pedido.</div>';
+      }
+
+      return `
+        <div class="admin-order-items-list">
+          ${items.map((item) => `
+            <div class="admin-order-item-row">
+              <div>
+                <div class="admin-order-item-name">${escapeHtml(item.name || 'Producto')}</div>
+                <div class="admin-order-item-meta">Cantidad: ${escapeHtml(item.quantity || 1)}</div>
+              </div>
+              <div class="admin-order-item-price">RD$ ${currency(item.lineTotal || (Number(item.price || 0) * Number(item.quantity || 1)))}</div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    function getOrderBucket(order) {
+      const status = String(order?.status || '').toLowerCase();
+      if (['completed', 'delivered', 'cancelled'].includes(status)) return 'completed';
+      return 'active';
+    }
+
+    function isAttentionOrder(order) {
+      return ['pending_payment', 'pending_review', 'pending', 'processing'].includes(String(order?.status || '').toLowerCase());
+    }
+
+    function isSameCalendarDay(left, right) {
+      return left.getFullYear() === right.getFullYear()
+        && left.getMonth() === right.getMonth()
+        && left.getDate() === right.getDate();
+    }
+
+    function filterOrdersByRange(orders, range) {
+      const now = new Date();
+
+      return (orders || []).filter((order) => {
+        const orderDate = new Date(order.created_at || order.updated_at || Date.now());
+        if (Number.isNaN(orderDate.getTime())) return false;
+
+        if (range === 'day') {
+          return isSameCalendarDay(orderDate, now);
+        }
+
+        if (range === 'week') {
+          const diffInDays = (now - orderDate) / (1000 * 60 * 60 * 24);
+          return diffInDays >= 0 && diffInDays < 7;
+        }
+
+        if (range === 'year') {
+          return orderDate.getFullYear() === now.getFullYear();
+        }
+
+        return orderDate.getFullYear() === now.getFullYear() && orderDate.getMonth() === now.getMonth();
+      });
+    }
+
+    function getRangeLabel(range) {
+      switch (range) {
+        case 'day': return 'Mostrando solo hoy.';
+        case 'week': return 'Mostrando los últimos 7 días.';
+        case 'year': return 'Mostrando el año actual.';
+        default: return 'Mostrando el mes actual.';
+      }
+    }
+
+    function summarizeOrdersForView(orders, view, range) {
+      const totalAmount = (orders || []).reduce((sum, order) => sum + Number(order.total_amount || 0), 0);
+      const attentionCount = (orders || []).filter(isAttentionOrder).length;
+      const averageTicket = orders.length ? totalAmount / orders.length : 0;
+
+      if (view === 'completed') {
+        return [
+          { label: 'Ventas hechas', value: `RD$ ${currency(totalAmount)}`, tone: 'sales' },
+          { label: 'Pedidos cerrados', value: orders.length, tone: 'success' },
+          { label: 'Ticket promedio', value: `RD$ ${currency(averageTicket)}`, tone: 'neutral' },
+          { label: 'Período', value: getRangeLabel(range).replace('Mostrando ', '').replace('.', ''), tone: 'neutral' }
+        ];
+      }
+
+      return [
+        { label: 'Pedidos vigentes', value: orders.length, tone: 'warning' },
+        { label: 'Pendientes por completar', value: orders.length, tone: 'warning' },
+        { label: 'Requieren atención', value: attentionCount, tone: attentionCount ? 'warning' : 'success' },
+        { label: 'Valor en movimiento', value: `RD$ ${currency(totalAmount)}`, tone: 'sales' }
+      ];
+    }
+
+    function groupOrdersByMonth(orders) {
+      const groups = new Map();
+
+      (orders || []).forEach((order) => {
+        const key = formatMonthYear(order.created_at || order.updated_at || Date.now());
+        if (!groups.has(key)) groups.set(key, []);
+        groups.get(key).push(order);
+      });
+
+      return Array.from(groups.entries()).map(([label, items]) => ({ label, items }));
+    }
+
+    function getFilteredOrdersForCurrentWorkspace() {
+      return filterOrdersByRange(adminOrders, adminOrdersRange)
+        .filter((order) => getOrderBucket(order) === adminOrdersView);
+    }
+
+    function escapeCsvCell(value) {
+      const normalizedValue = String(value ?? '').replace(/\r?\n|\r/g, ' ').trim();
+      return `"${normalizedValue.replace(/"/g, '""')}"`;
+    }
+
+    function buildOrdersCsvContent(orders) {
+      const header = [
+        'numero_pedido',
+        'fecha',
+        'estado',
+        'cliente',
+        'contacto',
+        'pago',
+        'entrega',
+        'total',
+        'productos',
+        'direccion',
+        'notas'
+      ];
+
+      const rows = orders.map((order) => {
+        const itemsSummary = Array.isArray(order.items)
+          ? order.items.map((item) => `${item.name || 'Producto'} x${item.quantity || 1}`).join(' | ')
+          : '';
+
+        return [
+          order.order_number || '',
+          formatDate(order.created_at),
+          formatOrderStatus(order.status),
+          order.customer_name || order.email || '',
+          order.phone || order.email || '',
+          formatPaymentMethod(order.payment_method),
+          formatDeliveryMethod(order.delivery_method),
+          Number(order.total_amount || 0).toFixed(2),
+          itemsSummary,
+          formatDeliveryAddress(order.delivery_address),
+          order.notes || order.reference_note || ''
+        ].map(escapeCsvCell).join(',');
+      });
+
+      return [header.map(escapeCsvCell).join(','), ...rows].join('\r\n');
+    }
+
+    function downloadOrdersCsv() {
+      const filteredOrders = getFilteredOrdersForCurrentWorkspace();
+      if (!filteredOrders.length) {
+        Swal.fire({ icon: 'info', title: 'Sin pedidos para exportar', text: 'Ajusta el período o la vista antes de exportar.' });
+        return;
+      }
+
+      const csvContent = buildOrdersCsvContent(filteredOrders);
+      const blob = new Blob([`\uFEFF${csvContent}`], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const anchor = document.createElement('a');
+      const viewLabel = adminOrdersView === 'completed' ? 'completados' : 'en-curso';
+      anchor.href = url;
+      anchor.download = `pedidos-${viewLabel}-${adminOrdersRange}.csv`;
+      document.body.appendChild(anchor);
+      anchor.click();
+      anchor.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    function renderOrdersSummary(orders) {
+      const cards = summarizeOrdersForView(orders, adminOrdersView, adminOrdersRange);
+      adminOrdersSummary.innerHTML = cards.map((card) => `
+        <article class="admin-orders-summary-card ${card.tone ? `is-${card.tone}` : ''}">
+          <span class="admin-orders-summary-label">${escapeHtml(card.label)}</span>
+          <strong class="admin-orders-summary-value">${escapeHtml(card.value)}</strong>
+        </article>
+      `).join('');
+    }
+
+    function renderOrdersLaunchpad() {
+      const activeOrders = adminOrders.filter((order) => getOrderBucket(order) === 'active').length;
+      const completedOrders = adminOrders.filter((order) => getOrderBucket(order) === 'completed').length;
+
+      if (adminOrdersActiveCount) {
+        adminOrdersActiveCount.textContent = `${activeOrders} pedido(s)`;
+      }
+
+      if (adminOrdersCompletedCount) {
+        adminOrdersCompletedCount.textContent = `${completedOrders} pedido(s)`;
+      }
+    }
+
+    function renderOrdersWorkspaceHeader() {
+      if (!adminOrdersWorkspaceTitle || !adminOrdersWorkspaceCopy) return;
+
+      if (adminOrdersView === 'completed') {
+        adminOrdersWorkspaceTitle.textContent = 'Pedidos completados';
+        adminOrdersWorkspaceCopy.textContent = 'Consulta el histórico cerrado con resumen general, filtros por período y detalle puntual solo cuando lo necesites.';
+        return;
+      }
+
+      adminOrdersWorkspaceTitle.textContent = 'Pedidos en curso';
+      adminOrdersWorkspaceCopy.textContent = 'Aquí ves primero un resumen compacto y puedes abrir cada pedido solo cuando lo necesites.';
+    }
+
+    function openOrdersWorkspace(view) {
+      adminOrdersView = view === 'completed' ? 'completed' : 'active';
+      isOrdersWorkspaceOpen = true;
+      if (adminOverview) {
+        adminOverview.hidden = true;
+        adminOverview.setAttribute('hidden', 'hidden');
+        adminOverview.style.setProperty('display', 'none', 'important');
+      }
+      if (adminOrdersWorkspace) {
+        adminOrdersWorkspace.hidden = false;
+        adminOrdersWorkspace.removeAttribute('hidden');
+        adminOrdersWorkspace.style.setProperty('display', 'block', 'important');
+      }
+      renderOrdersWorkspaceHeader();
+      renderOrders();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function closeOrdersWorkspace() {
+      isOrdersWorkspaceOpen = false;
+      if (adminOrdersWorkspace) {
+        adminOrdersWorkspace.hidden = true;
+        adminOrdersWorkspace.setAttribute('hidden', 'hidden');
+        adminOrdersWorkspace.style.setProperty('display', 'none', 'important');
+      }
+      if (adminOverview) {
+        adminOverview.hidden = false;
+        adminOverview.removeAttribute('hidden');
+        adminOverview.style.removeProperty('display');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function renderOrdersControlsState() {
+      renderOrdersWorkspaceHeader();
+
+      [adminOrdersActiveBtn, adminOrdersCompletedBtn].forEach((button) => {
+        if (!button) return;
+        const isActive = button.dataset.ordersView === adminOrdersView;
+        button.classList.toggle('is-active', isActive);
+        button.setAttribute('aria-selected', String(isActive));
+      });
+
+      adminOrdersPeriodFilters?.querySelectorAll('[data-orders-range]').forEach((button) => {
+        button.classList.toggle('is-active', button.dataset.ordersRange === adminOrdersRange);
+      });
+
+      if (adminOrdersPeriodLabel) {
+        adminOrdersPeriodLabel.textContent = getRangeLabel(adminOrdersRange);
+      }
+    }
+
+    function renderOrderCard(order) {
+      const itemCount = Array.isArray(order.items) ? order.items.length : 0;
+      const customerLine = order.customer_name || order.email || 'Sin nombre';
+      const currentStatus = String(order.status || 'pending_payment').toLowerCase();
+      const canQuickComplete = !['completed', 'delivered', 'cancelled'].includes(currentStatus);
+
+      return `
+        <article class="admin-order-card">
+          <div class="admin-order-top">
+            <div>
+              <h3 class="admin-order-number">Pedido ${escapeHtml(order.order_number || 'sin número')}</h3>
+              <div class="admin-order-meta">${formatDate(order.created_at)}</div>
+            </div>
+            <div class="admin-order-total">RD$ ${currency(order.total_amount)}</div>
+          </div>
+
+          <div class="admin-badge-row">
+            <span class="admin-chip ${getOrderStatusTone(order.status)}">${escapeHtml(formatOrderStatus(order.status))}</span>
+            <span class="admin-chip is-muted">${escapeHtml(formatPaymentMethod(order.payment_method))}</span>
+            <span class="admin-chip is-muted">${escapeHtml(formatDeliveryMethod(order.delivery_method))}</span>
+          </div>
+
+          <div class="admin-order-summary">
+            ${escapeHtml(customerLine)}
+            ${itemCount ? ` · ${itemCount} producto(s)` : ''}
+          </div>
+
+          <details class="admin-order-details">
+            <summary class="admin-order-details-toggle">Ver detalles</summary>
+            <div class="admin-order-details-body">
+              <div class="admin-order-grid">
+                <div class="admin-order-field">
+                  <span class="admin-order-label">Cliente</span>
+                  <span class="admin-order-value">${escapeHtml(customerLine)}</span>
+                </div>
+                <div class="admin-order-field">
+                  <span class="admin-order-label">Contacto</span>
+                  <span class="admin-order-value">${escapeHtml(order.phone || order.email || 'Sin contacto')}</span>
+                </div>
+                <div class="admin-order-field">
+                  <span class="admin-order-label">Forma de pago</span>
+                  <span class="admin-order-value">${escapeHtml(formatPaymentMethod(order.payment_method))}</span>
+                </div>
+                <div class="admin-order-field">
+                  <span class="admin-order-label">Entrega</span>
+                  <span class="admin-order-value">${escapeHtml(formatDeliveryMethod(order.delivery_method))}</span>
+                </div>
+              </div>
+
+              <div class="admin-order-actions">
+                <label class="admin-order-status-editor">
+                  <span class="admin-order-label">Estado del pedido</span>
+                  <select class="admin-order-select" data-order-status-select="${escapeHtml(order.id)}">
+                    ${renderOrderStatusOptions(currentStatus)}
+                  </select>
+                </label>
+                <div class="admin-order-action-buttons">
+                  <button type="button" class="sidebar-btn sidebar-btn-secondary" data-save-order-status="${escapeHtml(order.id)}">Guardar estado</button>
+                  ${canQuickComplete ? `<button type="button" class="checkout-btn admin-order-complete-btn" data-complete-order="${escapeHtml(order.id)}">Marcar como completado</button>` : ''}
+                </div>
+              </div>
+
+              <div class="admin-order-detail-block">
+                <span class="admin-order-label">Productos</span>
+                ${renderOrderItemsDetail(order)}
+              </div>
+              <div class="admin-order-detail-block">
+                <span class="admin-order-label">Entrega y notas</span>
+                <div class="admin-order-detail-note">${escapeHtml(formatDeliveryAddress(order.delivery_address))}</div>
+                <div class="admin-order-detail-note">${escapeHtml(order.notes || order.reference_note || 'Sin notas adicionales')}</div>
+              </div>
+            </div>
+          </details>
+        </article>
+      `;
+    }
+
+    async function handleOrderStatusUpdate(orderId, nextStatus) {
+      const result = await window.updateBeautyfastOrder(orderId, { status: nextStatus });
+      if (!result.ok) {
+        Swal.fire({ icon: 'error', title: 'No pudimos actualizar el pedido', text: result.error || 'Inténtalo de nuevo.' });
+        return false;
+      }
+
+      adminOrders = adminOrders.map((order) => String(order.id) === String(orderId) ? result.data : order);
+      await loadDashboardData();
+      Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: 'success',
+        title: 'Pedido actualizado',
+        showConfirmButton: false,
+        timer: 1800,
+        timerProgressBar: true
+      });
+      return true;
+    }
+
+    function attachOrderInteractionHandlers() {
+      adminOrdersList.querySelectorAll('[data-save-order-status]').forEach((button) => {
+        button.addEventListener('click', async () => {
+          const orderId = button.dataset.saveOrderStatus;
+          const container = button.closest('.admin-order-card');
+          const select = container?.querySelector('[data-order-status-select]');
+          const nextStatus = select?.value;
+          if (!orderId || !nextStatus) return;
+
+          button.disabled = true;
+          button.textContent = 'Guardando...';
+          const updated = await handleOrderStatusUpdate(orderId, nextStatus);
+          if (!updated) {
+            button.disabled = false;
+            button.textContent = 'Guardar estado';
+          }
+        });
+      });
+
+      adminOrdersList.querySelectorAll('[data-complete-order]').forEach((button) => {
+        button.addEventListener('click', async () => {
+          const orderId = button.dataset.completeOrder;
+          if (!orderId) return;
+
+          button.disabled = true;
+          button.textContent = 'Completando...';
+          const updated = await handleOrderStatusUpdate(orderId, 'completed');
+          if (!updated) {
+            button.disabled = false;
+            button.textContent = 'Marcar como completado';
+          }
+        });
+      });
+    }
+
+    function renderOrders() {
+      renderOrdersControlsState();
+
+      if (!adminOrders.length) {
+        adminOrdersSummary.innerHTML = '';
+        adminOrdersList.innerHTML = '<div class="orders-empty">Todavía no hay compras registradas para mostrar aquí.</div>';
+        return;
+      }
+
+      const filteredOrders = getFilteredOrdersForCurrentWorkspace();
+
+      renderOrdersSummary(filteredOrders);
+
+      if (!filteredOrders.length) {
+        adminOrdersList.innerHTML = `
+          <div class="orders-empty">
+            ${adminOrdersView === 'active'
+              ? 'No hay pedidos en curso dentro del período seleccionado.'
+              : 'No hay pedidos completados en el período seleccionado.'}
+          </div>
+        `;
+        return;
+      }
+
+      const groups = groupOrdersByMonth(filteredOrders);
+      adminOrdersList.innerHTML = groups.map((group) => `
+        <section class="admin-order-group">
+          <div class="admin-order-group-head">
+            <h3 class="admin-order-group-title">${escapeHtml(group.label)}</h3>
+            <span class="admin-order-group-count">${group.items.length} pedido(s)</span>
+          </div>
+          <div class="admin-orders-grid">
+            ${group.items.map((order) => renderOrderCard(order)).join('')}
+          </div>
+        </section>
+      `).join('');
+
+      attachOrderInteractionHandlers();
+    }
+
+    async function loadDashboardData() {
+      const [statsResult, productsResult, ordersResult] = await Promise.all([
+        window.fetchBeautyfastAdminStats(),
+        window.fetchBeautyfastProducts(),
+        window.fetchBeautyfastAdminOrders()
+      ]);
+
+      if (!statsResult.ok) {
+        setGateStatus(statsResult.error || 'No pudimos cargar estadísticas.', 'is-error');
+        return;
+      }
+
+      if (!productsResult.ok) {
+        setProductStatus(productsResult.error || 'No pudimos cargar productos.', 'is-error');
+        adminProducts = [];
+      } else {
+        adminProducts = productsResult.data || [];
+      }
+
+      if (!ordersResult.ok) {
+        adminOrders = [];
+      } else {
+        adminOrders = ordersResult.data || [];
+      }
+
+      const catalogModeResult = await ensureCatalogSourceMode(adminProducts);
+      if (!catalogModeResult.ok) {
+        renderCatalogMode('hybrid', { hint: 'No pudimos revisar la configuración actual de productos.' });
+        setProductStatus(catalogModeResult.error || 'No pudimos revisar la configuración actual de productos.', 'is-error');
+      } else if (catalogModeResult.autoEnabled) {
+        renderCatalogMode('supabase');
+        setProductStatus('El catálogo base ya está importado y la tienda tomará estos productos como referencia principal.', 'is-success');
+      } else {
+        renderCatalogMode(catalogModeResult.mode || 'hybrid');
+      }
+
+      renderStats(statsResult.data);
+      renderProducts();
+      renderOrdersLaunchpad();
+      renderOrders();
+    }
+
+    async function refreshAdminGate() {
+      if (!window.isBeautyfastSupabaseConfigured || !window.isBeautyfastSupabaseConfigured()) {
+        adminDashboard.hidden = true;
+        adminGate.hidden = false;
+        closeOrdersWorkspace();
+        setGateStatus('Falta completar la configuración inicial antes de usar este panel.', 'is-error');
+        return;
+      }
+
+      const sessionResult = await window.getBeautyfastSession();
+      if (!sessionResult.user) {
+        adminGate.hidden = false;
+        adminDashboard.hidden = true;
+        adminLogoutBtn.hidden = true;
+        closeOrdersWorkspace();
+        setGateStatus(`Inicia sesión con el usuario ${getAdminLoginConfig().username} para entrar al panel.`, '');
+        return;
+      }
+
+      adminLogoutBtn.hidden = false;
+
+      const adminResult = await window.isBeautyfastAdmin();
+      if (!adminResult.ok) {
+        adminDashboard.hidden = true;
+        adminGate.hidden = false;
+        closeOrdersWorkspace();
+        setGateStatus(adminResult.error || 'No pudimos validar el perfil administrador.', 'is-error');
+        return;
+      }
+
+      if (!adminResult.isAdmin) {
+        adminDashboard.hidden = true;
+        adminGate.hidden = false;
+        closeOrdersWorkspace();
+        setGateStatus('Esta cuenta no tiene permiso para entrar al panel de administración.', 'is-error');
+        return;
+      }
+
+      adminGate.hidden = true;
+      adminDashboard.hidden = false;
+      await loadDashboardData();
+    }
+
+    adminAuthForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      adminLoginBtn.disabled = true;
+      adminLoginBtn.textContent = 'Entrando...';
+
+      const adminLoginConfig = getAdminLoginConfig();
+      const typedUsername = adminUsernameInput.value.trim().toLowerCase();
+
+      if (!adminLoginConfig.email) {
+        setGateStatus('Falta completar el acceso del administrador en la configuración inicial.', 'is-error');
+        adminLoginBtn.disabled = false;
+        adminLoginBtn.textContent = 'Entrar al panel';
+        return;
+      }
+
+      const acceptedIdentifiers = [adminLoginConfig.username, adminLoginConfig.email].filter(Boolean);
+      if (!acceptedIdentifiers.includes(typedUsername)) {
+        setGateStatus('Usuario administrador no válido.', 'is-error');
+        adminLoginBtn.disabled = false;
+        adminLoginBtn.textContent = 'Entrar al panel';
+        return;
+      }
+
+      const result = await window.signInBeautyfastCustomer(
+        adminLoginConfig.email,
+        adminPasswordInput.value
+      );
+
+      if (!result.ok) {
+        setGateStatus(result.error || 'No pudimos iniciar sesión.', 'is-error');
+        adminLoginBtn.disabled = false;
+        adminLoginBtn.textContent = 'Entrar al panel';
+        return;
+      }
+
+      setGateStatus('Sesión iniciada. Validando permisos...', 'is-success');
+      adminLoginBtn.disabled = false;
+      adminLoginBtn.textContent = 'Entrar al panel';
+      await refreshAdminGate();
+    });
+
+    adminLogoutBtn.addEventListener('click', async () => {
+      const result = await window.signOutBeautyfastCustomer();
+      if (!result.ok) {
+        Swal.fire({ icon: 'error', title: 'No pudimos cerrar sesión', text: result.error || 'Inténtalo de nuevo.' });
+        return;
+      }
+
+      adminDashboard.hidden = true;
+      adminGate.hidden = false;
+      adminLogoutBtn.hidden = true;
+      closeOrdersWorkspace();
+      setGateStatus('Sesión cerrada.', 'is-success');
+    });
+
+    document.getElementById('adminProductName').addEventListener('input', (event) => {
+      const slugField = document.getElementById('adminProductSlug');
+      if (!slugField.dataset.touched) {
+        slugField.value = slugify(event.target.value);
+      }
+    });
+
+    document.getElementById('adminProductSlug').addEventListener('input', (event) => {
+      event.target.dataset.touched = event.target.value ? 'true' : '';
+    });
+
+    adminProductImageUrl.addEventListener('input', (event) => {
+      renderImagePreview(event.target.value.trim());
+    });
+
+    adminProductImageFile.addEventListener('change', () => {
+      const [file] = adminProductImageFile.files || [];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = () => renderImagePreview(reader.result);
+      reader.readAsDataURL(file);
+    });
+
+    adminResetProductBtn.addEventListener('click', () => {
+      if (adminProductComposer?.hidden) {
+        resetProductForm({ openComposer: true });
+        return;
+      }
+
+      setProductComposerOpen(false);
+    });
+
+    adminClearProductBtn.addEventListener('click', () => {
+      resetProductForm({ openComposer: true });
+    });
+
+    adminSeedCatalogBtn.addEventListener('click', async () => {
+      adminSeedCatalogBtn.disabled = true;
+      adminSeedCatalogBtn.textContent = 'Importando...';
+
+      const fallbackCatalog = getFallbackCatalog().map(normalizeImportProduct);
+      const result = await window.bulkUpsertBeautyfastProducts(fallbackCatalog);
+
+      adminSeedCatalogBtn.disabled = false;
+      adminSeedCatalogBtn.textContent = 'Importar catálogo base';
+
+      if (!result.ok) {
+        setProductStatus(result.error || 'No pudimos importar el catálogo base.', 'is-error');
+        return;
+      }
+
+      const modeResult = await enableSupabaseCatalogMode();
+      if (!modeResult.ok) {
+        setProductStatus(modeResult.error || 'El catálogo se importó, pero no pudimos actualizar la configuración de publicación.', 'is-error');
+        await loadDashboardData();
+        return;
+      }
+
+      setProductStatus('El catálogo base se importó correctamente y la tienda ya usa estos productos como referencia principal.', 'is-success');
+      await loadDashboardData();
+    });
+
+    adminBulkTemplateBtn?.addEventListener('click', () => {
+      downloadBulkTemplate();
+    });
+
+    adminBulkFile?.addEventListener('change', () => {
+      syncBulkFileLabel();
+    });
+
+    adminBulkDropzone?.addEventListener('click', () => {
+      adminBulkFile?.click();
+    });
+
+    adminBulkDropzone?.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        adminBulkFile?.click();
+      }
+    });
+
+    ['dragenter', 'dragover'].forEach((eventName) => {
+      adminBulkDropzone?.addEventListener(eventName, (event) => {
+        event.preventDefault();
+        adminBulkDropzone.classList.add('is-dragging');
+      });
+    });
+
+    ['dragleave', 'dragend', 'drop'].forEach((eventName) => {
+      adminBulkDropzone?.addEventListener(eventName, (event) => {
+        event.preventDefault();
+        adminBulkDropzone.classList.remove('is-dragging');
+      });
+    });
+
+    adminBulkDropzone?.addEventListener('drop', (event) => {
+      const droppedFiles = event.dataTransfer?.files;
+      if (!droppedFiles?.length) return;
+      assignBulkFileList(droppedFiles);
+    });
+
+    adminBulkImportBtn.addEventListener('click', async () => {
+      let parsedProducts;
+
+      try {
+        const bulkSource = await readBulkImportSource();
+        parsedProducts = parseBulkProducts(bulkSource);
+      } catch (error) {
+        setBulkStatus(error.message || 'La lista no tiene un formato válido.', 'is-error');
+        return;
+      }
+
+      const normalizedProducts = Array.isArray(parsedProducts)
+        ? parsedProducts.map(normalizeImportProduct)
+        : [];
+
+      const result = await window.bulkUpsertBeautyfastProducts(normalizedProducts);
+      if (!result.ok) {
+        setBulkStatus(result.error || 'No pudimos cargar la lista de productos.', 'is-error');
+        return;
+      }
+
+      adminBulkJson.value = '';
+      if (adminBulkFile) adminBulkFile.value = '';
+      syncBulkFileLabel();
+      setBulkStatus(`Carga completada: ${result.data.length} productos procesados.`, 'is-success');
+      await loadDashboardData();
+    });
+
+    adminForceSupabaseBtn?.addEventListener('click', async () => {
+      await updateCatalogMode('supabase');
+    });
+
+    adminForceHybridBtn?.addEventListener('click', async () => {
+      await updateCatalogMode('hybrid');
+    });
+
+    if (adminProductsToggleBtn) {
+      adminProductsToggleBtn.addEventListener('click', () => {
+        areAdminProductsExpanded = !areAdminProductsExpanded;
+        renderProductsSectionState();
+      });
+      renderProductsSectionState();
+    }
+
+    [adminOrdersActiveBtn, adminOrdersCompletedBtn].forEach((button) => {
+      button?.addEventListener('click', () => {
+        adminOrdersView = button.dataset.ordersView === 'completed' ? 'completed' : 'active';
+        renderOrders();
+      });
+    });
+
+    [adminOrdersOpenActiveBtn, adminOrdersOpenCompletedBtn].forEach((button) => {
+      button?.addEventListener('click', () => {
+        openOrdersWorkspace(button.dataset.openOrdersView);
+      });
+    });
+
+    adminDashboard?.addEventListener('click', (event) => {
+      const launchButton = event.target.closest('[data-open-orders-view]');
+      if (!launchButton) return;
+      openOrdersWorkspace(launchButton.dataset.openOrdersView);
+    });
+
+    adminOrdersBackBtn?.addEventListener('click', () => {
+      closeOrdersWorkspace();
+    });
+
+    adminOrdersExportBtn?.addEventListener('click', () => {
+      downloadOrdersCsv();
+    });
+
+    adminOrdersPeriodFilters?.querySelectorAll('[data-orders-range]').forEach((button) => {
+      button.addEventListener('click', () => {
+        adminOrdersRange = button.dataset.ordersRange || 'month';
+        renderOrders();
+      });
+    });
+
+    adminProductForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      adminSaveProductBtn.disabled = true;
+      adminSaveProductBtn.textContent = 'Guardando...';
+
+      let imageUrl = adminProductImageUrl.value.trim();
+      const [imageFile] = adminProductImageFile.files || [];
+      if (imageFile) {
+        const uploadResult = await window.uploadBeautyfastProductImage(imageFile);
+        if (!uploadResult.ok) {
+          setProductStatus(uploadResult.error || 'No pudimos subir la imagen.', 'is-error');
+          adminSaveProductBtn.disabled = false;
+          adminSaveProductBtn.textContent = 'Guardar producto';
+          return;
+        }
+
+        imageUrl = uploadResult.data.publicUrl;
+      }
+
+      const payload = {
+        id: document.getElementById('adminProductId').value || undefined,
+        name: document.getElementById('adminProductName').value.trim(),
+        slug: document.getElementById('adminProductSlug').value.trim() || slugify(document.getElementById('adminProductName').value),
+        category: document.getElementById('adminProductCategory').value,
+        price: document.getElementById('adminProductPrice').value,
+        offer_price: document.getElementById('adminProductOfferPrice').value,
+        image_url: imageUrl,
+        description: document.getElementById('adminProductDescription').value.trim(),
+        sort_order: document.getElementById('adminProductSort').value,
+        active: document.getElementById('adminProductActive').checked,
+        featured: document.getElementById('adminProductFeatured').checked
+      };
+
+      const result = await window.upsertBeautyfastProduct(payload);
+      if (!result.ok) {
+        setProductStatus(result.error || 'No pudimos guardar el producto.', 'is-error');
+        adminSaveProductBtn.disabled = false;
+        adminSaveProductBtn.textContent = 'Guardar producto';
+        return;
+      }
+
+      setProductStatus('Producto guardado correctamente.', 'is-success');
+      adminSaveProductBtn.disabled = false;
+      adminSaveProductBtn.textContent = 'Guardar producto';
+      await loadDashboardData();
+      resetProductForm();
+      setProductComposerOpen(false);
+    });
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      const adminLoginConfig = getAdminLoginConfig();
+      adminUsernameInput.value = adminLoginConfig.username;
+      if (adminOrdersWorkspace) adminOrdersWorkspace.style.setProperty('display', 'none', 'important');
+      if (adminOverview) adminOverview.style.removeProperty('display');
+      resetProductForm();
+      setProductComposerOpen(false);
+      await refreshAdminGate();
+    });
+  </script>
+</body>
+</html>

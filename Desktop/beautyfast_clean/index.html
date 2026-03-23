@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="El Secreto de Aris: línea capilar y productos de belleza naturales con compra rápida, carrito y atención por WhatsApp en República Dominicana.">
   <meta name="theme-color" content="#606c38">
+  <meta name="robots" content="index,follow">
   <title>El Secreto de Aris - Inicio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -45,17 +46,17 @@
   <div class="header-right">
     <div id="headerAccount" class="header-account"></div>
     <div class="search-box">
-      <button id="searchToggle" class="search-toggle" type="button" title="Buscar">
+      <button id="searchToggle" class="search-toggle" type="button" title="Buscar" aria-label="Abrir buscador">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="11" cy="11" r="8"></circle>
           <path d="m21 21-4.35-4.35"></path>
         </svg>
       </button>
-      <input type="text" id="search" placeholder="Buscar..." class="search-input">
+      <input type="text" id="search" placeholder="Buscar..." class="search-input" aria-label="Buscar productos">
       <button id="clearSearch" type="button" class="clear-search" aria-label="Limpiar búsqueda">×</button>
     </div>
 
-    <div class="cart" role="button" tabindex="0" aria-label="Abrir carrito">
+    <div class="cart" role="button" tabindex="0" aria-label="Abrir carrito" aria-haspopup="dialog" aria-controls="cartPanel">
       <svg class="cart-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="#e6d8b0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="9" cy="21" r="1.5"></circle>
         <circle cx="20" cy="21" r="1.5"></circle>
@@ -66,24 +67,21 @@
   </div>
 </header>
 
-<div class="sidebar" id="sidebar">
+<div class="sidebar" id="sidebar" aria-label="Menú lateral de navegación">
   <div class="sidebar-search-container">
     <svg class="sidebar-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <circle cx="11" cy="11" r="8"></circle>
       <path d="m21 21-4.35-4.35"></path>
     </svg>
-    <input type="text" id="sidebarSearch" placeholder="Buscar..." class="sidebar-search-input">
+    <input type="text" id="sidebarSearch" placeholder="Buscar..." class="sidebar-search-input" aria-label="Buscar categorías y productos">
     <button id="clearSidebarSearch" class="sidebar-search-clear" type="button" title="Limpiar búsqueda" aria-label="Limpiar búsqueda">×</button>
   </div>
   <div class="sidebar-categories" id="sidebarCategories"></div>
-  <div class="sidebar-actions">
-    <a href="index.html" class="sidebar-btn sidebar-btn-primary">Inicio</a>
-    <a href="beautyfast.html" class="sidebar-btn sidebar-btn-secondary" id="btnIrProductos">Productos</a>
-  </div>
   <div id="sidebarAccount" class="sidebar-account"></div>
 </div>
 <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
+<main id="mainContent">
 <section class="hero-aris home-hero-wrap">
   <div class="home-hero-stage">
     <div class="swiper hero-swiper">
@@ -165,8 +163,11 @@
 <section class="landing-card landing-card-peach">
   <h2 class="landing-title">¿Tienes dudas? ¡Contáctanos!</h2>
   <form onsubmit="enviarWhatsApp(event)" class="contact-form">
+    <label for="nombreContacto" class="sr-only">Tu nombre</label>
     <input type="text" name="nombre" id="nombreContacto" placeholder="Tu nombre" required>
+    <label for="whatsappContacto" class="sr-only">Tu WhatsApp</label>
     <input type="tel" name="whatsapp" id="whatsappContacto" placeholder="Tu WhatsApp" required pattern="[0-9\\+ ]{8,}">
+    <label for="mensajeContacto" class="sr-only">Tu mensaje</label>
     <textarea name="mensaje" id="mensajeContacto" placeholder="¿En qué podemos ayudarte?" required></textarea>
     <button type="submit" class="contact-submit">Enviar por WhatsApp</button>
   </form>
@@ -185,20 +186,20 @@
 
 <div id="cartOverlay" class="cart-overlay"></div>
 
-<div id="cartPanel" class="cart-panel">
+<div id="cartPanel" class="cart-panel" role="dialog" aria-modal="true" aria-labelledby="cartHeading">
   <button id="closeCart" class="close-cart" type="button" aria-label="Cerrar carrito">&times;</button>
-  <h2>Tu carrito</h2>
+  <h2 id="cartHeading">Tu carrito</h2>
   <div id="cartItems"></div>
   <p id="cartTotal">Total: RD$ 0</p>
   <div class="cart-actions">
-    <button id="emptyCart">Vaciar</button>
-    <button id="checkoutBtn">Pagar</button>
+    <button id="emptyCart" type="button">Vaciar</button>
+    <button id="checkoutBtn" type="button">Pagar</button>
   </div>
 </div>
 
-<div id="productModal" class="product-modal">
+<div id="productModal" class="product-modal" role="dialog" aria-modal="true" aria-labelledby="productModalTitle">
   <div class="product-modal-content">
-    <button id="closeProductModal" class="close-product-modal">&times;</button>
+    <button id="closeProductModal" class="close-product-modal" type="button" aria-label="Cerrar detalle de producto">&times;</button>
     <div class="product-detail">
       <div class="product-detail-image">
         <img id="productModalImage" src="" alt="Producto">
@@ -207,29 +208,30 @@
         <h2 id="productModalTitle"></h2>
         <p id="productModalDesc"></p>
         <p id="productModalPrice" class="product-modal-price"></p>
-        <button id="productModalAddCart" class="btn-add-cart">Agregar al carrito</button>
+        <button id="productModalAddCart" class="btn-add-cart" type="button">Agregar al carrito</button>
       </div>
     </div>
   </div>
 </div>
+</main>
 
 <footer class="site-footer">
   <div class="footer-columns">
     <div class="footer-column">
       <h3>Acerca de nosotros</h3>
       <ul class="footer-links">
-        <li><a href="about.html" target="_blank" class="footer-link-pill">Nosotros</a></li>
-        <li><a href="redes.html" target="_blank" class="footer-link-pill">Redes sociales</a></li>
-        <li><a href="contacto.html" target="_blank" class="footer-link-pill">Contacto</a></li>
+        <li><a href="about.html" target="_blank" rel="noopener" class="footer-link-pill">Nosotros</a></li>
+        <li><a href="redes.html" target="_blank" rel="noopener" class="footer-link-pill">Redes sociales</a></li>
+        <li><a href="contacto.html" target="_blank" rel="noopener" class="footer-link-pill">Contacto</a></li>
         <li><a href="orders.html" class="footer-link-pill">Mis pedidos</a></li>
       </ul>
     </div>
     <div class="footer-column">
       <h3>Legal</h3>
       <ul class="footer-links">
-        <li><a href="terminos.html" target="_blank" class="footer-link-pill">Términos y condiciones de uso</a></li>
-        <li><a href="privacidad.html" target="_blank" class="footer-link-pill">Políticas de Privacidad</a></li>
-        <li><a href="cambios.html" target="_blank" class="footer-link-pill">Cambios &amp; Devoluciones</a></li>
+        <li><a href="terminos.html" target="_blank" rel="noopener" class="footer-link-pill">Términos y condiciones de uso</a></li>
+        <li><a href="privacidad.html" target="_blank" rel="noopener" class="footer-link-pill">Políticas de Privacidad</a></li>
+        <li><a href="cambios.html" target="_blank" rel="noopener" class="footer-link-pill">Cambios &amp; Devoluciones</a></li>
       </ul>
     </div>
   </div>
@@ -240,6 +242,7 @@
   </div>
 </footer>
 
+<script src="catalog-fallback.js"></script>
 <script src="beautyfast.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -297,12 +300,8 @@
     e.preventDefault();
     fadeOutAndGo('beautyfast.html');
   });
-  document.getElementById('btnIrProductos').addEventListener('click', function(e) {
-    e.preventDefault();
-    fadeOutAndGo('beautyfast.html');
-  });
 </script>
-<a href="https://wa.me/18493990014?text=Hola,%20quiero%20m%C3%A1s%20informaci%C3%B3n..." class="whatsapp-button" title="Contactar por WhatsApp" target="_blank">
+<a href="https://wa.me/18493990014?text=Hola,%20quiero%20m%C3%A1s%20informaci%C3%B3n..." class="whatsapp-button" title="Contactar por WhatsApp" target="_blank" rel="noopener" aria-label="Contactar por WhatsApp">
   <img src="img/Whatsapp.jpg" alt="WhatsApp">
 </a>
 </body>

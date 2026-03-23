@@ -18,6 +18,12 @@
     }
 
     const sessionResult = await window.getBeautyfastSession();
+    const adminResult = window.isBeautyfastAdmin ? await window.isBeautyfastAdmin() : { ok: false, isAdmin: false };
+    if (adminResult.ok && adminResult.isAdmin) {
+      banner.innerHTML = 'La cuenta de administrador no puede usar la pantalla de pago. Usa el panel para gestionar la tienda.';
+      return;
+    }
+
     if (sessionResult.user) {
       banner.innerHTML = `Comprando como <strong>${escapeHtml(sessionResult.user.email)}</strong>. Este pedido se guardará en <a href="orders.html">Mis pedidos</a>.`;
       return;
@@ -31,6 +37,11 @@
 
     if (!window.isBeautyfastSupabaseConfigured || !window.isBeautyfastSupabaseConfigured()) {
       return { saved: false, message: 'Supabase todavía no está configurado.' };
+    }
+
+    const adminResult = window.isBeautyfastAdmin ? await window.isBeautyfastAdmin() : { ok: false, isAdmin: false };
+    if (adminResult.ok && adminResult.isAdmin) {
+      return { saved: false, message: 'La cuenta de administrador no puede registrar compras desde esta pantalla.' };
     }
 
     const result = await window.saveBeautyfastOrder(orderPayload);
