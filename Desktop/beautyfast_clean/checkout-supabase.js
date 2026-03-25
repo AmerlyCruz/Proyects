@@ -13,7 +13,7 @@
     if (!banner) return;
 
     if (!window.isBeautyfastSupabaseConfigured || !window.isBeautyfastSupabaseConfigured()) {
-      banner.innerHTML = 'Activa <strong>Supabase</strong> en <a href="supabase-config.js">supabase-config.js</a> para guardar pedidos reales e historial de clientes.';
+      banner.innerHTML = 'El historial de pedidos todavía no está disponible en esta tienda.';
       return;
     }
 
@@ -33,8 +33,6 @@
   };
 
   window.persistCheckoutOrderSupabase = async function persistCheckoutOrderSupabase(orderPayload) {
-    localStorage.setItem('beautyfast:last-order', JSON.stringify(orderPayload));
-
     if (!window.isBeautyfastSupabaseConfigured || !window.isBeautyfastSupabaseConfigured()) {
       return { saved: false, message: 'Supabase todavía no está configurado.' };
     }
@@ -52,6 +50,8 @@
 
       return { saved: false, message: result.error || 'No pudimos guardar el pedido en Supabase.' };
     }
+
+    localStorage.setItem('beautyfast:last-order', JSON.stringify(orderPayload));
 
     return { saved: true, message: 'Pedido guardado en tu historial.' };
   };

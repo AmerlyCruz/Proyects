@@ -41,16 +41,16 @@
 
   <main class="account-main">
     <section class="account-hero">
-      <p class="account-eyebrow">Área del cliente</p>
-      <h1 class="account-title">Mis pedidos</h1>
-      <p class="account-copy">Crea tu cuenta o inicia sesión para ver el historial de tus pedidos. Cuando compres con la sesión iniciada, tus órdenes aparecerán aquí automáticamente.</p>
+      <p class="account-eyebrow" id="accountEyebrow">Área del cliente</p>
+      <h1 class="account-title" id="accountTitle">Mis pedidos</h1>
+      <p class="account-copy" id="accountCopy">Crea tu cuenta o inicia sesión para ver el historial de tus pedidos. Cuando compres con la sesión iniciada, tus órdenes aparecerán aquí automáticamente.</p>
     </section>
 
-    <section class="account-grid">
+    <section class="account-grid" id="accountGrid">
       <!-- Login/Signup Card -->
-      <article class="account-card">
-        <h2 style="margin-bottom: 6px;">Acceso simple</h2>
-        <p style="margin-bottom: 12px; color: #b6a47a;">Usa tu correo o tu usuario de acceso para entrar. Si es tu primera vez, crea la cuenta con tu correo y luego realiza tus compras con esa sesión abierta.</p>
+      <article class="account-card account-card-auth" id="authCard">
+        <h2 class="account-section-title">Acceso simple</h2>
+        <p class="account-section-copy">Usa tu correo para entrar. Si es tu primera vez, crea la cuenta con ese mismo correo y luego realiza tus compras con la sesión abierta.</p>
 
         <div class="auth-toggle">
           <button type="button" class="active" data-auth-mode="login">Entrar</button>
@@ -59,7 +59,7 @@
 
         <form id="authForm" class="account-form">
           <input type="text" id="authName" placeholder="Nombre completo" autocomplete="name" hidden>
-          <input type="text" id="authEmail" placeholder="Correo o usuario" autocomplete="username" required>
+          <input type="text" id="authEmail" placeholder="Correo electrónico" autocomplete="username" required>
           <input type="password" id="authPassword" placeholder="Contraseña" autocomplete="current-password" required>
           <button type="submit" class="checkout-btn account-submit" id="authSubmitBtn">Entrar</button>
         </form>
@@ -68,11 +68,12 @@
       </article>
 
       <!-- Orders/History Card -->
-      <article class="account-card">
+      <article class="account-card account-card-wide" id="historyCard">
         <div class="account-toolbar">
-          <div>
-            <h2 style="margin-bottom: 2px;">Historial</h2>
+          <div class="account-toolbar-copy">
+            <h2 class="account-section-title account-section-title-tight">Historial</h2>
             <div id="accountUser" class="account-user">Sin sesión activa.</div>
+            <div id="historySummary" class="history-summary">Inicia sesión para ver el resumen de tus pedidos.</div>
           </div>
           <button type="button" class="sidebar-btn sidebar-btn-secondary" id="logoutBtn" hidden>Cerrar sesión</button>
         </div>
@@ -99,7 +100,13 @@
     const logoutBtn = document.getElementById('logoutBtn');
     const ordersCheckoutLink = document.getElementById('ordersCheckoutLink');
     const toggleButtons = document.querySelectorAll('[data-auth-mode]');
-    const authCard = authForm.closest('.account-card');
+    const authCard = document.getElementById('authCard');
+    const accountGrid = document.getElementById('accountGrid');
+    const headerAccount = document.getElementById('headerAccount');
+    const accountEyebrow = document.getElementById('accountEyebrow');
+    const accountTitle = document.getElementById('accountTitle');
+    const accountCopy = document.getElementById('accountCopy');
+    const historySummary = document.getElementById('historySummary');
     let authMode = 'login';
     let adminRedirectScheduled = false;
 
@@ -130,7 +137,7 @@
       authEmail.type = mode === 'signup' ? 'email' : 'text';
       authEmail.autocomplete = mode === 'signup' ? 'email' : 'username';
       authEmail.inputMode = mode === 'signup' ? 'email' : 'text';
-      authEmail.placeholder = mode === 'signup' ? 'Correo electrónico' : 'Correo o usuario';
+      authEmail.placeholder = 'Correo electrónico';
     }
 
     function getAdminLoginConfig() {
@@ -179,9 +186,13 @@
 
     function friendlyStatus(status) {
       switch ((status || '').toLowerCase()) {
+        case 'paid': return 'Pagado';
         case 'paid_pending_fulfillment': return 'Pagado, pendiente de entrega';
         case 'pending_payment': return 'Pendiente de comprobante';
+        case 'pending_review': return 'Pendiente de revisión';
         case 'pending': return 'Pendiente';
+        case 'shipped': return 'En camino';
+        case 'delivered': return 'Entregado';
         case 'completed': return 'Completado';
         case 'cancelled': return 'Cancelado';
         case 'processing': return 'Procesando';
@@ -190,17 +201,113 @@
     }
     function statusClass(status) {
       switch ((status || '').toLowerCase()) {
+        case 'paid': return 'status-completed';
+        case 'paid_pending_fulfillment': return 'status-completed';
         case 'pending_payment': return 'status-pending';
+        case 'pending_review': return 'status-pending';
         case 'completed': return 'status-completed';
+        case 'delivered': return 'status-completed';
+        case 'shipped': return 'status-completed';
         case 'cancelled': return 'status-cancelled';
         case 'pending': return 'status-pending';
+        case 'processing': return 'status-pending';
         default: return '';
+      }
+    }
+    function friendlyPaymentMethod(value) {
+      switch ((value || '').toLowerCase()) {
+        case 'azul': return 'Tarjeta';
+        case 'banco': return 'Transferencia o depósito';
+        case 'cash': return 'Efectivo';
+        default: return value;
+      }
+    }
+    function friendlyDeliveryMethod(value) {
+      switch ((value || '').toLowerCase()) {
+        case 'delivery': return 'Entrega a domicilio';
+        case 'pickup': return 'Retiro en local';
+        default: return value;
       }
     }
     function paymentClass() { return 'payment'; }
     function deliveryClass() { return 'delivery'; }
 
+    function getDisplayName(user, profile) {
+      const fullName = String(profile?.full_name || '').trim();
+      if (fullName) return fullName;
+
+      const email = String(user?.email || '').trim();
+      if (!email) return 'Mi cuenta';
+
+      return email.split('@')[0] || email;
+    }
+
+    function renderHeaderAccountState({ user = null, profile = null, isAdmin = false } = {}) {
+      if (!headerAccount) return;
+
+      if (isAdmin) {
+        headerAccount.innerHTML = '<a href="admin.html" class="sidebar-btn sidebar-btn-secondary header-account-pill">Panel admin</a>';
+        return;
+      }
+
+      if (user) {
+        headerAccount.innerHTML = `<a href="orders.html" class="sidebar-btn sidebar-btn-secondary header-account-pill">${escapeHtml(getDisplayName(user, profile))}</a>`;
+        return;
+      }
+
+      headerAccount.innerHTML = '<a href="orders.html" class="sidebar-btn sidebar-btn-secondary header-account-pill">Ingresar</a>';
+    }
+
+    function setAccountMode(mode) {
+      if (!accountGrid) return;
+
+      accountGrid.classList.toggle('account-grid-authenticated', mode === 'customer');
+      accountGrid.classList.toggle('account-grid-admin', mode === 'admin');
+
+      if (authCard) {
+        const showAuth = mode === 'guest';
+        authCard.hidden = !showAuth;
+        authCard.setAttribute('aria-hidden', String(!showAuth));
+        authCard.classList.toggle('account-card-hidden', !showAuth);
+        authCard.style.display = showAuth ? '' : 'none';
+      }
+
+      if (accountEyebrow) {
+        accountEyebrow.textContent = mode === 'customer' ? 'Sesión activa' : 'Área del cliente';
+      }
+
+      if (accountTitle) {
+        accountTitle.textContent = mode === 'customer' ? 'Tu historial de pedidos' : 'Mis pedidos';
+      }
+
+      if (accountCopy) {
+        accountCopy.textContent = mode === 'customer'
+          ? 'Aquí verás tus pedidos recientes, su estado y los detalles de entrega. Abre cualquier tarjeta para revisar la información completa.'
+          : 'Crea tu cuenta o inicia sesión para ver el historial de tus pedidos. Cuando compres con la sesión iniciada, tus órdenes aparecerán aquí automáticamente.';
+      }
+
+      if (historySummary && mode !== 'customer') {
+        historySummary.textContent = mode === 'admin'
+          ? 'Esta sesión pertenece al panel administrativo.'
+          : 'Inicia sesión para ver el resumen de tus pedidos.';
+      }
+    }
+
+    function updateHistorySummary(orders) {
+      if (!historySummary) return;
+
+      if (!Array.isArray(orders) || !orders.length) {
+        historySummary.textContent = 'Todavía no tienes compras registradas con esta cuenta.';
+        return;
+      }
+
+      const latestOrder = orders[0];
+      historySummary.textContent = `${orders.length} pedido(s) guardado(s). Último movimiento: ${friendlyStatus(latestOrder.status || 'pending')}.`;
+    }
+
     function renderOrders(orders) {
+      updateHistorySummary(orders);
+
       if (!orders.length) {
         ordersList.innerHTML = '<div class="orders-empty">Todavía no tienes pedidos guardados. Cuando compres con la sesión iniciada, aparecerán aquí.</div>';
         return;
@@ -211,50 +318,65 @@
         const deliveryAddress = order.delivery_address || {};
 
         return `
-          <article class="order-card">
-            <div class="order-head">
-              <div class="order-number">${escapeHtml(order.order_number)}</div>
-              <div class="order-date">${formatDate(order.created_at)}</div>
+          <details class="order-card">
+            <summary class="order-summary">
+              <div class="order-summary-main">
+                <div class="order-number">${escapeHtml(order.order_number)}</div>
+                <div class="order-date">${formatDate(order.created_at)}</div>
+                <div class="order-summary-caption">${items.length} producto(s) en esta orden</div>
+              </div>
+              <div class="order-summary-side">
+                <div class="order-badges">
+                  <span class="order-badge ${deliveryClass()}">${escapeHtml(friendlyDeliveryMethod(order.delivery_method || 'Sin método'))}</span>
+                  <span class="order-badge ${paymentClass()}">${escapeHtml(friendlyPaymentMethod(order.payment_method || 'Sin pago'))}</span>
+                  <span class="order-badge status ${statusClass(order.status)}">${escapeHtml(friendlyStatus(order.status || 'pending'))}</span>
+                </div>
+                <div class="order-total">RD$ ${currency(order.total_amount)}</div>
+                <div class="order-summary-action">Ver detalles</div>
+              </div>
+            </summary>
+            <div class="order-details-body">
+              <div class="order-meta">
+                <div><strong>Cliente:</strong> ${escapeHtml(order.customer_name)}</div>
+                <div><strong>Teléfono:</strong> ${escapeHtml(order.phone)}</div>
+                ${deliveryAddress?.direccion ? `<div><strong>Dirección:</strong> ${escapeHtml(deliveryAddress.direccion)}${deliveryAddress.ciudad ? ', ' + escapeHtml(deliveryAddress.ciudad) : ''}</div>` : ''}
+              </div>
+              <div class="order-items">
+                ${items.map((item) => `<div class="order-item"><span>${escapeHtml(item.name)} x${escapeHtml(item.quantity)}</span><span>RD$ ${currency(item.lineTotal || (item.price * item.quantity))}</span></div>`).join('')}
+              </div>
             </div>
-            <div class="order-badges">
-              <span class="order-badge ${deliveryClass()}">${escapeHtml(order.delivery_method || 'Sin método')}</span>
-              <span class="order-badge ${paymentClass()}">${escapeHtml(order.payment_method || 'Sin pago')}</span>
-              <span class="order-badge status ${statusClass(order.status)}">${escapeHtml(friendlyStatus(order.status || 'pending'))}</span>
-            </div>
-            <div class="order-meta">
-              <div><strong>Cliente:</strong> ${escapeHtml(order.customer_name)}</div>
-              <div><strong>Teléfono:</strong> ${escapeHtml(order.phone)}</div>
-              ${deliveryAddress?.direccion ? `<div><strong>Dirección:</strong> ${escapeHtml(deliveryAddress.direccion)}${deliveryAddress.ciudad ? ', ' + escapeHtml(deliveryAddress.ciudad) : ''}</div>` : ''}
-            </div>
-            <div class="order-items">
-              ${items.map((item) => `<div class="order-item"><span>${escapeHtml(item.name)} x${escapeHtml(item.quantity)}</span><span>RD$ ${currency(item.lineTotal || (item.price * item.quantity))}</span></div>`).join('')}
-            </div>
-            <div class="order-total">Total: RD$ ${currency(order.total_amount)}</div>
-          </article>
+          </details>
         `;
       }).join('');
     }
 
     async function refreshOrders() {
       if (!window.isBeautyfastSupabaseConfigured()) {
-        setStatus('Completa supabase-config.js para activar login e historial.', 'is-error');
-        ordersList.innerHTML = '<div class="orders-empty">Supabase todavía no está configurado en este proyecto.</div>';
+        renderHeaderAccountState();
+        setAccountMode('guest');
+        setStatus('El acceso de clientes y el historial todavía no están habilitados en esta tienda.', 'is-error');
+        ordersList.innerHTML = '<div class="orders-empty">El historial de pedidos todavía no está disponible.</div>';
         return;
       }
 
       const sessionResult = await window.getBeautyfastSession();
       if (!sessionResult.user) {
+        renderHeaderAccountState();
+        setAccountMode('guest');
         accountUser.textContent = 'Sin sesión activa.';
         logoutBtn.hidden = true;
         if (ordersCheckoutLink) ordersCheckoutLink.hidden = false;
-        if (authCard) authCard.hidden = false;
         renderOrders([]);
         return;
       }
 
+      const profileResult = typeof window.getBeautyfastProfile === 'function'
+        ? await window.getBeautyfastProfile()
+        : { ok: false, data: null };
       const adminResult = window.isBeautyfastAdmin ? await window.isBeautyfastAdmin() : { ok: false, isAdmin: false };
       if (adminResult.ok && adminResult.isAdmin) {
-        if (authCard) authCard.hidden = true;
+        renderHeaderAccountState({ user: sessionResult.user, profile: adminResult.profile, isAdmin: true });
+        setAccountMode('admin');
         accountUser.textContent = 'Sesión de administrador activa.';
         logoutBtn.hidden = false;
         if (ordersCheckoutLink) ordersCheckoutLink.hidden = true;
@@ -263,10 +385,11 @@
         return;
       }
 
-      accountUser.textContent = `Sesión activa: ${sessionResult.user.email}`;
+      renderHeaderAccountState({ user: sessionResult.user, profile: profileResult.data, isAdmin: false });
+      setAccountMode('customer');
+      accountUser.textContent = `Sesión activa: ${getDisplayName(sessionResult.user, profileResult.data)}`;
       logoutBtn.hidden = false;
       if (ordersCheckoutLink) ordersCheckoutLink.hidden = false;
-      if (authCard) authCard.hidden = false;
 
       const ordersResult = await window.fetchBeautyfastOrders();
       if (!ordersResult.ok) {
@@ -285,7 +408,7 @@
       event.preventDefault();
 
       if (!window.isBeautyfastSupabaseConfigured()) {
-        setStatus('Completa supabase-config.js antes de usar esta pantalla.', 'is-error');
+        setStatus('El acceso de clientes todavía no está habilitado en esta tienda.', 'is-error');
         return;
       }
 
@@ -335,6 +458,7 @@
 
     document.addEventListener('DOMContentLoaded', async () => {
       setAuthMode('login');
+      renderHeaderAccountState();
       await refreshOrders();
     });
   </script>

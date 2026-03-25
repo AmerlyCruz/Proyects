@@ -37,7 +37,7 @@
       <circle cx="100" cy="110" r="10" fill="#9CCC65"/>
     </svg>
     <h1>
-      <a href="index.html" class="brand-link" onclick="window.location='index.html'">
+      <a href="index.html" class="brand-link">
         El Secreto de Aris
       </a>
     </h1>
@@ -85,43 +85,24 @@
 <section class="hero-aris home-hero-wrap">
   <div class="home-hero-stage">
     <div class="swiper hero-swiper">
-      <div class="swiper-wrapper">
-        <div class="swiper-slide">
-          <a href="beautyfast.html#capilar" class="hero-slide-link">
-            <img src="img/aris hero.jpeg" alt="Aris Hero" class="hero-img-slide hero-img-contain hero-img-hero">
-          </a>
-        </div>
-        <div class="swiper-slide">
-          <a href="beautyfast.html#capilar" class="hero-slide-link">
-            <img src="img/linea.jpg" alt="Línea Capilar" class="hero-img-slide hero-img-contain">
-          </a>
-        </div>
-        <div class="swiper-slide">
-          <a href="beautyfast.html#individuales" class="hero-slide-link">
-            <img src="img/shampoo16oz.jpg" alt="Shampoo 16 OZ" class="hero-img-slide hero-img-contain">
-          </a>
-        </div>
-        <div class="swiper-slide">
-          <a href="beautyfast.html#individuales" class="hero-slide-link">
-            <img src="img/TratInt.jpg" alt="Tratamiento Intensivo" class="hero-img-slide hero-img-contain">
-          </a>
-        </div>
-        <div class="swiper-slide">
-          <a href="beautyfast.html#individuales" class="hero-slide-link">
-            <img src="img/gotero4oz.jpg" alt="Gotero Capilar" class="hero-img-slide hero-img-contain">
-          </a>
-        </div>
-        <div class="swiper-slide">
-          <a href="beautyfast.html#individuales" class="hero-slide-link">
-            <img src="img/SupMask.jpg" alt="Super Mascarilla" class="hero-img-slide hero-img-contain">
-          </a>
-        </div>
-      </div>
+      <div class="swiper-wrapper" id="homeHeroSlides" aria-live="polite"></div>
       <div class="swiper-pagination"></div>
       <div class="swiper-button-prev"></div>
       <div class="swiper-button-next"></div>
     </div>
   </div>
+</section>
+
+<section class="landing-card landing-card-cream featured-showcase" id="featuredShowcase" hidden>
+  <div class="featured-showcase-head">
+    <div>
+      <p class="account-eyebrow">Selección curada</p>
+      <h2 class="landing-title">Destacados de la tienda</h2>
+      <p class="landing-copy">Los productos marcados como destacados aparecen aquí para darles prioridad visual y ayudarte a empujar lanzamientos, favoritos o campañas activas.</p>
+    </div>
+    <a href="beautyfast.html" class="landing-cta featured-showcase-cta">Ver catálogo completo</a>
+  </div>
+  <div id="featuredProductsGrid" class="featured-products-grid" aria-live="polite"></div>
 </section>
 
 <section class="hero-compra landing-card landing-card-peach">
@@ -243,53 +224,12 @@
 </footer>
 
 <script src="catalog-fallback.js"></script>
+<script src="beautyfast-shared.js"></script>
 <script src="beautyfast.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js"></script>
 <script src="supabase-client.js"></script>
-<script>
-  const swiper = new Swiper('.hero-swiper', {
-    loop: true,
-    autoplay: {
-      delay: 3000,
-      disableOnInteraction: false,
-    },
-    pagination: {
-      el: '.swiper-pagination',
-      clickable: true,
-    },
-    navigation: {
-      nextEl: '.swiper-button-next',
-      prevEl: '.swiper-button-prev',
-    },
-    effect: 'slide',
-    speed: 700,
-    grabCursor: true,
-    centeredSlides: true,
-    slidesPerView: 1,
-    spaceBetween: 0,
-    breakpoints: {
-      900: {
-        slidesPerView: 1,
-        spaceBetween: 0
-      }
-    }
-  });
-</script>
-<script>
-  window.addEventListener('DOMContentLoaded', function() {
-    if (typeof initializeSidebarMenu === 'function') {
-      initializeSidebarMenu();
-    }
-    if (typeof updateCartCount === 'function') {
-      updateCartCount();
-    }
-    if (typeof renderCart === 'function') {
-      renderCart();
-    }
-  });
-</script>
 <script>
   function fadeOutAndGo(url) {
     document.body.style.transition = 'opacity 0.4s';

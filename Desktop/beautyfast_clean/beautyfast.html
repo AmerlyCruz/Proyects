@@ -51,7 +51,7 @@
         </svg>
       </button>
       <input type="text" id="search" placeholder="Buscar..." class="search-input" aria-label="Buscar productos">
-      <button id="clearSearch" type="button" class="clear-search" aria-label="Limpiar búsqueda">✕</button>
+      <button id="clearSearch" type="button" class="clear-search" aria-label="Limpiar búsqueda">×</button>
     </div>
 
     <div class="cart" role="button" tabindex="0" aria-label="Abrir carrito" aria-haspopup="dialog" aria-controls="cartPanel">
@@ -84,7 +84,7 @@
       <path d="m21 21-4.35-4.35"></path>
     </svg>
     <input type="text" id="sidebarSearch" placeholder="Buscar..." class="sidebar-search-input" aria-label="Buscar categorías y productos">
-    <button id="clearSidebarSearch" class="sidebar-search-clear" type="button" title="Limpiar búsqueda" aria-label="Limpiar búsqueda">✕</button>
+    <button id="clearSidebarSearch" class="sidebar-search-clear" type="button" title="Limpiar búsqueda" aria-label="Limpiar búsqueda">×</button>
   </div>
   <div class="sidebar-categories" id="sidebarCategories">
     <!-- Las categorías se generarán con JavaScript -->
@@ -99,7 +99,7 @@
   </div>
   <script>
     // Mostrar animación de carga al abrir desde otra página
-    if (document.referrer && document.referrer.includes('home.html')) {
+    if (document.referrer && document.referrer.includes('index.html')) {
       document.getElementById('loader').style.display = 'flex';
       setTimeout(() => {
         document.getElementById('loader').style.display = 'none';
@@ -111,118 +111,15 @@
 <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
 <main class="main product-main">
-  <section id="capilar" class="section active">
-    <div class="card">
-      <div class="card-image">
-        <img src="img/linea.jpg" alt="Línea Pequeña">
-      </div>
-      <div class="card-body">
-        <h3 class="card-title">Línea Pequeña</h3>
-        <p class="card-price">RD$ 1,050.00</p>
-        <button type="button" onclick="addToCart('Línea Pequeña')">Agregar al carrito</button>
-      </div>
-    </div>
+  <section id="capilar" class="section active" aria-live="polite"></section>
 
-    <div class="card">
-      <div class="card-image">
-        <img src="img/linea.jpg" alt="Línea Mediana">
-      </div>
-      <div class="card-body">
-        <h3 class="card-title">Línea Mediana</h3>
-        <p class="card-price">RD$ 1,350.00</p>
-        <button type="button" onclick="addToCart('Línea Mediana')">Agregar al carrito</button>
-      </div>
-    </div>
+  <section id="individuales" class="section" aria-live="polite"></section>
 
-    <div class="card">
-      <div class="card-image">
-        <img src="img/linea.jpg" alt="Línea Grande">
-      </div>
-      <div class="card-body">
-        <h3 class="card-title">Línea Grande</h3>
-        <p class="card-price">RD$ 1,850.00</p>
-        <button type="button" onclick="addToCart('Línea Grande')">Agregar al carrito</button>
-      </div>
-    </div>
+  <section id="otros" class="section" aria-live="polite"></section>
 
-    <div class="card">
-      <div class="card-image">
-        <img src="img/linea.jpg" alt="Línea Jumbo">
-      </div>
-      <div class="card-body">
-        <h3 class="card-title">Línea Jumbo</h3>
-        <p class="card-price">RD$ 2,000.00</p>
-        <button type="button" onclick="addToCart('Línea Jumbo')">Agregar al carrito</button>
-      </div>
-    </div>
-  </section>
-
-  <section id="individuales" class="section">
-    <div class="card">
-      <div class="card-image">
-        <img src="img/shampoo16oz.jpg" alt="Shampoo 16 OZ">
-      </div>
-      <div class="card-body">
-        <h3 class="card-title">Shampoo 16 OZ</h3>
-        <p class="card-price">RD$ 1,200.00</p>
-        <button type="button" onclick="addToCart('Shampoo 16 OZ')">Agregar al carrito</button>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-image">
-        <img src="img/shampoo32oz.jpg" alt="Shampoo 32 OZ">
-      </div>
-      <div class="card-body">
-        <h3 class="card-title">Shampoo 32 OZ</h3>
-        <p class="card-price">RD$ 900.00</p>
-        <button type="button" onclick="addToCart('Shampoo 32 OZ')">Agregar al carrito</button>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-image">
-        <img src="img/TratInt.jpg" alt="Tratamiento Intensivo">
-      </div>
-      <div class="card-body">
-        <h3 class="card-title">Tratamiento Intensivo</h3>
-        <p class="card-price">RD$ 500.00</p>
-        <button type="button" onclick="addToCart('Tratamiento Intensivo')">Agregar al carrito</button>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-image">
-        <img src="img/gotero4oz.jpg" alt="Gotero">
-      </div>
-      <div class="card-body">
-        <h3 class="card-title">Gotero</h3>
-        <p class="card-price">RD$ 800.00</p>
-        <button type="button" onclick="addToCart('Gotero')">Agregar al carrito</button>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-image">
-        <img src="img/SupMask.jpg" alt="Super Mascarilla">
-      </div>
-      <div class="card-body">
-        <h3 class="card-title">Super Mascarilla</h3>
-        <p class="card-price">RD$ 800.00</p>
-        <button type="button" onclick="addToCart('Super Mascarilla')">Agregar al carrito</button>
-      </div>
-    </div>
-  </section>
-
-  <section id="otros" class="section">
-    <div class="card">
-      <div class="card-body">
-        <h3 class="card-title">Aprieta Cuca</h3>
-        <p class="card-price">RD$ 1,000.00</p>
-        <button type="button" onclick="addToCart('Aprieta Cuca')">Agregar al carrito</button>
-      </div>
-    </div>
-  </section>
+  <noscript>
+    <div class="orders-empty">Necesitas habilitar JavaScript para cargar el catálogo dinámico de la tienda.</div>
+  </noscript>
 
   <div id="cartOverlay" class="cart-overlay"></div>
 
@@ -291,6 +188,7 @@
 <script src="supabase-config.js"></script>
 <script src="supabase-client.js"></script>
 <script src="catalog-fallback.js"></script>
+<script src="beautyfast-shared.js"></script>
 <script src="beautyfast.js"></script>
 
 </body>

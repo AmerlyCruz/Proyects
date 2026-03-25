@@ -29,6 +29,33 @@
     return getConfig().storageKey || "beautyfast.auth";
   }
 
+  function getSupabaseAuthStorage() {
+    try {
+      if (typeof window !== 'undefined' && window.sessionStorage) {
+        return window.sessionStorage;
+      }
+    } catch (error) {
+      return undefined;
+    }
+
+    return undefined;
+  }
+
+  function clearBeautyfastClientState() {
+    try {
+      if (typeof window !== 'undefined' && window.localStorage) {
+        window.localStorage.removeItem('cart');
+        window.localStorage.removeItem('beautyfast:last-order');
+      }
+
+      if (typeof window !== 'undefined' && window.sessionStorage) {
+        window.sessionStorage.removeItem('beautyfast:checkout-order-draft');
+      }
+    } catch (error) {
+      return;
+    }
+  }
+
   function normalizeError(error, fallback) {
     if (!error) return fallback;
     return error.message || fallback;
@@ -50,6 +77,7 @@
       price: Number.isFinite(price) ? price : 0,
       offer_price: Number.isFinite(offerPrice) && offerPrice > 0 ? offerPrice : null,
       active: product.active !== false,
+      out_of_stock: Boolean(product.out_of_stock),
       featured: Boolean(product.featured),
       sort_order: Number.isFinite(Number(product.sort_order)) ? Number(product.sort_order) : 0
     };
@@ -65,7 +93,8 @@
         persistSession: true,
         autoRefreshToken: true,
         detectSessionInUrl: true,
-        storageKey: getStorageKey()
+        storageKey: getStorageKey(),
+        storage: getSupabaseAuthStorage()
       }
     });
 
@@ -160,6 +189,8 @@
       return { ok: false, reason: "auth_error", error: normalizeError(error, "No pudimos cerrar sesión.") };
     }
 
+    clearBeautyfastClientState();
+
     return { ok: true };
   };
 
@@ -183,6 +214,19 @@
       .single();
 
     if (error) {
+      if (error.code === '23505' && payload.order_number) {
+        const { data: existingOrder, error: existingOrderError } = await client
+          .from(getOrdersTable())
+          .select('id, order_number, created_at')
+          .eq('user_id', sessionResult.user.id)
+          .eq('order_number', payload.order_number)
+          .maybeSingle();
+
+        if (!existingOrderError && existingOrder) {
+          return { ok: true, data: existingOrder, recovered: true };
+        }
+      }
+
       return { ok: false, reason: "db_error", error: normalizeError(error, "No pudimos guardar el pedido.") };
     }
 
@@ -346,7 +390,7 @@
 
     const totalSales = ordersResult.data.reduce((sum, order) => sum + Number(order.total_amount || 0), 0);
     const pendingOrders = ordersResult.data.filter((order) => ['pending', 'pending_payment', 'pending_review', 'processing'].includes(String(order.status || '').toLowerCase())).length;
-    const paidOrders = ordersResult.data.filter((order) => ['paid', 'paid_pending_fulfillment', 'delivered', 'completed'].includes(String(order.status || '').toLowerCase()) || String(order.payment_status || '').toLowerCase() === 'paid').length;
+    const paidOrders = ordersResult.data.filter((order) => ['paid', 'paid_pending_fulfillment', 'shipped', 'delivered', 'completed'].includes(String(order.status || '').toLowerCase()) || String(order.payment_status || '').toLowerCase() === 'paid').length;
     const activeProducts = productsResult.data.filter((product) => product.active !== false).length;
 
     return {

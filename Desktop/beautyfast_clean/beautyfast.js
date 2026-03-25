@@ -1,5 +1,5 @@
 // Espera a que el DOM cargue antes de ejecutar el JS
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", async function () {
 
 // change this variable to update business name site-wide
 const BUSINESS_NAME = "El Secreto de Aris";
@@ -95,37 +95,32 @@ if (searchToggle && searchInput && clearSearchBtn) {
 }
 
 // ------------ Carrito ----------------
+const MAX_CART_ITEM_QUANTITY = 25;
+const HOME_SLIDER_SETTING_KEY = 'home_slider';
+const STOCK_VISIBILITY_SETTING_KEY = 'storefront_stock_visibility';
+
 function sanitizeCartItem(item) {
-  if (!item || typeof item !== "object") return null;
+  if (typeof window.sanitizeBeautyfastCartItem === 'function') {
+    return window.sanitizeBeautyfastCartItem(item);
+  }
 
-  const name = typeof item.name === "string" ? item.name.trim() : "";
-  const image = typeof item.image === "string" ? item.image : "";
-  const price = Number(item.price);
-  const quantity = Math.max(1, Math.floor(Number(item.quantity) || 0));
+  return null;
+}
 
-  if (!name || !Number.isFinite(price) || price < 0) return null;
+function clampCartQuantity(value) {
+  if (typeof window.clampBeautyfastCartQuantity === 'function') {
+    return window.clampBeautyfastCartQuantity(value);
+  }
 
-  return { name, image, price, quantity };
+  return Math.min(MAX_CART_ITEM_QUANTITY, Math.max(1, Math.floor(Number(value) || 0)));
 }
 
 function loadStoredCart() {
-  const rawCart = localStorage.getItem("cart");
-  if (!rawCart) return [];
-
-  try {
-    const parsedCart = JSON.parse(rawCart);
-    if (!Array.isArray(parsedCart)) throw new Error("Invalid cart payload");
-
-    const sanitizedCart = parsedCart.map(sanitizeCartItem).filter(Boolean);
-    if (sanitizedCart.length !== parsedCart.length) {
-      localStorage.setItem("cart", JSON.stringify(sanitizedCart));
-    }
-
-    return sanitizedCart;
-  } catch (error) {
-    localStorage.removeItem("cart");
-    return [];
+  if (typeof window.loadBeautyfastStoredCart === 'function') {
+    return window.loadBeautyfastStoredCart();
   }
+
+  return [];
 }
 
 function escapeHtml(value) {
@@ -140,7 +135,8 @@ function escapeHtml(value) {
 let cart = loadStoredCart();
 let storefrontSessionState = {
   isAdmin: false,
-  user: null
+  user: null,
+  profile: null
 };
 
 function isAdminStorefrontSession() {
@@ -163,23 +159,34 @@ function showElement(element, displayValue = '') {
 
 async function resolveStorefrontSessionState() {
   if (!window.isBeautyfastSupabaseConfigured || !window.isBeautyfastSupabaseConfigured()) {
-    storefrontSessionState = { isAdmin: false, user: null };
+    storefrontSessionState = { isAdmin: false, user: null, profile: null };
     return storefrontSessionState;
   }
 
   const sessionResult = await window.getBeautyfastSession();
   if (!sessionResult.user) {
-    storefrontSessionState = { isAdmin: false, user: null };
+    storefrontSessionState = { isAdmin: false, user: null, profile: null };
     return storefrontSessionState;
   }
 
   const adminResult = window.isBeautyfastAdmin ? await window.isBeautyfastAdmin() : { ok: false, isAdmin: false };
   storefrontSessionState = {
     isAdmin: Boolean(adminResult.ok && adminResult.isAdmin),
-    user: sessionResult.user
+    user: sessionResult.user,
+    profile: adminResult.profile || null
   };
 
   return storefrontSessionState;
+}
+
+function getStorefrontDisplayName() {
+  const profileName = String(storefrontSessionState.profile?.full_name || '').trim();
+  if (profileName) return profileName;
+
+  const email = String(storefrontSessionState.user?.email || '').trim();
+  if (!email) return 'Mi cuenta';
+
+  return email.split('@')[0] || email;
 }
 
 function renderHeaderAccount() {
@@ -187,16 +194,16 @@ function renderHeaderAccount() {
   if (!headerAccount) return;
 
   if (isAdminStorefrontSession()) {
-    headerAccount.innerHTML = '<a href="admin.html" class="sidebar-btn sidebar-btn-secondary">Panel admin</a>';
+    headerAccount.innerHTML = '<a href="admin.html" class="sidebar-btn sidebar-btn-secondary header-account-pill">Panel admin</a>';
     return;
   }
 
   if (storefrontSessionState.user) {
-    headerAccount.innerHTML = '<a href="orders.html" class="sidebar-btn sidebar-btn-secondary">Mis pedidos</a>';
+    headerAccount.innerHTML = `<a href="orders.html" class="sidebar-btn sidebar-btn-secondary header-account-pill">${escapeHtml(getStorefrontDisplayName())}</a>`;
     return;
   }
 
-  headerAccount.innerHTML = '<a href="orders.html" class="sidebar-btn sidebar-btn-secondary">Ingresar</a>';
+  headerAccount.innerHTML = '<a href="orders.html" class="sidebar-btn sidebar-btn-secondary header-account-pill">Ingresar</a>';
 }
 
 function applyStorefrontSessionMode() {
@@ -250,9 +257,13 @@ window.addToCart = function(name){
     Swal.fire({ icon: 'error', title: 'Producto no encontrado', toast: true, position: 'top-end', showConfirmButton: false, timer: 1200 });
     return;
   }
+  if (product.out_of_stock) {
+    Swal.fire({ icon: 'info', title: 'Producto agotado', text: 'Este producto está marcado como fuera de stock y no se puede agregar al carrito.' });
+    return;
+  }
   const existing = cart.find(i=>i.name===name);
   const productPrice = getProductCurrentPrice(product);
-  if(existing) existing.quantity++;
+  if(existing) existing.quantity = clampCartQuantity(existing.quantity + 1);
   else cart.push({name, price: productPrice, quantity:1, image: product.image || ""});
   saveCart(); updateCartCount(); renderCart();
   Swal.fire({ 
@@ -272,7 +283,14 @@ function updateCartCount(){
   updateWhatsappLink();
 }
 
-function saveCart(){ localStorage.setItem("cart",JSON.stringify(cart)); }
+function saveCart(){
+  if (typeof window.saveBeautyfastStoredCart === 'function') {
+    window.saveBeautyfastStoredCart(cart);
+    return;
+  }
+
+  localStorage.setItem("cart",JSON.stringify(cart));
+}
 function removeFromCart(index){ cart.splice(index,1); saveCart(); updateCartCount(); renderCart(); }
 
 // ---------------- Formato moneda ----------------
@@ -406,7 +424,7 @@ function renderCart(){
 
     btnPlus.addEventListener("click", (e) => {
       e.stopPropagation();
-      item.quantity++;
+      item.quantity = clampCartQuantity(item.quantity + 1);
       saveCart();
       updateCartCount();
       renderCart();
@@ -414,8 +432,7 @@ function renderCart(){
 
     btnMinus.addEventListener("click", (e) => {
       e.stopPropagation();
-      item.quantity--;
-      if (item.quantity < 1) item.quantity = 1;
+      item.quantity = clampCartQuantity(item.quantity - 1);
       saveCart();
       updateCartCount();
       renderCart();
@@ -634,10 +651,12 @@ function formatRD(value){ return value.toLocaleString("es-DO",{style:"currency",
 window.showSection = function(sectionId,btn){
   const sections=document.querySelectorAll(".section");
   sections.forEach(sec=>sec.classList.remove("active"));
-  document.getElementById(sectionId).classList.add("active");
+  const section=document.getElementById(sectionId);
+  if (!section) return;
+  section.classList.add("active");
   const tabButtons=document.querySelectorAll(".tabs button");
   tabButtons.forEach(b=>b.classList.remove("active"));
-  btn.classList.add("active");
+  if (btn) btn.classList.add("active");
 }
 
 // Handle clear button click
@@ -657,10 +676,13 @@ if (clearSearchBtn && searchInput) {
 
 // Product database fallback
 const fallbackProducts = Object.freeze(
-  Array.isArray(window.BEAUTYFAST_FALLBACK_PRODUCTS) ? window.BEAUTYFAST_FALLBACK_PRODUCTS : []
+  typeof window.getBeautyfastFallbackProducts === 'function'
+    ? window.getBeautyfastFallbackProducts()
+    : (Array.isArray(window.BEAUTYFAST_FALLBACK_PRODUCTS) ? window.BEAUTYFAST_FALLBACK_PRODUCTS : [])
 );
 
 let products = [...fallbackProducts];
+let storefrontShowsOutOfStock = false;
 
 function slugifyProductName(value) {
   return normalizeText(String(value || ''))
@@ -669,6 +691,10 @@ function slugifyProductName(value) {
 }
 
 function getProductCurrentPrice(product) {
+  if (typeof window.getBeautyfastCatalogCurrentPrice === 'function') {
+    return window.getBeautyfastCatalogCurrentPrice(product);
+  }
+
   const basePrice = Number(product?.price || 0);
   const offerPrice = Number(product?.offer_price || 0);
   if (Number.isFinite(offerPrice) && offerPrice > 0 && offerPrice < basePrice) return offerPrice;
@@ -677,6 +703,62 @@ function getProductCurrentPrice(product) {
 
 function formatPlainRD(value) {
   return `RD$ ${Number(value || 0).toLocaleString('es-DO', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+}
+
+function getOfferPercentage(product) {
+  if (typeof window.getBeautyfastOfferPercentage === 'function') {
+    return window.getBeautyfastOfferPercentage(product);
+  }
+
+  const basePrice = Number(product?.price || 0);
+  const offerPrice = Number(product?.offer_price || 0);
+  if (!Number.isFinite(basePrice) || !Number.isFinite(offerPrice) || basePrice <= 0 || offerPrice <= 0 || offerPrice >= basePrice) {
+    return 0;
+  }
+
+  return Math.max(0, Math.round(((basePrice - offerPrice) / basePrice) * 100));
+}
+
+function sortProductsForDisplay(left, right) {
+  const leftFeatured = left?.featured ? 1 : 0;
+  const rightFeatured = right?.featured ? 1 : 0;
+  if (leftFeatured !== rightFeatured) return rightFeatured - leftFeatured;
+
+  const leftSort = Number(left?.sort_order);
+  const rightSort = Number(right?.sort_order);
+  if (Number.isFinite(leftSort) && Number.isFinite(rightSort) && leftSort !== rightSort) {
+    return leftSort - rightSort;
+  }
+
+  return String(left?.name || '').localeCompare(String(right?.name || ''));
+}
+
+function getDefaultHomeSlides() {
+  return typeof window.getBeautyfastDefaultHomeSlides === 'function'
+    ? window.getBeautyfastDefaultHomeSlides()
+    : [];
+}
+
+function normalizeHomeSlide(slide, index) {
+  if (typeof window.normalizeBeautyfastHomeSlide === 'function') {
+    return window.normalizeBeautyfastHomeSlide(slide, index);
+  }
+
+  return {
+    id: String(slide?.id || `hero-slide-${index + 1}`).trim(),
+    image_url: String(slide?.image_url || '').trim(),
+    alt_text: String(slide?.alt_text || `Slide ${index + 1}`).trim(),
+    link_url: String(slide?.link_url || 'beautyfast.html').trim(),
+    active: slide?.active !== false,
+    sort_order: Number.isFinite(Number(slide?.sort_order)) ? Number(slide.sort_order) : index + 1
+  };
+}
+
+function normalizeHomeSlidesCollection(slides) {
+  return (Array.isArray(slides) ? slides : [])
+    .map((slide, index) => normalizeHomeSlide(slide, index))
+    .filter((slide) => slide.image_url && slide.active !== false)
+    .sort((left, right) => Number(left.sort_order || 0) - Number(right.sort_order || 0));
 }
 
 function normalizeProductRecord(product, index) {
@@ -694,70 +776,125 @@ function normalizeProductRecord(product, index) {
     description: String(product.description || 'Producto disponible en El Secreto de Aris.').trim(),
     category,
     active: product.active !== false,
+    out_of_stock: Boolean(product.out_of_stock),
     featured: Boolean(product.featured),
     sort_order: Number.isFinite(Number(product.sort_order)) ? Number(product.sort_order) : index + 1
   };
 }
 
-async function loadProductsCatalog() {
-  const normalizedFallback = fallbackProducts.map(normalizeProductRecord).filter((product) => product.name);
+function normalizeStockVisibilitySetting(value) {
+  return Boolean(value && typeof value === 'object' && value.show_out_of_stock === true);
+}
 
-  if (!window.fetchBeautyfastProducts || !window.isBeautyfastSupabaseConfigured || !window.isBeautyfastSupabaseConfigured()) {
-    products = normalizedFallback;
-    return { source: 'fallback' };
-  }
+function shouldDisplayProduct(product) {
+  if (!product || product.active === false) return false;
+  if (!storefrontShowsOutOfStock && product.out_of_stock) return false;
+  return true;
+}
 
-  const [result, catalogSettingResult] = await Promise.all([
-    window.fetchBeautyfastProducts({ activeOnly: true }),
-    typeof window.fetchBeautyfastPublicSetting === 'function'
-      ? window.fetchBeautyfastPublicSetting('catalog_source')
-      : Promise.resolve({ ok: false, data: null })
-  ]);
-
-  const catalogMode = catalogSettingResult.ok
-    ? String(catalogSettingResult.data?.mode || '').trim().toLowerCase()
-    : '';
-
-  if (!result.ok || !result.data.length) {
-    if (catalogMode === 'supabase' && result.ok) {
-      products = [];
-      return { source: 'supabase', empty: true };
-    }
-
-    products = normalizedFallback;
-    return { source: 'fallback', error: result.error };
-  }
-
-  const normalizedRemote = result.data.map(normalizeProductRecord).filter((product) => product.name);
-
+function mergeCatalogProductsForDisplay(remoteProducts, catalogMode) {
   if (catalogMode === 'supabase') {
-    products = normalizedRemote;
-    return { source: 'supabase' };
+    return [...remoteProducts].sort(sortProductsForDisplay);
   }
 
-  const mergedProducts = new Map(normalizedFallback.map((product) => [product.slug, product]));
-
-  normalizedRemote.forEach((product) => {
-    mergedProducts.set(product.slug, product);
+  const mergedProducts = new Map(fallbackProducts.map((product) => [String(product?.slug || product?.name || ''), product]));
+  remoteProducts.forEach((product) => {
+    mergedProducts.set(String(product?.slug || product?.name || ''), product);
   });
 
-  products = [...mergedProducts.values()].sort((left, right) => left.sort_order - right.sort_order);
-  return {
-    source: normalizedRemote.length >= normalizedFallback.length ? 'supabase' : 'hybrid'
-  };
+  return [...mergedProducts.values()].sort(sortProductsForDisplay);
+}
+
+function getCachedCatalogProducts() {
+  if (typeof window.getBeautyfastCachedCatalog !== 'function') return [];
+
+  const cachedCatalog = window.getBeautyfastCachedCatalog({ products: [], catalogMode: '' });
+  const cachedRemoteProducts = Array.isArray(cachedCatalog?.products)
+    ? cachedCatalog.products.map(normalizeProductRecord).filter((product) => product?.name)
+    : [];
+
+  if (!cachedRemoteProducts.length) return [];
+  return mergeCatalogProductsForDisplay(cachedRemoteProducts, String(cachedCatalog?.catalogMode || '').trim().toLowerCase());
+}
+
+function refreshStorefrontCatalogView() {
+  renderProductCatalog();
+  renderHomeFeaturedProducts();
+  syncCartProductData();
+  initializeProductCards();
+
+  if (typeof window.refreshBeautyfastSidebarMenu === 'function') {
+    window.refreshBeautyfastSidebarMenu();
+  }
+
+  if (searchInput?.value) {
+    searchInput.dispatchEvent(new Event('input'));
+  }
+}
+
+async function refreshProductsCatalogInBackground() {
+  if (typeof window.resolveBeautyfastCatalog !== 'function') return;
+
+  let result;
+  try {
+    result = await window.resolveBeautyfastCatalog({ normalizeProduct: normalizeProductRecord, mergeKey: 'slug' });
+  } catch (error) {
+    return;
+  }
+
+  const nextProducts = result.products || [];
+
+  if (JSON.stringify(nextProducts) === JSON.stringify(products)) return;
+
+  products = nextProducts;
+  refreshStorefrontCatalogView();
+}
+
+async function loadProductsCatalog() {
+  const cachedStockVisibility = typeof window.getBeautyfastCachedPublicSetting === 'function'
+    ? window.getBeautyfastCachedPublicSetting(STOCK_VISIBILITY_SETTING_KEY, { show_out_of_stock: false })
+    : { show_out_of_stock: false };
+  storefrontShowsOutOfStock = normalizeStockVisibilitySetting(cachedStockVisibility);
+
+  const cachedProducts = getCachedCatalogProducts();
+  if (cachedProducts.length) {
+    products = cachedProducts;
+    return {
+      source: 'cache',
+      refreshPromise: refreshProductsCatalogInBackground()
+    };
+  }
+
+  if (typeof window.resolveBeautyfastCatalog === 'function') {
+    const [result, stockVisibilityResult] = await Promise.all([
+      window.resolveBeautyfastCatalog({ normalizeProduct: normalizeProductRecord, mergeKey: 'slug' }),
+      typeof window.fetchBeautyfastPublicSetting === 'function'
+        ? window.fetchBeautyfastPublicSetting(STOCK_VISIBILITY_SETTING_KEY)
+        : Promise.resolve({ ok: false, data: null })
+    ]);
+
+    if (stockVisibilityResult.ok) {
+      storefrontShowsOutOfStock = normalizeStockVisibilitySetting(stockVisibilityResult.data);
+      if (typeof window.setBeautyfastCachedPublicSetting === 'function') {
+        window.setBeautyfastCachedPublicSetting(STOCK_VISIBILITY_SETTING_KEY, {
+          show_out_of_stock: storefrontShowsOutOfStock
+        });
+      }
+    }
+
+    products = result.products || [];
+    return { source: result.source, empty: result.empty, error: result.error };
+  }
+
+  products = fallbackProducts.map(normalizeProductRecord).filter((product) => product.name);
+  return { source: 'fallback' };
 }
 
 function syncCartProductData() {
-  cart = cart.map((item) => {
-    const product = products.find((entry) => entry.name === item.name);
-    if (!product) return item;
-
-    return {
-      ...item,
-      price: getProductCurrentPrice(product),
-      image: product.image || item.image || ''
-    };
-  });
+  if (typeof window.syncBeautyfastCartWithCatalog === 'function') {
+    const result = window.syncBeautyfastCartWithCatalog(cart, products);
+    cart = result.items;
+  }
 
   saveCart();
   updateCartCount();
@@ -778,8 +915,30 @@ function buildProductCard(product) {
 
   cardImage.appendChild(image);
 
+  const offerPercentage = getOfferPercentage(product);
+  if (offerPercentage > 0) {
+    const badge = document.createElement('span');
+    badge.className = 'card-offer-badge';
+    badge.textContent = `${offerPercentage}% OFF`;
+    cardImage.appendChild(badge);
+  }
+
   const cardBody = document.createElement('div');
   cardBody.className = 'card-body';
+
+  if (product.featured) {
+    const featuredChip = document.createElement('span');
+    featuredChip.className = 'card-featured-chip';
+    featuredChip.textContent = 'Destacado';
+    cardBody.appendChild(featuredChip);
+  }
+
+  if (product.out_of_stock) {
+    const stockChip = document.createElement('span');
+    stockChip.className = 'card-featured-chip card-stock-chip';
+    stockChip.textContent = 'Agotado';
+    cardBody.appendChild(stockChip);
+  }
 
   const title = document.createElement('h3');
   title.className = 'card-title';
@@ -796,9 +955,13 @@ function buildProductCard(product) {
 
   const button = document.createElement('button');
   button.type = 'button';
-  button.textContent = isAdminStorefrontSession() ? 'Ver detalle' : 'Agregar al carrito';
+  button.textContent = isAdminStorefrontSession()
+    ? 'Ver detalle'
+    : (product.out_of_stock ? 'Agotado' : 'Agregar al carrito');
+  button.disabled = !isAdminStorefrontSession() && product.out_of_stock;
   button.addEventListener('click', (event) => {
     event.stopPropagation();
+    if (button.disabled) return;
     if (isAdminStorefrontSession()) {
       openProductModal(product.id);
       return;
@@ -829,8 +992,8 @@ function renderProductCatalog() {
 
     section.replaceChildren();
     const categoryProducts = products
-      .filter((product) => product.category === category && product.active !== false)
-      .sort((left, right) => left.sort_order - right.sort_order);
+      .filter((product) => product.category === category && shouldDisplayProduct(product))
+      .sort(sortProductsForDisplay);
 
     if (!categoryProducts.length) {
       const emptyState = document.createElement('div');
@@ -844,6 +1007,120 @@ function renderProductCatalog() {
       section.appendChild(buildProductCard(product));
     });
   });
+}
+
+function getFeaturedProducts(limit = 4) {
+  return products
+    .filter((product) => shouldDisplayProduct(product) && product.featured)
+    .sort(sortProductsForDisplay)
+    .slice(0, limit);
+}
+
+function renderHomeFeaturedProducts() {
+  const showcase = document.getElementById('featuredShowcase');
+  const grid = document.getElementById('featuredProductsGrid');
+  if (!showcase || !grid) return;
+
+  const featuredProducts = getFeaturedProducts();
+  if (!featuredProducts.length) {
+    showcase.hidden = true;
+    grid.replaceChildren();
+    return;
+  }
+
+  showcase.hidden = false;
+  grid.replaceChildren();
+  featuredProducts.forEach((product) => {
+    grid.appendChild(buildProductCard(product));
+  });
+}
+
+function renderHomeHeroSlides(slides) {
+  const slidesRoot = document.getElementById('homeHeroSlides');
+  if (!slidesRoot) return;
+
+  slidesRoot.innerHTML = slides.map((slide, index) => `
+    <div class="swiper-slide" data-slide-id="${escapeHtml(slide.id || `hero-slide-${index + 1}`)}">
+      <a href="${escapeHtml(slide.link_url || 'beautyfast.html')}" class="hero-slide-link">
+        <img src="${escapeHtml(slide.image_url)}" alt="${escapeHtml(slide.alt_text || `Slide ${index + 1}`)}" class="hero-img-slide hero-img-contain ${index === 0 ? 'hero-img-hero' : ''}">
+      </a>
+    </div>
+  `).join('');
+}
+
+let homeHeroSwiper = null;
+
+function mountHomeHeroSwiper() {
+  const swiperElement = document.querySelector('.hero-swiper');
+  if (!swiperElement || typeof window.Swiper !== 'function') return;
+
+  if (homeHeroSwiper) {
+    homeHeroSwiper.destroy(true, true);
+    homeHeroSwiper = null;
+  }
+
+  homeHeroSwiper = new window.Swiper('.hero-swiper', {
+    loop: true,
+    autoplay: {
+      delay: 3000,
+      disableOnInteraction: false
+    },
+    pagination: {
+      el: '.swiper-pagination',
+      clickable: true
+    },
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev'
+    },
+    effect: 'slide',
+    speed: 700,
+    grabCursor: true,
+    centeredSlides: true,
+    slidesPerView: 1,
+    spaceBetween: 0,
+    breakpoints: {
+      900: {
+        slidesPerView: 1,
+        spaceBetween: 0
+      }
+    }
+  });
+}
+
+async function initializeHomeHeroSlider() {
+  const slidesRoot = document.getElementById('homeHeroSlides');
+  if (!slidesRoot) return;
+
+  const defaultSlides = normalizeHomeSlidesCollection(getDefaultHomeSlides());
+  const cachedSetting = typeof window.getBeautyfastCachedPublicSetting === 'function'
+    ? window.getBeautyfastCachedPublicSetting(HOME_SLIDER_SETTING_KEY, { slides: defaultSlides })
+    : { slides: defaultSlides };
+  let currentSlides = normalizeHomeSlidesCollection(cachedSetting?.slides);
+  if (!currentSlides.length) currentSlides = defaultSlides;
+
+  renderHomeHeroSlides(currentSlides);
+  mountHomeHeroSwiper();
+
+  if (!window.fetchBeautyfastPublicSetting || !window.isBeautyfastSupabaseConfigured || !window.isBeautyfastSupabaseConfigured()) {
+    return;
+  }
+
+  const result = await window.fetchBeautyfastPublicSetting(HOME_SLIDER_SETTING_KEY);
+  if (!result.ok) return;
+
+  const hasStoredSlides = Boolean(result.record);
+  const remoteSlides = normalizeHomeSlidesCollection(result.data?.slides);
+  const nextSlides = hasStoredSlides ? remoteSlides : defaultSlides;
+
+  if (typeof window.setBeautyfastCachedPublicSetting === 'function') {
+    window.setBeautyfastCachedPublicSetting(HOME_SLIDER_SETTING_KEY, { slides: nextSlides });
+  }
+
+  if (JSON.stringify(nextSlides) === JSON.stringify(currentSlides)) return;
+
+  renderHomeHeroSlides(nextSlides);
+  mountHomeHeroSwiper();
 }
 
 const productModal = document.getElementById('productModal');
@@ -864,6 +1141,10 @@ function openProductModal(productId) {
   document.getElementById('productModalTitle').textContent = product.name;
   document.getElementById('productModalDesc').textContent = product.description;
   document.getElementById('productModalPrice').textContent = formatRD(getProductCurrentPrice(product));
+  if (productModalAddCartBtn) {
+    productModalAddCartBtn.disabled = product.out_of_stock === true;
+    productModalAddCartBtn.textContent = product.out_of_stock ? 'Agotado' : 'Agregar al carrito';
+  }
   
   productModal.classList.add('show');
   openDialog(productModal, document.activeElement, { initialFocus: closeProductModalBtn || productModalAddCartBtn || productModal });
@@ -927,7 +1208,7 @@ function initializeProductCards() {
 // SIDEBAR MENU WITH CATEGORIES
 // ============================================================
 
-function initializeSidebarMenu() {
+async function initializeSidebarMenu() {
   const hamburger = document.getElementById('hamburger');
   const sidebar = document.getElementById('sidebar');
   const overlay = document.getElementById('sidebarOverlay');
@@ -935,6 +1216,8 @@ function initializeSidebarMenu() {
   const sidebarSearch = document.getElementById('sidebarSearch');
   const sidebarAccount = document.getElementById('sidebarAccount');
   if (!hamburger || !sidebar || !overlay || !sidebarCategories || !sidebarSearch) return;
+  if (sidebar.dataset.initialized === 'true') return;
+  sidebar.dataset.initialized = 'true';
 
   function getCategories() {
     return {
@@ -990,7 +1273,7 @@ function initializeSidebarMenu() {
             return;
           }
 
-          window.open(`beautyfast.html#${section}`,'_blank');
+          window.location.href = `beautyfast.html#${section}`;
         });
         itemsContainer.appendChild(item);
       });
@@ -1006,6 +1289,10 @@ function initializeSidebarMenu() {
       sidebarCategories.appendChild(categoryDiv);
     });
   }
+
+  window.refreshBeautyfastSidebarMenu = function refreshBeautyfastSidebarMenu() {
+    renderSidebarMenu(sidebarSearch.value || '');
+  };
   
   function openSidebar() {
     sidebar.classList.add('open');
@@ -1075,7 +1362,7 @@ function initializeSidebarMenu() {
             return;
           }
 
-          storefrontSessionState = { isAdmin: false, user: null };
+          storefrontSessionState = { isAdmin: false, user: null, profile: null };
           applyStorefrontSessionMode();
           await renderSidebarAccount();
           if (window.Swal) {
@@ -1143,18 +1430,33 @@ function initializeSidebarMenu() {
   }
   
   renderSidebarMenu();
-  renderSidebarAccount();
+  await renderSidebarAccount();
 }
 
 async function initializeStorefront() {
-  await resolveStorefrontSessionState();
-  await loadProductsCatalog();
-  applyStorefrontSessionMode();
-  renderProductCatalog();
-  syncCartProductData();
-  initializeProductCards();
-  initializeSidebarMenu();
-}
+  document.body.classList.remove('storefront-ready');
 
-initializeStorefront();
+  const homeHeroTask = initializeHomeHeroSlider();
+  let catalogResult = null;
+
+  try {
+    const [, loadedCatalogResult] = await Promise.all([
+      resolveStorefrontSessionState(),
+      loadProductsCatalog(),
+      homeHeroTask
+    ]);
+    catalogResult = loadedCatalogResult;
+
+    applyStorefrontSessionMode();
+    refreshStorefrontCatalogView();
+    await initializeSidebarMenu();
+
+    if (catalogResult?.refreshPromise) {
+      void catalogResult.refreshPromise;
+    }
+  } finally {
+    document.body.classList.add('storefront-ready');
+  }
+}
+await initializeStorefront();
 });

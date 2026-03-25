@@ -65,13 +65,43 @@
       <div id="adminGateStatus" class="account-status">El panel verificará si tu perfil tiene rol de administrador.</div>
     </section>
 
-    <section id="adminDashboard" hidden>
-      <div id="adminOverview">
+    <section id="adminDashboard" class="admin-dashboard-shell" hidden>
+      <div id="adminOverview" class="admin-overview-stack">
         <div class="stats-grid" id="adminStatsGrid"></div>
 
-        <div class="admin-grid" id="adminMainGrid" style="margin-top: 24px;">
+        <div class="admin-grid admin-main-grid" id="adminMainGrid">
         <div class="admin-stack">
           <section class="admin-panel">
+            <div class="admin-toolbar admin-orders-toolbar">
+              <div>
+                <h2>Gestión del catálogo</h2>
+                <p class="admin-panel-copy">Abre una vista dedicada para trabajar por separado productos individuales, slider principal o cargas masivas, sin apilar paneles largos en la misma pantalla.</p>
+              </div>
+            </div>
+
+            <div class="admin-orders-launch-grid">
+              <button type="button" class="admin-orders-launch-card" data-open-catalog-view="product">
+                <span class="admin-orders-launch-eyebrow">Catálogo</span>
+                <strong class="admin-orders-launch-title">Producto individual</strong>
+                <span class="admin-orders-launch-copy">Crear, editar y revisar productos uno por uno con su imagen, oferta y estado.</span>
+                <span class="admin-orders-launch-count">Formulario + listado</span>
+              </button>
+              <button type="button" class="admin-orders-launch-card" data-open-catalog-view="slider">
+                <span class="admin-orders-launch-eyebrow">Home</span>
+                <strong class="admin-orders-launch-title">Slider principal</strong>
+                <span class="admin-orders-launch-copy">Gestiona las imágenes del carrusel y su orden sin dejarlas fijas en el HTML.</span>
+                <span class="admin-orders-launch-count">Slides del inicio</span>
+              </button>
+              <button type="button" class="admin-orders-launch-card" data-open-catalog-view="bulk">
+                <span class="admin-orders-launch-eyebrow">Importación</span>
+                <strong class="admin-orders-launch-title">Carga masiva</strong>
+                <span class="admin-orders-launch-copy">Sube CSV o pega una tabla para cargar muchos productos de una sola vez.</span>
+                <span class="admin-orders-launch-count">CSV y texto</span>
+              </button>
+            </div>
+          </section>
+
+          <section class="admin-panel" id="adminProductManagerPanel">
             <div class="admin-toolbar">
               <div>
                 <h2>Productos</h2>
@@ -81,6 +111,14 @@
                 <button type="button" class="sidebar-btn sidebar-btn-secondary" id="adminSeedCatalogBtn">Importar catálogo base</button>
                 <button type="button" class="sidebar-btn sidebar-btn-secondary" id="adminResetProductBtn">Nuevo producto</button>
               </div>
+            </div>
+
+            <div class="admin-stock-visibility">
+              <label class="admin-switch-row" for="adminShowOutOfStockToggle">
+                <input type="checkbox" id="adminShowOutOfStockToggle">
+                <span>Mostrar productos agotados en la tienda</span>
+              </label>
+              <p class="admin-field-help" id="adminShowOutOfStockHint">Los productos marcados como fuera de stock quedarán ocultos del catálogo público.</p>
             </div>
 
             <div id="adminProductComposer" class="admin-product-composer" hidden>
@@ -132,6 +170,7 @@
 
                 <div class="admin-inline-checks">
                   <label><input type="checkbox" id="adminProductActive" checked> Producto activo</label>
+                  <label><input type="checkbox" id="adminProductOutOfStock"> Fuera de stock</label>
                   <label><input type="checkbox" id="adminProductFeatured"> Destacado</label>
                 </div>
 
@@ -147,7 +186,7 @@
             </div>
           </section>
 
-          <section class="admin-panel">
+          <section class="admin-panel" id="adminProductsLibraryPanel">
             <div class="admin-toolbar admin-toolbar-collapsible">
               <div>
                 <h2>Productos activos</h2>
@@ -163,7 +202,76 @@
             </div>
           </section>
 
-          <section class="admin-panel">
+          <section class="admin-panel" id="adminSliderManagerPanel">
+            <div class="admin-toolbar admin-toolbar-collapsible">
+              <div>
+                <h2>Slider principal</h2>
+                <p class="admin-panel-copy">Administra las imágenes del carrusel de inicio sin dejarlas fijas en el HTML. Cada slide puede tener imagen, enlace y orden propio.</p>
+              </div>
+              <button type="button" class="admin-collapse-btn" id="adminSliderToggleBtn" aria-expanded="false" aria-controls="adminSliderSectionBody">
+                <span>Mostrar slider</span>
+                <span class="admin-collapse-icon">▾</span>
+              </button>
+            </div>
+            <div id="adminSliderSectionBody" class="admin-collapsible-body" hidden>
+              <div class="admin-toolbar">
+                <div>
+                  <h3>Slides activos</h3>
+                  <p class="admin-panel-copy">Lo que guardes aquí se refleja en el home y puede restaurarse al slider base cuando lo necesites.</p>
+                </div>
+                <div class="admin-form-actions">
+                  <button type="button" class="sidebar-btn sidebar-btn-secondary" id="adminSeedSliderBtn">Restaurar slider base</button>
+                  <button type="button" class="sidebar-btn sidebar-btn-secondary" id="adminNewSlideBtn">Nuevo slide</button>
+                </div>
+              </div>
+
+              <div id="adminSliderComposer" class="admin-product-composer" hidden>
+                <form id="adminSliderForm" class="admin-form">
+                  <input type="hidden" id="adminSliderId">
+
+                  <div class="admin-form-grid">
+                    <div class="admin-field">
+                      <label for="adminSliderAlt">Texto alterno</label>
+                      <input type="text" id="adminSliderAlt" placeholder="Describe la imagen" required>
+                    </div>
+                    <div class="admin-field">
+                      <label for="adminSliderLink">Destino al hacer clic</label>
+                      <input type="text" id="adminSliderLink" placeholder="beautyfast.html#capilar">
+                    </div>
+                    <div class="admin-field">
+                      <label for="adminSliderSort">Orden</label>
+                      <input type="number" id="adminSliderSort" min="0" step="1" value="0">
+                    </div>
+                    <div class="admin-field admin-field-full">
+                      <label for="adminSliderImageUrl">URL de imagen</label>
+                      <input type="url" id="adminSliderImageUrl" placeholder="https://...">
+                    </div>
+                    <div class="admin-field admin-field-full">
+                      <label for="adminSliderImageFile">O subir imagen</label>
+                      <input type="file" id="adminSliderImageFile" accept="image/*">
+                    </div>
+                  </div>
+
+                  <div class="admin-inline-checks">
+                    <label><input type="checkbox" id="adminSliderActive" checked> Slide activo</label>
+                  </div>
+
+                  <div class="admin-preview" id="adminSliderPreview">Vista previa del slide</div>
+
+                  <div class="admin-form-actions">
+                    <button type="submit" class="checkout-btn" id="adminSaveSliderBtn">Guardar slide</button>
+                    <button type="button" class="sidebar-btn sidebar-btn-secondary" id="adminClearSliderBtn">Limpiar</button>
+                  </div>
+                </form>
+
+                <div id="adminSliderStatus" class="account-status">Listo para crear el primer slide del home.</div>
+              </div>
+
+              <div id="adminSliderList" class="admin-slider-grid"></div>
+            </div>
+          </section>
+
+          <section class="admin-panel" id="adminBulkManagerPanel">
             <h2>Carga rápida de productos</h2>
             <p class="admin-panel-copy">Si quieres cargar muchos productos de una vez, puedes subir un CSV de Excel o pegar aquí una tabla preparada.</p>
             <div class="admin-field admin-field-full">
@@ -256,6 +364,33 @@
         <div id="adminOrdersSummary" class="admin-orders-summary-grid"></div>
         <div id="adminOrdersList" class="admin-orders-groups"></div>
       </section>
+
+      <section class="admin-panel admin-orders-workspace" id="adminCatalogWorkspace" hidden>
+        <div class="admin-toolbar admin-orders-workspace-head">
+          <div>
+            <p class="admin-eyebrow">Catálogo</p>
+            <h2 id="adminCatalogWorkspaceTitle">Producto individual</h2>
+            <p class="admin-panel-copy" id="adminCatalogWorkspaceCopy">Gestiona el catálogo en una vista dedicada para evitar bloques largos y elementos superpuestos.</p>
+          </div>
+          <div class="admin-form-actions">
+            <button type="button" class="sidebar-btn sidebar-btn-secondary" id="adminCatalogBackBtn">Volver al panel</button>
+          </div>
+        </div>
+
+        <div class="admin-toolbar admin-orders-toolbar">
+          <div class="admin-orders-view-switch" role="tablist" aria-label="Cambiar vista del catálogo">
+            <button type="button" class="admin-segment-btn is-active" id="adminCatalogProductBtn" data-catalog-view="product" aria-selected="true">Producto individual</button>
+            <button type="button" class="admin-segment-btn" id="adminCatalogSliderBtn" data-catalog-view="slider" aria-selected="false">Slider</button>
+            <button type="button" class="admin-segment-btn" id="adminCatalogBulkBtn" data-catalog-view="bulk" aria-selected="false">Carga masiva</button>
+          </div>
+        </div>
+
+        <div class="admin-catalog-panels">
+          <div id="adminCatalogProductView" class="admin-catalog-view"></div>
+          <div id="adminCatalogSliderView" class="admin-catalog-view" hidden></div>
+          <div id="adminCatalogBulkView" class="admin-catalog-view" hidden></div>
+        </div>
+      </section>
     </section>
   </main>
 
@@ -263,6 +398,7 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="supabase-config.js"></script>
   <script src="catalog-fallback.js"></script>
+  <script src="beautyfast-shared.js"></script>
   <script src="supabase-client.js"></script>
   <script>
     const adminAuthForm = document.getElementById('adminAuthForm');
@@ -273,6 +409,7 @@
     const adminGate = document.getElementById('adminGate');
     const adminGateStatus = document.getElementById('adminGateStatus');
     const adminDashboard = document.getElementById('adminDashboard');
+    const adminHero = document.querySelector('.admin-hero');
     const adminOverview = document.getElementById('adminOverview');
     const adminStatsGrid = document.getElementById('adminStatsGrid');
     const adminMainGrid = document.getElementById('adminMainGrid');
@@ -294,10 +431,22 @@
     const adminOrdersPeriodLabel = document.getElementById('adminOrdersPeriodLabel');
     const adminOrdersSummary = document.getElementById('adminOrdersSummary');
     const adminOrdersList = document.getElementById('adminOrdersList');
+    const adminCatalogWorkspace = document.getElementById('adminCatalogWorkspace');
+    const adminCatalogWorkspaceTitle = document.getElementById('adminCatalogWorkspaceTitle');
+    const adminCatalogWorkspaceCopy = document.getElementById('adminCatalogWorkspaceCopy');
+    const adminCatalogBackBtn = document.getElementById('adminCatalogBackBtn');
+    const adminCatalogProductBtn = document.getElementById('adminCatalogProductBtn');
+    const adminCatalogSliderBtn = document.getElementById('adminCatalogSliderBtn');
+    const adminCatalogBulkBtn = document.getElementById('adminCatalogBulkBtn');
+    const adminCatalogProductView = document.getElementById('adminCatalogProductView');
+    const adminCatalogSliderView = document.getElementById('adminCatalogSliderView');
+    const adminCatalogBulkView = document.getElementById('adminCatalogBulkView');
     const adminCatalogModeValue = document.getElementById('adminCatalogModeValue');
     const adminCatalogModeHint = document.getElementById('adminCatalogModeHint');
     const adminForceSupabaseBtn = document.getElementById('adminForceSupabaseBtn');
     const adminForceHybridBtn = document.getElementById('adminForceHybridBtn');
+    const adminProductManagerPanel = document.getElementById('adminProductManagerPanel');
+    const adminProductsLibraryPanel = document.getElementById('adminProductsLibraryPanel');
     const adminProductComposer = document.getElementById('adminProductComposer');
     const adminProductForm = document.getElementById('adminProductForm');
     const adminProductStatus = document.getElementById('adminProductStatus');
@@ -308,6 +457,23 @@
     const adminImagePreview = document.getElementById('adminImagePreview');
     const adminProductImageUrl = document.getElementById('adminProductImageUrl');
     const adminProductImageFile = document.getElementById('adminProductImageFile');
+    const adminShowOutOfStockToggle = document.getElementById('adminShowOutOfStockToggle');
+    const adminShowOutOfStockHint = document.getElementById('adminShowOutOfStockHint');
+    const adminSliderToggleBtn = document.getElementById('adminSliderToggleBtn');
+    const adminSliderManagerPanel = document.getElementById('adminSliderManagerPanel');
+    const adminSliderSectionBody = document.getElementById('adminSliderSectionBody');
+    const adminSliderComposer = document.getElementById('adminSliderComposer');
+    const adminSliderForm = document.getElementById('adminSliderForm');
+    const adminSliderStatus = document.getElementById('adminSliderStatus');
+    const adminSliderList = document.getElementById('adminSliderList');
+    const adminNewSlideBtn = document.getElementById('adminNewSlideBtn');
+    const adminSeedSliderBtn = document.getElementById('adminSeedSliderBtn');
+    const adminSaveSliderBtn = document.getElementById('adminSaveSliderBtn');
+    const adminClearSliderBtn = document.getElementById('adminClearSliderBtn');
+    const adminSliderPreview = document.getElementById('adminSliderPreview');
+    const adminSliderImageUrl = document.getElementById('adminSliderImageUrl');
+    const adminSliderImageFile = document.getElementById('adminSliderImageFile');
+    const adminBulkManagerPanel = document.getElementById('adminBulkManagerPanel');
     const adminBulkDropzone = document.getElementById('adminBulkDropzone');
     const adminBulkFile = document.getElementById('adminBulkFile');
     const adminBulkFileHelp = document.getElementById('adminBulkFileHelp');
@@ -317,14 +483,21 @@
     const adminBulkImportBtn = document.getElementById('adminBulkImportBtn');
 
     const CATALOG_SOURCE_SETTING_KEY = 'catalog_source';
+    const HOME_SLIDER_SETTING_KEY = 'home_slider';
+    const STOCK_VISIBILITY_SETTING_KEY = 'storefront_stock_visibility';
 
     let adminProducts = [];
     let adminOrders = [];
+    let adminHomeSlides = [];
     let currentCatalogMode = 'hybrid';
+    let storefrontShowsOutOfStock = false;
     let areAdminProductsExpanded = false;
+    let areAdminSlidesExpanded = false;
     let adminOrdersView = 'active';
     let adminOrdersRange = 'month';
     let isOrdersWorkspaceOpen = false;
+    let adminCatalogView = 'product';
+    let isCatalogWorkspaceOpen = false;
 
     function getAdminLoginConfig() {
       const config = window.BEAUTYFAST_SUPABASE_CONFIG || {};
@@ -376,6 +549,10 @@
     }
 
     function getFallbackCatalog() {
+      if (typeof window.getBeautyfastFallbackProducts === 'function') {
+        return window.getBeautyfastFallbackProducts();
+      }
+
       return Array.isArray(window.BEAUTYFAST_FALLBACK_PRODUCTS) ? window.BEAUTYFAST_FALLBACK_PRODUCTS : [];
     }
 
@@ -397,6 +574,7 @@
           ? null
           : Number(product.offer_price),
         active: product.active !== false,
+        out_of_stock: Boolean(product.out_of_stock),
         featured: Boolean(product.featured),
         sort_order: Number.isFinite(Number(product.sort_order)) ? Number(product.sort_order) : index + 1
       };
@@ -406,6 +584,16 @@
       const normalizedValue = String(value ?? '').trim().toLowerCase();
       if (!normalizedValue) return fallback;
       return ['1', 'true', 'si', 'sí', 'yes', 'activo', 'activa', 'destacado'].includes(normalizedValue);
+    }
+
+    function parseOutOfStockLike(value, fallback = false) {
+      const normalizedValue = String(value ?? '').trim().toLowerCase();
+      if (!normalizedValue) return fallback;
+      return ['1', 'true', 'si', 'sí', 'yes', 'agotado', 'fuera de stock', 'fuera_stock', 'out_of_stock', 'sin stock'].includes(normalizedValue);
+    }
+
+    function normalizeStockVisibilitySetting(value) {
+      return Boolean(value && typeof value === 'object' && value.show_out_of_stock === true);
     }
 
     function detectBulkDelimiter(headerLine) {
@@ -482,6 +670,9 @@
         precio_oferta: 'offer_price',
         activo: 'active',
         active: 'active',
+        agotado: 'out_of_stock',
+        sin_stock: 'out_of_stock',
+        out_of_stock: 'out_of_stock',
         destacado: 'featured',
         featured: 'featured',
         orden: 'sort_order',
@@ -521,6 +712,7 @@
           price: row.price,
           offer_price: row.offer_price,
           active: parseBooleanLike(row.active, true),
+          out_of_stock: parseOutOfStockLike(row.out_of_stock, false),
           featured: parseBooleanLike(row.featured, false),
           sort_order: row.sort_order || index + 1
         };
@@ -570,9 +762,9 @@
 
     function downloadBulkTemplate() {
       const templateLines = [
-        'nombre,categoria,descripcion,precio,precio_oferta,imagen,activo,destacado,orden',
-        'Shampoo Reparador,capilar,Limpia y ayuda a reparar el cabello,950,790,https://tusitio.com/shampoo.jpg,si,si,1',
-        'Mascarilla Nutritiva,capilar,Nutricion intensiva para el cabello,1200,,https://tusitio.com/mascarilla.jpg,si,no,2'
+        'nombre,categoria,descripcion,precio,precio_oferta,imagen,activo,agotado,destacado,orden',
+        'Shampoo Reparador,capilar,Limpia y ayuda a reparar el cabello,950,790,https://tusitio.com/shampoo.jpg,si,no,si,1',
+        'Mascarilla Nutritiva,capilar,Nutricion intensiva para el cabello,1200,,https://tusitio.com/mascarilla.jpg,si,si,no,2'
       ];
 
       const blob = new Blob([`\uFEFF${templateLines.join('\r\n')}`], { type: 'text/csv;charset=utf-8;' });
@@ -674,6 +866,13 @@
       if (type) adminGateStatus.classList.add(type);
     }
 
+    function renderAdminShellState(isDashboardVisible) {
+      document.body.classList.toggle('admin-session-active', isDashboardVisible === true);
+      if (adminHero) {
+        adminHero.hidden = isDashboardVisible === true;
+      }
+    }
+
     function setProductStatus(message, type) {
       adminProductStatus.textContent = message;
       adminProductStatus.className = 'account-status';
@@ -685,6 +884,29 @@
       adminBulkStatus.textContent = message;
       adminBulkStatus.className = 'account-status';
       if (type) adminBulkStatus.classList.add(type);
+    }
+
+    function prepareCatalogWorkspace() {
+      if (adminProductManagerPanel && adminCatalogProductView && adminProductManagerPanel.parentElement !== adminCatalogProductView) {
+        adminCatalogProductView.appendChild(adminProductManagerPanel);
+      }
+
+      if (adminProductsLibraryPanel && adminCatalogProductView && adminProductsLibraryPanel.parentElement !== adminCatalogProductView) {
+        adminCatalogProductView.appendChild(adminProductsLibraryPanel);
+      }
+
+      if (adminSliderManagerPanel && adminCatalogSliderView && adminSliderManagerPanel.parentElement !== adminCatalogSliderView) {
+        adminCatalogSliderView.appendChild(adminSliderManagerPanel);
+      }
+
+      if (adminBulkManagerPanel && adminCatalogBulkView && adminBulkManagerPanel.parentElement !== adminCatalogBulkView) {
+        adminCatalogBulkView.appendChild(adminBulkManagerPanel);
+      }
+
+      if (adminProductsToggleBtn) adminProductsToggleBtn.hidden = true;
+      if (adminProductsSectionBody) adminProductsSectionBody.hidden = false;
+      if (adminSliderToggleBtn) adminSliderToggleBtn.hidden = true;
+      if (adminSliderSectionBody) adminSliderSectionBody.hidden = false;
     }
 
     function renderProductsSectionState() {
@@ -713,6 +935,18 @@
       if (adminForceHybridBtn) adminForceHybridBtn.disabled = currentCatalogMode === 'hybrid';
     }
 
+    function renderStockVisibilitySetting() {
+      if (adminShowOutOfStockToggle) {
+        adminShowOutOfStockToggle.checked = storefrontShowsOutOfStock;
+      }
+
+      if (adminShowOutOfStockHint) {
+        adminShowOutOfStockHint.textContent = storefrontShowsOutOfStock
+          ? 'Los productos agotados seguirán visibles en catálogo, pero sin opción de compra.'
+          : 'Los productos marcados como fuera de stock quedarán ocultos del catálogo público.';
+      }
+    }
+
     function setCatalogModeButtonsBusy(isBusy, mode) {
       if (adminForceSupabaseBtn) {
         adminForceSupabaseBtn.disabled = isBusy || currentCatalogMode === 'supabase';
@@ -733,6 +967,56 @@
       adminImagePreview.innerHTML = `<img src="${escapeHtml(imageUrl)}" alt="Vista previa del producto">`;
     }
 
+    function getDefaultHomeSlides() {
+      return typeof window.getBeautyfastDefaultHomeSlides === 'function'
+        ? window.getBeautyfastDefaultHomeSlides()
+        : [];
+    }
+
+    function normalizeHomeSlideRecord(slide, index) {
+      if (typeof window.normalizeBeautyfastHomeSlide === 'function') {
+        return window.normalizeBeautyfastHomeSlide(slide, index);
+      }
+
+      return {
+        id: String(slide?.id || `hero-slide-${index + 1}`).trim(),
+        image_url: String(slide?.image_url || '').trim(),
+        alt_text: String(slide?.alt_text || `Slide ${index + 1}`).trim(),
+        link_url: String(slide?.link_url || 'beautyfast.html').trim(),
+        active: slide?.active !== false,
+        sort_order: Number.isFinite(Number(slide?.sort_order)) ? Number(slide.sort_order) : index + 1
+      };
+    }
+
+    function sortHomeSlides(slides) {
+      return [...(slides || [])].sort((left, right) => {
+        const leftSort = Number(left?.sort_order);
+        const rightSort = Number(right?.sort_order);
+        if (Number.isFinite(leftSort) && Number.isFinite(rightSort) && leftSort !== rightSort) {
+          return leftSort - rightSort;
+        }
+
+        return String(left?.alt_text || '').localeCompare(String(right?.alt_text || ''));
+      });
+    }
+
+    function setSliderStatus(message, tone = '') {
+      if (!adminSliderStatus) return;
+      adminSliderStatus.textContent = message;
+      adminSliderStatus.className = `account-status${tone ? ` ${tone}` : ''}`;
+    }
+
+    function renderSliderPreview(imageUrl) {
+      if (!adminSliderPreview) return;
+
+      if (!imageUrl) {
+        adminSliderPreview.textContent = 'Vista previa del slide';
+        return;
+      }
+
+      adminSliderPreview.innerHTML = `<img src="${escapeHtml(imageUrl)}" alt="Vista previa del slide">`;
+    }
+
     function setProductComposerOpen(isOpen) {
       if (!adminProductComposer) return;
 
@@ -748,16 +1032,51 @@
       }
     }
 
+    function setSliderComposerOpen(isOpen) {
+      if (!adminSliderComposer) return;
+
+      adminSliderComposer.hidden = !isOpen;
+      if (isOpen) {
+        adminSliderComposer.removeAttribute('hidden');
+        adminSliderComposer.style.setProperty('display', 'grid', 'important');
+        if (adminNewSlideBtn) adminNewSlideBtn.textContent = 'Ocultar formulario';
+      } else {
+        adminSliderComposer.setAttribute('hidden', 'hidden');
+        adminSliderComposer.style.setProperty('display', 'none', 'important');
+        if (adminNewSlideBtn) adminNewSlideBtn.textContent = 'Nuevo slide';
+      }
+    }
+
     function resetProductForm(options = {}) {
       adminProductForm.reset();
       document.getElementById('adminProductId').value = '';
       document.getElementById('adminProductSort').value = '0';
       document.getElementById('adminProductActive').checked = true;
+      document.getElementById('adminProductOutOfStock').checked = false;
       renderImagePreview('');
       setProductStatus('Formulario listo para un producto nuevo.', 'is-success');
 
       if (options.openComposer) {
         setProductComposerOpen(true);
+      }
+    }
+
+    function getNextSlideSortOrder() {
+      return adminHomeSlides.reduce((maxValue, slide) => Math.max(maxValue, Number(slide.sort_order || 0)), 0) + 1;
+    }
+
+    function resetSliderForm(options = {}) {
+      if (!adminSliderForm) return;
+
+      adminSliderForm.reset();
+      document.getElementById('adminSliderId').value = '';
+      document.getElementById('adminSliderSort').value = String(getNextSlideSortOrder());
+      document.getElementById('adminSliderActive').checked = true;
+      renderSliderPreview('');
+      setSliderStatus('Formulario listo para crear un slide nuevo.', 'is-success');
+
+      if (options.openComposer) {
+        setSliderComposerOpen(true);
       }
     }
 
@@ -773,10 +1092,206 @@
       document.getElementById('adminProductDescription').value = product.description || '';
       document.getElementById('adminProductSort').value = Number(product.sort_order || 0);
       document.getElementById('adminProductActive').checked = product.active !== false;
+      document.getElementById('adminProductOutOfStock').checked = Boolean(product.out_of_stock);
       document.getElementById('adminProductFeatured').checked = Boolean(product.featured);
       renderImagePreview(product.image_url || '');
       setProductStatus(`Editando: ${product.name}`, 'is-success');
       window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function fillSliderForm(slide) {
+      setSliderComposerOpen(true);
+      document.getElementById('adminSliderId').value = slide.id || '';
+      document.getElementById('adminSliderAlt').value = slide.alt_text || '';
+      document.getElementById('adminSliderLink').value = slide.link_url || '';
+      document.getElementById('adminSliderSort').value = Number(slide.sort_order || 0);
+      document.getElementById('adminSliderImageUrl').value = slide.image_url || '';
+      document.getElementById('adminSliderActive').checked = slide.active !== false;
+      renderSliderPreview(slide.image_url || '');
+      setSliderStatus(`Editando slide: ${slide.alt_text || 'sin título'}`, 'is-success');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function renderSliderSectionState() {
+      if (!adminSliderToggleBtn || !adminSliderSectionBody) return;
+
+      adminSliderSectionBody.hidden = !areAdminSlidesExpanded;
+      adminSliderToggleBtn.classList.toggle('is-open', areAdminSlidesExpanded);
+      adminSliderToggleBtn.setAttribute('aria-expanded', String(areAdminSlidesExpanded));
+      adminSliderToggleBtn.querySelector('span').textContent = areAdminSlidesExpanded ? 'Ocultar slider' : 'Mostrar slider';
+    }
+
+    function renderCatalogWorkspaceHeader() {
+      if (!adminCatalogWorkspaceTitle || !adminCatalogWorkspaceCopy) return;
+
+      if (adminCatalogView === 'slider') {
+        adminCatalogWorkspaceTitle.textContent = 'Slider principal';
+        adminCatalogWorkspaceCopy.textContent = 'Gestiona los slides del home con una vista dedicada, sin listas abiertas o bloques superpuestos encima del panel.';
+        return;
+      }
+
+      if (adminCatalogView === 'bulk') {
+        adminCatalogWorkspaceTitle.textContent = 'Carga masiva de productos';
+        adminCatalogWorkspaceCopy.textContent = 'Sube CSV o pega texto en una vista enfocada solo en importación y validación masiva.';
+        return;
+      }
+
+      adminCatalogWorkspaceTitle.textContent = 'Producto individual';
+      adminCatalogWorkspaceCopy.textContent = 'Crea y edita productos uno por uno, con formulario y listado en una vista separada del resto del panel.';
+    }
+
+    function renderCatalogWorkspaceState() {
+      renderCatalogWorkspaceHeader();
+
+      const views = {
+        product: adminCatalogProductView,
+        slider: adminCatalogSliderView,
+        bulk: adminCatalogBulkView
+      };
+
+      Object.entries(views).forEach(([viewKey, element]) => {
+        if (!element) return;
+        element.hidden = viewKey !== adminCatalogView;
+      });
+
+      [adminCatalogProductBtn, adminCatalogSliderBtn, adminCatalogBulkBtn].forEach((button) => {
+        if (!button) return;
+        const isActive = button.dataset.catalogView === adminCatalogView;
+        button.classList.toggle('is-active', isActive);
+        button.setAttribute('aria-selected', String(isActive));
+      });
+    }
+
+    function openCatalogWorkspace(view) {
+      prepareCatalogWorkspace();
+      adminCatalogView = view === 'slider' || view === 'bulk' ? view : 'product';
+      isCatalogWorkspaceOpen = true;
+      isOrdersWorkspaceOpen = false;
+
+      if (adminOverview) {
+        adminOverview.hidden = true;
+        adminOverview.setAttribute('hidden', 'hidden');
+        adminOverview.style.setProperty('display', 'none', 'important');
+      }
+
+      if (adminOrdersWorkspace) {
+        adminOrdersWorkspace.hidden = true;
+        adminOrdersWorkspace.setAttribute('hidden', 'hidden');
+        adminOrdersWorkspace.style.setProperty('display', 'none', 'important');
+      }
+
+      if (adminCatalogWorkspace) {
+        adminCatalogWorkspace.hidden = false;
+        adminCatalogWorkspace.removeAttribute('hidden');
+        adminCatalogWorkspace.style.setProperty('display', 'block', 'important');
+      }
+
+      renderCatalogWorkspaceState();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function buildHomeSliderSettingPayload() {
+      return {
+        slides: sortHomeSlides(adminHomeSlides).map((slide, index) => normalizeHomeSlideRecord(slide, index))
+      };
+    }
+
+    async function saveHomeSliderSetting() {
+      const payload = buildHomeSliderSettingPayload();
+      const result = await window.upsertBeautyfastPublicSetting(HOME_SLIDER_SETTING_KEY, payload);
+
+      if (result.ok && typeof window.setBeautyfastCachedPublicSetting === 'function') {
+        window.setBeautyfastCachedPublicSetting(HOME_SLIDER_SETTING_KEY, payload);
+      }
+
+      return result;
+    }
+
+    function renderHomeSlides() {
+      if (!adminSliderList) return;
+
+      if (!adminHomeSlides.length) {
+        adminSliderList.innerHTML = '<div class="orders-empty">No hay slides guardados. Puedes restaurar el slider base o crear uno nuevo.</div>';
+        return;
+      }
+
+      adminSliderList.innerHTML = sortHomeSlides(adminHomeSlides).map((slide) => `
+        <article class="admin-slider-card">
+          <div class="admin-slider-thumb-wrap">
+            ${slide.image_url ? `<img src="${escapeHtml(slide.image_url)}" alt="${escapeHtml(slide.alt_text || 'Slide')}" class="admin-slider-thumb">` : '<div class="orders-empty">Sin imagen</div>'}
+          </div>
+          <div class="admin-slider-content">
+            <div class="admin-product-top">
+              <div>
+                <h3 class="admin-product-name">${escapeHtml(slide.alt_text || 'Slide sin texto')}</h3>
+                <div class="admin-product-meta">Orden ${escapeHtml(slide.sort_order)} · ${escapeHtml(slide.link_url || 'Sin enlace')}</div>
+              </div>
+            </div>
+            <div class="admin-badge-row">
+              <span class="admin-chip ${slide.active !== false ? 'is-success' : 'is-muted'}">${slide.active !== false ? 'Activo' : 'Oculto'}</span>
+              <span class="admin-chip is-muted">Slider home</span>
+            </div>
+            <div class="admin-product-actions">
+              <button type="button" class="sidebar-btn sidebar-btn-secondary" data-edit-slide="${escapeHtml(slide.id)}">Editar</button>
+              <button type="button" class="sidebar-btn sidebar-btn-secondary" data-delete-slide="${escapeHtml(slide.id)}">Eliminar</button>
+            </div>
+          </div>
+        </article>
+      `).join('');
+
+      adminSliderList.querySelectorAll('[data-edit-slide]').forEach((button) => {
+        button.addEventListener('click', () => {
+          const slide = adminHomeSlides.find((entry) => String(entry.id) === button.dataset.editSlide);
+          if (slide) fillSliderForm(slide);
+        });
+      });
+
+      adminSliderList.querySelectorAll('[data-delete-slide]').forEach((button) => {
+        button.addEventListener('click', async () => {
+          const slide = adminHomeSlides.find((entry) => String(entry.id) === button.dataset.deleteSlide);
+          if (!slide) return;
+
+          const confirmation = await Swal.fire({
+            icon: 'warning',
+            title: 'Eliminar slide',
+            text: `Se eliminará el slide ${slide.alt_text || 'sin nombre'}.`,
+            showCancelButton: true,
+            confirmButtonText: 'Eliminar',
+            cancelButtonText: 'Cancelar'
+          });
+
+          if (!confirmation.isConfirmed) return;
+
+          adminHomeSlides = adminHomeSlides.filter((entry) => String(entry.id) !== String(slide.id));
+          const result = await saveHomeSliderSetting();
+          if (!result.ok) {
+            setSliderStatus(result.error || 'No pudimos guardar los cambios del slider.', 'is-error');
+            return;
+          }
+
+          renderHomeSlides();
+          resetSliderForm();
+          setSliderComposerOpen(false);
+          setSliderStatus('Slide eliminado correctamente.', 'is-success');
+        });
+      });
+    }
+
+    function loadHomeSliderSettings(settingResult) {
+      const normalizedResult = settingResult && typeof settingResult === 'object'
+        ? settingResult
+        : { ok: false, data: null, record: null };
+      const storedSlides = Array.isArray(normalizedResult.data?.slides) ? normalizedResult.data.slides : [];
+      const shouldUseDefaultSlides = !normalizedResult.record && !storedSlides.length;
+      const baseSlides = shouldUseDefaultSlides ? getDefaultHomeSlides() : storedSlides;
+
+      adminHomeSlides = sortHomeSlides(
+        (baseSlides || [])
+          .map((slide, index) => normalizeHomeSlideRecord(slide, index))
+          .filter((slide) => slide.image_url)
+      );
+
+      renderHomeSlides();
     }
 
     function renderStats(stats) {
@@ -808,11 +1323,12 @@
               <h3 class="admin-product-name">${escapeHtml(product.name)}</h3>
               <div class="admin-product-meta">${escapeHtml(product.category)} · RD$ ${currency(currentProductPrice(product))}</div>
             </div>
-            ${product.image_url ? `<img src="${escapeHtml(product.image_url)}" alt="${escapeHtml(product.name)}" style="width:72px;height:72px;object-fit:cover;border-radius:14px;">` : ''}
+            ${product.image_url ? `<img src="${escapeHtml(product.image_url)}" alt="${escapeHtml(product.name)}" class="admin-product-thumb">` : ''}
           </div>
           <div class="admin-badge-row">
             <span class="admin-chip ${product.active !== false ? 'is-success' : 'is-muted'}">${product.active !== false ? 'Activo' : 'Oculto'}</span>
-            ${product.featured ? '<span class="admin-chip">Destacado</span>' : ''}
+            ${product.out_of_stock ? '<span class="admin-chip is-muted">Agotado</span>' : ''}
+            ${product.featured ? '<span class="admin-chip is-warning">Destacado · home</span>' : ''}
             ${product.offer_price ? `<span class="admin-chip">Oferta RD$ ${currency(product.offer_price)}</span>` : ''}
           </div>
           <div class="admin-product-meta" style="margin-top:10px;">${escapeHtml(product.description || 'Sin descripción')}</div>
@@ -868,6 +1384,7 @@
         case 'processing': return 'En preparación';
         case 'paid': return 'Pagado';
         case 'paid_pending_fulfillment': return 'Pagado, por entregar';
+        case 'shipped': return 'En camino';
         case 'delivered': return 'Entregado';
         case 'completed': return 'Completado';
         case 'cancelled': return 'Cancelado';
@@ -879,6 +1396,7 @@
       switch (String(status || '').toLowerCase()) {
         case 'paid':
         case 'paid_pending_fulfillment':
+        case 'shipped':
         case 'delivered':
         case 'completed':
           return 'is-success';
@@ -919,6 +1437,7 @@
         { value: 'processing', label: 'En preparación' },
         { value: 'paid', label: 'Pagado' },
         { value: 'paid_pending_fulfillment', label: 'Pagado, por entregar' },
+        { value: 'shipped', label: 'En camino' },
         { value: 'delivered', label: 'Entregado' },
         { value: 'completed', label: 'Completado' },
         { value: 'cancelled', label: 'Cancelado' }
@@ -1156,6 +1675,7 @@
     function openOrdersWorkspace(view) {
       adminOrdersView = view === 'completed' ? 'completed' : 'active';
       isOrdersWorkspaceOpen = true;
+      isCatalogWorkspaceOpen = false;
       if (adminOverview) {
         adminOverview.hidden = true;
         adminOverview.setAttribute('hidden', 'hidden');
@@ -1165,6 +1685,11 @@
         adminOrdersWorkspace.hidden = false;
         adminOrdersWorkspace.removeAttribute('hidden');
         adminOrdersWorkspace.style.setProperty('display', 'block', 'important');
+      }
+      if (adminCatalogWorkspace) {
+        adminCatalogWorkspace.hidden = true;
+        adminCatalogWorkspace.setAttribute('hidden', 'hidden');
+        adminCatalogWorkspace.style.setProperty('display', 'none', 'important');
       }
       renderOrdersWorkspaceHeader();
       renderOrders();
@@ -1177,6 +1702,21 @@
         adminOrdersWorkspace.hidden = true;
         adminOrdersWorkspace.setAttribute('hidden', 'hidden');
         adminOrdersWorkspace.style.setProperty('display', 'none', 'important');
+      }
+      if (adminOverview) {
+        adminOverview.hidden = false;
+        adminOverview.removeAttribute('hidden');
+        adminOverview.style.removeProperty('display');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function closeCatalogWorkspace() {
+      isCatalogWorkspaceOpen = false;
+      if (adminCatalogWorkspace) {
+        adminCatalogWorkspace.hidden = true;
+        adminCatalogWorkspace.setAttribute('hidden', 'hidden');
+        adminCatalogWorkspace.style.setProperty('display', 'none', 'important');
       }
       if (adminOverview) {
         adminOverview.hidden = false;
@@ -1379,11 +1919,29 @@
     }
 
     async function loadDashboardData() {
-      const [statsResult, productsResult, ordersResult] = await Promise.all([
+      const [statsResult, productsResult, ordersResult, sliderSettingResult, stockVisibilityResult] = await Promise.all([
         window.fetchBeautyfastAdminStats(),
         window.fetchBeautyfastProducts(),
-        window.fetchBeautyfastAdminOrders()
+        window.fetchBeautyfastAdminOrders(),
+        typeof window.fetchBeautyfastPublicSetting === 'function'
+          ? window.fetchBeautyfastPublicSetting(HOME_SLIDER_SETTING_KEY)
+          : Promise.resolve({ ok: false, data: null, record: null }),
+        typeof window.fetchBeautyfastPublicSetting === 'function'
+          ? window.fetchBeautyfastPublicSetting(STOCK_VISIBILITY_SETTING_KEY)
+          : Promise.resolve({ ok: false, data: null, record: null })
       ]);
+
+      storefrontShowsOutOfStock = normalizeStockVisibilitySetting(stockVisibilityResult.ok
+        ? stockVisibilityResult.data
+        : (typeof window.getBeautyfastCachedPublicSetting === 'function'
+          ? window.getBeautyfastCachedPublicSetting(STOCK_VISIBILITY_SETTING_KEY, { show_out_of_stock: false })
+          : null));
+      if (stockVisibilityResult.ok && typeof window.setBeautyfastCachedPublicSetting === 'function') {
+        window.setBeautyfastCachedPublicSetting(STOCK_VISIBILITY_SETTING_KEY, {
+          show_out_of_stock: storefrontShowsOutOfStock
+        });
+      }
+      renderStockVisibilitySetting();
 
       if (!statsResult.ok) {
         setGateStatus(statsResult.error || 'No pudimos cargar estadísticas.', 'is-error');
@@ -1416,6 +1974,7 @@
 
       renderStats(statsResult.data);
       renderProducts();
+      loadHomeSliderSettings(sliderSettingResult);
       renderOrdersLaunchpad();
       renderOrders();
     }
@@ -1424,7 +1983,9 @@
       if (!window.isBeautyfastSupabaseConfigured || !window.isBeautyfastSupabaseConfigured()) {
         adminDashboard.hidden = true;
         adminGate.hidden = false;
+        renderAdminShellState(false);
         closeOrdersWorkspace();
+        closeCatalogWorkspace();
         setGateStatus('Falta completar la configuración inicial antes de usar este panel.', 'is-error');
         return;
       }
@@ -1434,7 +1995,9 @@
         adminGate.hidden = false;
         adminDashboard.hidden = true;
         adminLogoutBtn.hidden = true;
+        renderAdminShellState(false);
         closeOrdersWorkspace();
+        closeCatalogWorkspace();
         setGateStatus(`Inicia sesión con el usuario ${getAdminLoginConfig().username} para entrar al panel.`, '');
         return;
       }
@@ -1445,7 +2008,9 @@
       if (!adminResult.ok) {
         adminDashboard.hidden = true;
         adminGate.hidden = false;
+        renderAdminShellState(false);
         closeOrdersWorkspace();
+        closeCatalogWorkspace();
         setGateStatus(adminResult.error || 'No pudimos validar el perfil administrador.', 'is-error');
         return;
       }
@@ -1453,13 +2018,16 @@
       if (!adminResult.isAdmin) {
         adminDashboard.hidden = true;
         adminGate.hidden = false;
+        renderAdminShellState(false);
         closeOrdersWorkspace();
+        closeCatalogWorkspace();
         setGateStatus('Esta cuenta no tiene permiso para entrar al panel de administración.', 'is-error');
         return;
       }
 
       adminGate.hidden = true;
       adminDashboard.hidden = false;
+      renderAdminShellState(true);
       await loadDashboardData();
     }
 
@@ -1514,7 +2082,9 @@
       adminDashboard.hidden = true;
       adminGate.hidden = false;
       adminLogoutBtn.hidden = true;
+      renderAdminShellState(false);
       closeOrdersWorkspace();
+      closeCatalogWorkspace();
       setGateStatus('Sesión cerrada.', 'is-success');
     });
 
@@ -1542,6 +2112,49 @@
       reader.readAsDataURL(file);
     });
 
+    adminSliderImageUrl?.addEventListener('input', (event) => {
+      renderSliderPreview(event.target.value.trim());
+    });
+
+    adminSliderImageFile?.addEventListener('change', () => {
+      const [file] = adminSliderImageFile.files || [];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = () => renderSliderPreview(reader.result);
+      reader.readAsDataURL(file);
+    });
+
+    adminShowOutOfStockToggle?.addEventListener('change', async (event) => {
+      const nextValue = Boolean(event.target.checked);
+      storefrontShowsOutOfStock = nextValue;
+      renderStockVisibilitySetting();
+
+      if (typeof window.upsertBeautyfastPublicSetting !== 'function') {
+        return;
+      }
+
+      const payload = { show_out_of_stock: nextValue };
+      const result = await window.upsertBeautyfastPublicSetting(STOCK_VISIBILITY_SETTING_KEY, payload);
+      if (!result.ok) {
+        storefrontShowsOutOfStock = !nextValue;
+        renderStockVisibilitySetting();
+        setProductStatus(result.error || 'No pudimos guardar la visibilidad de agotados.', 'is-error');
+        return;
+      }
+
+      if (typeof window.setBeautyfastCachedPublicSetting === 'function') {
+        window.setBeautyfastCachedPublicSetting(STOCK_VISIBILITY_SETTING_KEY, payload);
+      }
+
+      setProductStatus(
+        nextValue
+          ? 'Los productos agotados seguirán visibles en la tienda sin permitir compra.'
+          : 'Los productos agotados se ocultarán del catálogo público.',
+        'is-success'
+      );
+    });
+
     adminResetProductBtn.addEventListener('click', () => {
       if (adminProductComposer?.hidden) {
         resetProductForm({ openComposer: true });
@@ -1553,6 +2166,44 @@
 
     adminClearProductBtn.addEventListener('click', () => {
       resetProductForm({ openComposer: true });
+    });
+
+    adminNewSlideBtn?.addEventListener('click', () => {
+      if (adminSliderComposer?.hidden) {
+        resetSliderForm({ openComposer: true });
+        return;
+      }
+
+      setSliderComposerOpen(false);
+    });
+
+    adminClearSliderBtn?.addEventListener('click', () => {
+      resetSliderForm({ openComposer: true });
+    });
+
+    adminSeedSliderBtn?.addEventListener('click', async () => {
+      adminSeedSliderBtn.disabled = true;
+      adminSeedSliderBtn.textContent = 'Restaurando...';
+
+      adminHomeSlides = sortHomeSlides(
+        getDefaultHomeSlides()
+          .map((slide, index) => normalizeHomeSlideRecord(slide, index))
+          .filter((slide) => slide.image_url)
+      );
+
+      const result = await saveHomeSliderSetting();
+      adminSeedSliderBtn.disabled = false;
+      adminSeedSliderBtn.textContent = 'Restaurar slider base';
+
+      if (!result.ok) {
+        setSliderStatus(result.error || 'No pudimos restaurar el slider base.', 'is-error');
+        return;
+      }
+
+      renderHomeSlides();
+      resetSliderForm();
+      setSliderComposerOpen(false);
+      setSliderStatus('El slider base se restauró correctamente.', 'is-success');
     });
 
     adminSeedCatalogBtn.addEventListener('click', async () => {
@@ -1664,6 +2315,25 @@
       renderProductsSectionState();
     }
 
+    if (adminSliderToggleBtn) {
+      adminSliderToggleBtn.addEventListener('click', () => {
+        areAdminSlidesExpanded = !areAdminSlidesExpanded;
+        renderSliderSectionState();
+      });
+      renderSliderSectionState();
+    }
+
+    [adminCatalogProductBtn, adminCatalogSliderBtn, adminCatalogBulkBtn].forEach((button) => {
+      button?.addEventListener('click', () => {
+        adminCatalogView = button.dataset.catalogView || 'product';
+        renderCatalogWorkspaceState();
+      });
+    });
+
+    adminCatalogBackBtn?.addEventListener('click', () => {
+      closeCatalogWorkspace();
+    });
+
     [adminOrdersActiveBtn, adminOrdersCompletedBtn].forEach((button) => {
       button?.addEventListener('click', () => {
         adminOrdersView = button.dataset.ordersView === 'completed' ? 'completed' : 'active';
@@ -1678,6 +2348,12 @@
     });
 
     adminDashboard?.addEventListener('click', (event) => {
+      const launchCatalogButton = event.target.closest('[data-open-catalog-view]');
+      if (launchCatalogButton) {
+        openCatalogWorkspace(launchCatalogButton.dataset.openCatalogView);
+        return;
+      }
+
       const launchButton = event.target.closest('[data-open-orders-view]');
       if (!launchButton) return;
       openOrdersWorkspace(launchButton.dataset.openOrdersView);
@@ -1728,6 +2404,7 @@
         description: document.getElementById('adminProductDescription').value.trim(),
         sort_order: document.getElementById('adminProductSort').value,
         active: document.getElementById('adminProductActive').checked,
+        out_of_stock: document.getElementById('adminProductOutOfStock').checked,
         featured: document.getElementById('adminProductFeatured').checked
       };
 
@@ -1739,7 +2416,28 @@
         return;
       }
 
-      setProductStatus('Producto guardado correctamente.', 'is-success');
+      let promotedToLiveCatalog = false;
+      if (currentCatalogMode !== 'supabase') {
+        const catalogModeResult = await enableSupabaseCatalogMode();
+        if (!catalogModeResult.ok) {
+          setProductStatus(catalogModeResult.error || 'El producto se guardó, pero no pudimos activar su publicación principal.', 'is-error');
+          adminSaveProductBtn.disabled = false;
+          adminSaveProductBtn.textContent = 'Guardar producto';
+          await loadDashboardData();
+          resetProductForm();
+          setProductComposerOpen(false);
+          return;
+        }
+
+        promotedToLiveCatalog = true;
+      }
+
+      setProductStatus(
+        promotedToLiveCatalog
+          ? 'Producto guardado y publicado como parte del catálogo principal.'
+          : 'Producto guardado correctamente.',
+        'is-success'
+      );
       adminSaveProductBtn.disabled = false;
       adminSaveProductBtn.textContent = 'Guardar producto';
       await loadDashboardData();
@@ -1747,13 +2445,82 @@
       setProductComposerOpen(false);
     });
 
+    adminSliderForm?.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      adminSaveSliderBtn.disabled = true;
+      adminSaveSliderBtn.textContent = 'Guardando...';
+
+      let imageUrl = adminSliderImageUrl.value.trim();
+      const [imageFile] = adminSliderImageFile.files || [];
+      if (imageFile) {
+        const uploadResult = await window.uploadBeautyfastProductImage(imageFile);
+        if (!uploadResult.ok) {
+          setSliderStatus(uploadResult.error || 'No pudimos subir la imagen del slide.', 'is-error');
+          adminSaveSliderBtn.disabled = false;
+          adminSaveSliderBtn.textContent = 'Guardar slide';
+          return;
+        }
+
+        imageUrl = uploadResult.data.publicUrl;
+      }
+
+      const payload = normalizeHomeSlideRecord({
+        id: document.getElementById('adminSliderId').value || `hero-slide-${Date.now()}`,
+        image_url: imageUrl,
+        alt_text: document.getElementById('adminSliderAlt').value.trim(),
+        link_url: document.getElementById('adminSliderLink').value.trim() || 'beautyfast.html',
+        sort_order: document.getElementById('adminSliderSort').value,
+        active: document.getElementById('adminSliderActive').checked
+      }, adminHomeSlides.length);
+
+      if (!payload.image_url) {
+        setSliderStatus('El slide necesita una imagen.', 'is-error');
+        adminSaveSliderBtn.disabled = false;
+        adminSaveSliderBtn.textContent = 'Guardar slide';
+        return;
+      }
+
+      if (!payload.alt_text) {
+        setSliderStatus('El slide necesita un texto alterno para accesibilidad.', 'is-error');
+        adminSaveSliderBtn.disabled = false;
+        adminSaveSliderBtn.textContent = 'Guardar slide';
+        return;
+      }
+
+      const existingIndex = adminHomeSlides.findIndex((slide) => String(slide.id) === String(payload.id));
+      if (existingIndex >= 0) {
+        adminHomeSlides.splice(existingIndex, 1, payload);
+      } else {
+        adminHomeSlides.push(payload);
+      }
+
+      adminHomeSlides = sortHomeSlides(adminHomeSlides);
+      const result = await saveHomeSliderSetting();
+      adminSaveSliderBtn.disabled = false;
+      adminSaveSliderBtn.textContent = 'Guardar slide';
+
+      if (!result.ok) {
+        setSliderStatus(result.error || 'No pudimos guardar el slider.', 'is-error');
+        return;
+      }
+
+      renderHomeSlides();
+      resetSliderForm();
+      setSliderComposerOpen(false);
+      setSliderStatus('Slide guardado correctamente.', 'is-success');
+    });
+
     document.addEventListener('DOMContentLoaded', async () => {
       const adminLoginConfig = getAdminLoginConfig();
       adminUsernameInput.value = adminLoginConfig.username;
       if (adminOrdersWorkspace) adminOrdersWorkspace.style.setProperty('display', 'none', 'important');
+      if (adminCatalogWorkspace) adminCatalogWorkspace.style.setProperty('display', 'none', 'important');
       if (adminOverview) adminOverview.style.removeProperty('display');
+      prepareCatalogWorkspace();
       resetProductForm();
       setProductComposerOpen(false);
+      resetSliderForm();
+      setSliderComposerOpen(false);
       await refreshAdminGate();
     });
   </script>

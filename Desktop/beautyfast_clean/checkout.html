@@ -621,45 +621,73 @@
   <script src="supabase-client.js"></script>
   <script src="checkout-supabase.js"></script>
   <script src="catalog-fallback.js"></script>
+  <script src="beautyfast-shared.js"></script>
   <script src="beautyfast.js"></script>
   <script>
+    const MAX_CART_ITEM_QUANTITY = 25;
+    const CHECKOUT_ORDER_DRAFT_KEY = 'beautyfast:checkout-order-draft';
     let cart = [];
 
-    function loadStoredCart() {
-      const rawCart = localStorage.getItem("cart");
-      if (!rawCart) return [];
-
-      try {
-        const parsedCart = JSON.parse(rawCart);
-        if (!Array.isArray(parsedCart)) throw new Error('Invalid cart payload');
-
-        const sanitizedCart = parsedCart
-          .map((item) => {
-            if (!item || typeof item !== 'object') return null;
-
-            const name = typeof item.name === 'string' ? item.name.trim() : '';
-            const image = typeof item.image === 'string' ? item.image : '';
-            const price = Number(item.price);
-            const quantity = Math.max(1, Math.floor(Number(item.quantity) || 0));
-
-            if (!name || !Number.isFinite(price) || price < 0) return null;
-
-            return { name, image, price, quantity };
-          })
-          .filter(Boolean);
-
-        if (sanitizedCart.length !== parsedCart.length) {
-          localStorage.setItem('cart', JSON.stringify(sanitizedCart));
-        }
-
-        return sanitizedCart;
-      } catch (error) {
-        localStorage.removeItem('cart');
-        return [];
+    function clampCartQuantity(value) {
+      if (typeof window.clampBeautyfastCartQuantity === 'function') {
+        return window.clampBeautyfastCartQuantity(value);
       }
+
+      return Math.min(MAX_CART_ITEM_QUANTITY, Math.max(1, Math.floor(Number(value) || 0)));
+    }
+
+    function loadStoredCart() {
+      if (typeof window.loadBeautyfastStoredCart === 'function') {
+        return window.loadBeautyfastStoredCart();
+      }
+
+      return [];
     }
 
     cart = loadStoredCart();
+
+    function normalizeCatalogProduct(product, index) {
+      const basePrice = Number(product?.price || 0);
+      const offerPrice = Number(product?.offer_price || 0);
+
+      return {
+        id: product?.id || index + 1,
+        name: String(product?.name || '').trim(),
+        price: Number.isFinite(basePrice) ? basePrice : 0,
+        offer_price: Number.isFinite(offerPrice) && offerPrice > 0 ? offerPrice : null,
+        image: String(product?.image_url || product?.image || 'img/linea.jpg').trim() || 'img/linea.jpg'
+      };
+    }
+
+    function getCatalogProductCurrentPrice(product) {
+      if (typeof window.getBeautyfastCatalogCurrentPrice === 'function') {
+        return window.getBeautyfastCatalogCurrentPrice(product);
+      }
+
+      const basePrice = Number(product?.price || 0);
+      const offerPrice = Number(product?.offer_price || 0);
+      if (Number.isFinite(offerPrice) && offerPrice > 0 && offerPrice < basePrice) return offerPrice;
+      return basePrice;
+    }
+
+    async function syncCheckoutCartProductData() {
+      const catalogResult = typeof window.resolveBeautyfastCatalog === 'function'
+        ? await window.resolveBeautyfastCatalog({ normalizeProduct: normalizeCatalogProduct, mergeKey: 'name' })
+        : { products: [] };
+
+      if (typeof window.syncBeautyfastCartWithCatalog === 'function') {
+        const syncResult = window.syncBeautyfastCartWithCatalog(cart, catalogResult.products || []);
+        cart = syncResult.items;
+
+        if (syncResult.hasChanges) {
+          if (typeof window.saveBeautyfastStoredCart === 'function') {
+            window.saveBeautyfastStoredCart(cart);
+          } else {
+            localStorage.setItem('cart', JSON.stringify(cart));
+          }
+        }
+      }
+    }
 
     function getShippingCost() {
       const selectedDelivery = document.querySelector('input[name="envio"]:checked')?.value || 'delivery';
@@ -759,6 +787,18 @@
       const box = document.getElementById('orderNumBox');
       box.textContent = 'Número de pedido: ' + num;
       box.style.display = 'block';
+    }
+
+    function getCartFingerprint() {
+      return JSON.stringify(
+        cart
+          .map((item) => ({ name: item.name, quantity: clampCartQuantity(item.quantity), price: Number(item.price || 0) }))
+          .sort((left, right) => left.name.localeCompare(right.name))
+      );
+    }
+
+    function clearCheckoutOrderDraft() {
+      sessionStorage.removeItem(CHECKOUT_ORDER_DRAFT_KEY);
     }
 
     function setCheckoutButtonText() {
@@ -874,7 +914,7 @@
         customer_name: customerName,
         email: form.email.value.trim(),
         phone: form.telefono.value.trim(),
-        delivery_method: deliveryLabel,
+        delivery_method: form.envio.value,
         shipping_cost: shippingCost,
         total_amount: total,
         payment_method: form.pago.value,
@@ -919,10 +959,18 @@
 
     function setCopyButtons() {
       document.querySelectorAll('.copy-btn').forEach((btn) => {
-        btn.addEventListener('click', function (e) {
+        btn.addEventListener('click', async function (e) {
           e.preventDefault();
           const val = btn.getAttribute('data-copy');
-          navigator.clipboard.writeText(val);
+          const copied = await copyTextToClipboard(val);
+          if (!copied) {
+            Swal.fire({
+              icon: 'warning',
+              title: 'No pudimos copiar el dato',
+              text: 'Copia manualmente el número o inténtalo desde un navegador con permisos de portapapeles.'
+            });
+            return;
+          }
           let check = btn.querySelector('.copy-check');
           if (!check) {
             check = document.createElement('span');
@@ -941,23 +989,83 @@
       });
     }
 
-    function generateOrderNumber() {
-      let n = localStorage.getItem('lastOrderNum') || 0;
-      n = parseInt(n, 10) + 1;
-      localStorage.setItem('lastOrderNum', n);
-      return 'PED-' + n.toString().padStart(6, '0');
+    async function copyTextToClipboard(value) {
+      const text = String(value || '').trim();
+      if (!text) return false;
+
+      if (navigator.clipboard?.writeText) {
+        try {
+          await navigator.clipboard.writeText(text);
+          return true;
+        } catch (error) {
+        }
+      }
+
+      const helper = document.createElement('textarea');
+      helper.value = text;
+      helper.setAttribute('readonly', 'true');
+      helper.style.position = 'fixed';
+      helper.style.opacity = '0';
+      helper.style.pointerEvents = 'none';
+      document.body.appendChild(helper);
+      helper.focus();
+      helper.select();
+
+      let copied = false;
+      try {
+        copied = document.execCommand('copy');
+      } catch (error) {
+        copied = false;
+      }
+
+      document.body.removeChild(helper);
+      return copied;
     }
 
-    document.addEventListener('DOMContentLoaded', function () {
+    function generateOrderNumber() {
+      const timestamp = new Date()
+        .toISOString()
+        .replace(/[-:.TZ]/g, '')
+        .slice(0, 14);
+      const randomChunk = typeof crypto !== 'undefined' && crypto.getRandomValues
+        ? Array.from(crypto.getRandomValues(new Uint8Array(3)), (value) => value.toString(16).padStart(2, '0')).join('').toUpperCase()
+        : Math.random().toString(16).slice(2, 8).toUpperCase();
+      return `PED-${timestamp}-${randomChunk}`;
+    }
+
+    function getCheckoutOrderNumber() {
+      const cartFingerprint = getCartFingerprint();
+
+      try {
+        const rawDraft = sessionStorage.getItem(CHECKOUT_ORDER_DRAFT_KEY);
+        if (rawDraft) {
+          const parsedDraft = JSON.parse(rawDraft);
+          if (parsedDraft?.cartFingerprint === cartFingerprint && parsedDraft?.orderNumber) {
+            return parsedDraft.orderNumber;
+          }
+        }
+      } catch (error) {
+        clearCheckoutOrderDraft();
+      }
+
+      const orderNumber = generateOrderNumber();
+      sessionStorage.setItem(CHECKOUT_ORDER_DRAFT_KEY, JSON.stringify({ cartFingerprint, orderNumber }));
+      return orderNumber;
+    }
+
+    document.addEventListener('DOMContentLoaded', async function () {
+      await syncCheckoutCartProductData();
       renderCheckoutCart();
-      currentOrderNum = generateOrderNumber();
+      currentOrderNum = getCheckoutOrderNumber();
       showOrderNum(currentOrderNum);
       setCopyButtons();
 
       const phoneInput = document.querySelector('input[name="telefono"]');
-      phoneInput.addEventListener('input', () => {
-        phoneInput.value = normalizePhone(phoneInput.value);
-      });
+      if (phoneInput) {
+        phoneInput.addEventListener('input', () => {
+          phoneInput.value = normalizePhone(phoneInput.value);
+        });
+      }
 
       document.querySelectorAll('input[name="pago"]').forEach((radio) => {
         radio.addEventListener('change', updateBankInfoVisibility);
@@ -974,7 +1082,8 @@
       }
     });
 
-    document.getElementById('checkoutForm').addEventListener('submit', async function (e) {
+    const checkoutForm = document.getElementById('checkoutForm');
+    checkoutForm?.addEventListener('submit', async function (e) {
       e.preventDefault();
 
       if (window.isBeautyfastAdmin) {
@@ -1042,6 +1151,7 @@
                 didOpen: () => { confetti(); }
               });
               localStorage.removeItem('cart');
+              clearCheckoutOrderDraft();
               setTimeout(() => { window.location.href = persistenceResult.saved ? 'orders.html' : 'index.html'; }, 2800);
             }, 500);
           }
@@ -1063,6 +1173,7 @@
 
         window.open('https://wa.me/18493990014?text=' + msg, '_blank');
         localStorage.removeItem('cart');
+        clearCheckoutOrderDraft();
         setTimeout(() => { window.location.href = persistenceResult.saved ? 'orders.html' : 'index.html'; }, 2000);
       }).finally(() => {
         checkoutBtn.disabled = false;

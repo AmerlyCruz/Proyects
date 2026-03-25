@@ -5,12 +5,40 @@ create extension if not exists "pgcrypto";
 DO $$
 BEGIN
   IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'order_status') THEN
-    CREATE TYPE order_status AS ENUM ('pending_review', 'processing', 'shipped', 'delivered', 'cancelled');
+    CREATE TYPE order_status AS ENUM (
+      'pending',
+      'pending_payment',
+      'pending_review',
+      'processing',
+      'paid',
+      'paid_pending_fulfillment',
+      'shipped',
+      'delivered',
+      'completed',
+      'cancelled'
+    );
   END IF;
   IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'payment_status_enum') THEN
-    CREATE TYPE payment_status_enum AS ENUM ('pending', 'paid', 'failed', 'refunded');
+    CREATE TYPE payment_status_enum AS ENUM ('pending', 'pending_proof', 'paid', 'failed', 'refunded');
   END IF;
 END$$;
+
+ALTER TYPE order_status ADD VALUE IF NOT EXISTS 'pending';
+ALTER TYPE order_status ADD VALUE IF NOT EXISTS 'pending_payment';
+ALTER TYPE order_status ADD VALUE IF NOT EXISTS 'pending_review';
+ALTER TYPE order_status ADD VALUE IF NOT EXISTS 'processing';
+ALTER TYPE order_status ADD VALUE IF NOT EXISTS 'paid';
+ALTER TYPE order_status ADD VALUE IF NOT EXISTS 'paid_pending_fulfillment';
+ALTER TYPE order_status ADD VALUE IF NOT EXISTS 'shipped';
+ALTER TYPE order_status ADD VALUE IF NOT EXISTS 'delivered';
+ALTER TYPE order_status ADD VALUE IF NOT EXISTS 'completed';
+ALTER TYPE order_status ADD VALUE IF NOT EXISTS 'cancelled';
+
+ALTER TYPE payment_status_enum ADD VALUE IF NOT EXISTS 'pending';
+ALTER TYPE payment_status_enum ADD VALUE IF NOT EXISTS 'pending_proof';
+ALTER TYPE payment_status_enum ADD VALUE IF NOT EXISTS 'paid';
+ALTER TYPE payment_status_enum ADD VALUE IF NOT EXISTS 'failed';
+ALTER TYPE payment_status_enum ADD VALUE IF NOT EXISTS 'refunded';
 
 create table if not exists public.orders (
   id uuid primary key default gen_random_uuid(),

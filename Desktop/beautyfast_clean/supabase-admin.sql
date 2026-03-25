@@ -19,11 +19,15 @@ create table if not exists public.products (
   price numeric(10,2) not null default 0,
   offer_price numeric(10,2),
   active boolean not null default true,
+  out_of_stock boolean not null default false,
   featured boolean not null default false,
   sort_order integer not null default 0,
   created_at timestamptz not null default timezone('utc', now()),
   updated_at timestamptz not null default timezone('utc', now())
 );
+
+alter table if exists public.products
+  add column if not exists out_of_stock boolean not null default false;
 
 create table if not exists public.site_settings (
   setting_key text primary key,

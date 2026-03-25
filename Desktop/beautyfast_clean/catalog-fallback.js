@@ -1,5 +1,5 @@
 (function () {
-  window.BEAUTYFAST_FALLBACK_PRODUCTS = [
+  const fallbackProducts = [
     { id: 1, name: 'Línea Pequeña', slug: 'linea-pequena', price: 1050, offer_price: null, image: 'img/linea.jpg', description: 'Producto de línea capilar en formato pequeño. Ideal para pruebas y viajes.', category: 'capilar', active: true, featured: true, sort_order: 1 },
     { id: 2, name: 'Línea Mediana', slug: 'linea-mediana', price: 1350, offer_price: null, image: 'img/linea.jpg', description: 'Formato mediano de nuestra línea capilar. Perfecto para uso regular.', category: 'capilar', active: true, featured: false, sort_order: 2 },
     { id: 3, name: 'Línea Grande', slug: 'linea-grande', price: 1850, offer_price: null, image: 'img/linea.jpg', description: 'Formato grande para uso prolongado. Mayor rendimiento.', category: 'capilar', active: true, featured: false, sort_order: 3 },
@@ -11,4 +11,9 @@
     { id: 9, name: 'Super Mascarilla', slug: 'super-mascarilla', price: 800, offer_price: null, image: 'img/SupMask.jpg', description: 'Mascarilla ultra nutritiva. Hidrata y fortalece en profundidad.', category: 'individuales', active: true, featured: false, sort_order: 9 },
     { id: 10, name: 'Aprieta Cuca', slug: 'aprieta-cuca', price: 1000, offer_price: null, image: 'img/linea.jpg', description: 'Producto especial con efectos reafirmantes. Úsalo regularmente para mejores resultados.', category: 'otros', active: true, featured: false, sort_order: 10 }
   ];
+
+  window.BEAUTYFAST_FALLBACK_PRODUCTS = Object.freeze(fallbackProducts.map((product) => Object.freeze({ ...product })));
+  window.getBeautyfastFallbackProducts = function getBeautyfastFallbackProducts() {
+    return window.BEAUTYFAST_FALLBACK_PRODUCTS.map((product) => ({ ...product }));
+  };
 })();
