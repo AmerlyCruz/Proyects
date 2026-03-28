@@ -9,17 +9,41 @@
   <title>El Secreto de Aris - Inicio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="preconnect" href="https://xmipcqspotmfljleamcw.supabase.co" crossorigin>
+  <link rel="preload" as="image" href="img/aris hero.jpeg" fetchpriority="high">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="beautyfast.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
 </head>
 <body class="home-shell">
+<div id="storefrontLoader" class="storefront-loader" aria-live="polite">
+  <div class="storefront-loader__spinner" aria-hidden="true"></div>
+  <p class="storefront-loader__title">Cargando tienda</p>
+  <p class="storefront-loader__copy">Preparando productos, accesos y contenido del home.</p>
+</div>
+<div class="site-topbar">
+  <p>Compra segura, entrega local y soporte rápido por WhatsApp.</p>
+</div>
 <header class="header header-relative">
-  <button id="hamburger" class="hamburger" type="button" title="Menú" aria-label="Abrir menú">
-    <span></span>
-    <span></span>
-    <span></span>
-  </button>
+  <div class="header-side header-side-left">
+    <button id="hamburger" class="hamburger" type="button" title="Menú" aria-label="Abrir menú">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <div class="search-box search-box-header">
+      <button id="searchToggle" class="search-toggle" type="button" title="Buscar" aria-label="Abrir buscador">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.35-4.35"></path>
+        </svg>
+      </button>
+      <input type="text" id="search" placeholder="Buscar..." class="search-input" aria-label="Buscar productos">
+      <button id="clearSearch" type="button" class="clear-search" aria-label="Limpiar búsqueda">×</button>
+    </div>
+  </div>
 
   <div class="brand">
     <svg width="40" height="40" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" class="leaf-icon">
@@ -43,21 +67,10 @@
     </h1>
   </div>
 
-  <div class="header-right">
+  <div class="header-side header-side-right">
     <div id="headerAccount" class="header-account"></div>
-    <div class="search-box">
-      <button id="searchToggle" class="search-toggle" type="button" title="Buscar" aria-label="Abrir buscador">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="11" cy="11" r="8"></circle>
-          <path d="m21 21-4.35-4.35"></path>
-        </svg>
-      </button>
-      <input type="text" id="search" placeholder="Buscar..." class="search-input" aria-label="Buscar productos">
-      <button id="clearSearch" type="button" class="clear-search" aria-label="Limpiar búsqueda">×</button>
-    </div>
-
     <div class="cart" role="button" tabindex="0" aria-label="Abrir carrito" aria-haspopup="dialog" aria-controls="cartPanel">
-      <svg class="cart-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="#e6d8b0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <svg class="cart-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="9" cy="21" r="1.5"></circle>
         <circle cx="20" cy="21" r="1.5"></circle>
         <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
@@ -66,6 +79,41 @@
     </div>
   </div>
 </header>
+
+<div id="welcomeModal" class="welcome-modal" hidden aria-hidden="true">
+  <div class="welcome-modal__backdrop" data-welcome-close></div>
+  <div class="welcome-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="welcomeModalTitle">
+    <button id="closeWelcomeModal" class="welcome-modal__close" type="button" aria-label="Cerrar formulario">×</button>
+    <p class="welcome-modal__eyebrow">Primer acceso</p>
+    <h2 id="welcomeModalTitle" class="welcome-modal__title">Guarda tus datos y compra más rápido</h2>
+    <p class="welcome-modal__copy">Deja tus datos una sola vez y compra más rápido en tu próxima visita.</p>
+
+    <form id="welcomeForm" class="welcome-form" autocomplete="on">
+      <div class="welcome-form__row">
+        <input type="text" id="welcomeFirstName" name="firstName" placeholder="Nombre" autocomplete="given-name" required>
+        <input type="text" id="welcomeLastName" name="lastName" placeholder="Apellido" autocomplete="family-name" required>
+      </div>
+      <input type="email" id="welcomeEmail" name="email" placeholder="Correo electrónico" autocomplete="email" inputmode="email" required>
+      <input type="tel" id="welcomePhone" name="phone" placeholder="Teléfono" autocomplete="tel" inputmode="tel" required>
+
+      <label class="welcome-form__check">
+        <input type="checkbox" id="welcomeMarketing" name="marketingConsent">
+        <span>Quiero recibir promociones y novedades por correo o WhatsApp.</span>
+      </label>
+
+      <div id="welcomeStatus" class="welcome-status" aria-live="polite"></div>
+
+      <button type="submit" class="welcome-form__submit">Guardar y continuar</button>
+
+      <div class="welcome-form__footer">
+        <a href="orders.html" class="welcome-form__link">Ya tengo cuenta</a>
+        <button id="welcomeSkipBtn" type="button" class="welcome-form__skip">Ahora no</button>
+      </div>
+    </form>
+
+    <p class="welcome-modal__note">Tus datos se usan para autocompletar compras futuras.</p>
+  </div>
+</div>
 
 <div class="sidebar" id="sidebar" aria-label="Menú lateral de navegación">
   <div class="sidebar-search-container">
@@ -82,6 +130,18 @@
 <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
 <main id="mainContent">
+<section class="landing-card landing-card-cream featured-showcase home-search-results" id="homeSearchResults" hidden>
+  <div class="featured-showcase-head">
+    <div>
+      <p class="account-eyebrow">Busqueda activa</p>
+      <h2 class="landing-title">Resultados para ti</h2>
+      <p class="landing-copy">Te mostramos primero los productos que coinciden con lo que acabas de buscar.</p>
+    </div>
+    <a href="beautyfast.html" class="landing-cta featured-showcase-cta">Ver catálogo completo</a>
+  </div>
+  <div id="homeSearchResultsGrid" class="featured-products-grid" aria-live="polite"></div>
+</section>
+
 <section class="hero-aris home-hero-wrap">
   <div class="home-hero-stage">
     <div class="swiper hero-swiper">
@@ -123,46 +183,58 @@
 
 <section class="landing-card landing-card-peach">
   <h2 class="landing-title">Testimonios de clientes</h2>
-  <div class="testimonials-grid">
-    <blockquote class="testimonial-card">"¡Mi cabello nunca había estado tan suave y brillante! Recomiendo la línea capilar a todos."<br><span>- Laura G.</span></blockquote>
-    <blockquote class="testimonial-card">"El tratamiento intensivo salvó mi melena después de años de daño. ¡Gracias Aris!"<br><span>- Camila R.</span></blockquote>
-    <blockquote class="testimonial-card">"Atención rápida y productos de calidad. ¡Volveré a comprar!"<br><span>- José M.</span></blockquote>
-    <blockquote class="testimonial-card">"El gotero es mi favorito, noté menos caída en pocas semanas."<br><span>- Paola S.</span></blockquote>
+  <p class="landing-copy">Descubre resultados reales y experiencias de clientas que ya probaron la linea. Siempre veras aqui las historias mas recientes y destacadas.</p>
+  <div id="testimonialsShowcase" class="testimonials-showcase" hidden>
+    <div class="swiper testimonials-swiper">
+      <div class="swiper-wrapper" id="homeTestimonialsSlides" aria-live="polite"></div>
+      <div class="swiper-pagination testimonials-pagination"></div>
+      <div class="swiper-button-prev testimonials-button-prev"></div>
+      <div class="swiper-button-next testimonials-button-next"></div>
+    </div>
   </div>
 </section>
 
 <section class="landing-card landing-card-cream">
   <h2 class="landing-title">Preguntas frecuentes</h2>
-  <div class="faq-list">
-    <details class="faq-item"><summary>¿Los productos son aptos para todo tipo de cabello?</summary><div>Sí, están formulados para adaptarse a cualquier tipo de cabello, incluso teñido o tratado químicamente.</div></details>
-    <details class="faq-item"><summary>¿Cuánto tardan en llegar los pedidos?</summary><div>El envío es rápido: de 1 a 3 días laborables en República Dominicana.</div></details>
-    <details class="faq-item"><summary>¿Puedo pagar contra entrega?</summary><div>Sí, aceptamos pago contra entrega y transferencias.</div></details>
-    <details class="faq-item"><summary>¿Cómo contacto para dudas o asesoría?</summary><div>Puedes escribirnos por WhatsApp o usar el formulario de contacto rápido abajo.</div></details>
-  </div>
+  <div id="homeFaqList" class="faq-list" aria-live="polite"></div>
 </section>
 
-<section class="landing-card landing-card-peach">
-  <h2 class="landing-title">¿Tienes dudas? ¡Contáctanos!</h2>
-  <form onsubmit="enviarWhatsApp(event)" class="contact-form">
-    <label for="nombreContacto" class="sr-only">Tu nombre</label>
-    <input type="text" name="nombre" id="nombreContacto" placeholder="Tu nombre" required>
-    <label for="whatsappContacto" class="sr-only">Tu WhatsApp</label>
-    <input type="tel" name="whatsapp" id="whatsappContacto" placeholder="Tu WhatsApp" required pattern="[0-9\\+ ]{8,}">
+<section class="landing-card landing-card-peach landing-card-compact-contact" id="homeContactSection">
+  <div class="compact-contact-head">
+    <div>
+      <h2 class="landing-title">Resuelve tus dudas</h2>
+      <p class="landing-copy">Envianos tu consulta por aqui y te responderemos lo antes posible. Si prefieres, tambien puedes escribirnos por WhatsApp.</p>
+    </div>
+  </div>
+  <form id="homeContactForm" class="contact-form compact-contact-form">
+    <div class="contact-form-row contact-form-row-tight">
+      <div>
+        <label for="contactTopic" class="sr-only">Tipo de duda</label>
+        <select name="topic" id="contactTopic" required>
+          <option value="Duda general">Duda general</option>
+          <option value="Producto recomendado">Producto recomendado</option>
+          <option value="Pedido">Pedido</option>
+          <option value="Metodos de pago">Metodos de pago</option>
+        </select>
+      </div>
+      <div>
+        <label for="nombreContacto" class="sr-only">Tu nombre</label>
+        <input type="text" name="nombre" id="nombreContacto" placeholder="Tu nombre" required>
+      </div>
+    </div>
+    <div class="contact-form-row">
+      <div>
+        <label for="emailContacto" class="sr-only">Tu email</label>
+        <input type="email" name="email" id="emailContacto" placeholder="Tu correo" required>
+      </div>
+    </div>
     <label for="mensajeContacto" class="sr-only">Tu mensaje</label>
-    <textarea name="mensaje" id="mensajeContacto" placeholder="¿En qué podemos ayudarte?" required></textarea>
-    <button type="submit" class="contact-submit">Enviar por WhatsApp</button>
+    <textarea name="mensaje" id="mensajeContacto" placeholder="Cuentanos tu duda o que necesitas" required></textarea>
+    <div class="contact-form-actions">
+      <button type="submit" class="contact-submit" id="homeContactSubmitBtn">Enviar mensaje</button>
+      <div id="homeContactStatus" class="contact-status" aria-live="polite">Tu mensaje llegara directo a nuestro equipo.</div>
+    </div>
   </form>
-  <script>
-    function enviarWhatsApp(e) {
-      e.preventDefault();
-      const nombre = document.getElementById('nombreContacto').value.trim();
-      const whatsapp = document.getElementById('whatsappContacto').value.trim();
-      const mensaje = document.getElementById('mensajeContacto').value.trim();
-      const texto = `Hola, soy ${nombre}. Mi WhatsApp es ${whatsapp}. Quiero consultar: ${mensaje}`;
-      const url = `https://wa.me/18493990014?text=${encodeURIComponent(texto)}`;
-      window.open(url, '_blank');
-    }
-  </script>
 </section>
 
 <div id="cartOverlay" class="cart-overlay"></div>
@@ -221,12 +293,15 @@
     <br>
     <span>Envía tu comprobante de pago por WhatsApp tras completar el pedido.</span>
   </div>
+  <a href="https://soulcrwk.netlify.app/?ref=beautyfast&source=footer&campaign=project-lead#contacto" target="_blank" rel="noopener" class="footer-powered-by" aria-label="Contactar a SoulCrystal Works">
+    <span class="footer-powered-by__label">Powered by</span>
+    <span class="footer-powered-by__brand">SoulCrystal Works</span>
+  </a>
 </footer>
 
 <script src="catalog-fallback.js"></script>
 <script src="beautyfast-shared.js"></script>
 <script src="beautyfast.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js"></script>
 <script src="supabase-client.js"></script>

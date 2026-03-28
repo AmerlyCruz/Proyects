@@ -3,6 +3,20 @@
   const MAX_CART_ITEM_QUANTITY = 25;
   const PUBLIC_SETTING_CACHE_PREFIX = 'beautyfast:setting:';
   const CATALOG_CACHE_KEY = 'beautyfast:catalog:resolved';
+  const PROFILE_STORAGE_KEY = 'beautyfast:stored-profile';
+  const DEFAULT_PUBLIC_SETTING_CACHE_TTL_MS = 10 * 60 * 1000;
+  const DEFAULT_CATALOG_CACHE_TTL_MS = 5 * 60 * 1000;
+  const DEFAULT_HOME_TESTIMONIALS = Object.freeze([
+    Object.freeze({ id: 'testimonial-1', image_url: 'img/aris hero.jpeg', customer_name: 'Laura G.', quote: 'Mi cabello se siente mucho mas suave y con brillo desde las primeras aplicaciones.', active: true, sort_order: 1 }),
+    Object.freeze({ id: 'testimonial-2', image_url: 'img/linea.jpg', customer_name: 'Camila R.', quote: 'La linea capilar me ayudo a recuperar fuerza y orden en mi rutina.', active: true, sort_order: 2 }),
+    Object.freeze({ id: 'testimonial-3', image_url: 'img/TratInt.jpg', customer_name: 'Paola S.', quote: 'El tratamiento intensivo fue el cambio mas visible en pocas semanas.', active: true, sort_order: 3 })
+  ]);
+  const DEFAULT_HOME_FAQS = Object.freeze([
+    Object.freeze({ id: 'faq-1', question: 'Los productos son aptos para todo tipo de cabello?', answer: 'Si, estan formulados para adaptarse a cualquier tipo de cabello, incluso tenido o tratado quimicamente.', active: true, sort_order: 1 }),
+    Object.freeze({ id: 'faq-2', question: 'Cuanto tardan en llegar los pedidos?', answer: 'El envio suele tardar entre 1 y 3 dias laborables dentro de Republica Dominicana.', active: true, sort_order: 2 }),
+    Object.freeze({ id: 'faq-3', question: 'Puedo pagar contra entrega?', answer: 'Si, aceptamos pago contra entrega y tambien transferencias.', active: true, sort_order: 3 }),
+    Object.freeze({ id: 'faq-4', question: 'Como contacto para dudas o asesoria?', answer: 'Puedes escribirnos por el formulario de contacto o por WhatsApp cuando necesites una respuesta rapida.', active: true, sort_order: 4 })
+  ]);
   const DEFAULT_HOME_SLIDES = Object.freeze([
     Object.freeze({ id: 'hero-slide-1', image_url: 'img/aris hero.jpeg', alt_text: 'Aris Hero', link_url: 'beautyfast.html#capilar', active: true, sort_order: 1 }),
     Object.freeze({ id: 'hero-slide-2', image_url: 'img/linea.jpg', alt_text: 'Línea Capilar', link_url: 'beautyfast.html#capilar', active: true, sort_order: 2 }),
@@ -36,6 +50,36 @@
     return options?.storageKey || CART_STORAGE_KEY;
   }
 
+  function parseCachedEntry(rawValue) {
+    const parsedValue = JSON.parse(rawValue);
+
+    if (parsedValue && typeof parsedValue === 'object' && Object.prototype.hasOwnProperty.call(parsedValue, 'value')) {
+      return {
+        value: parsedValue.value,
+        savedAt: parsedValue.savedAt || parsedValue.cachedAt || null
+      };
+    }
+
+    return {
+      value: parsedValue,
+      savedAt: parsedValue?.cachedAt || null
+    };
+  }
+
+  function buildCachedEntry(value) {
+    return {
+      value: cloneValue(value, {}),
+      savedAt: new Date().toISOString()
+    };
+  }
+
+  function isCacheFresh(savedAt, maxAgeMs) {
+    const savedAtTimestamp = Date.parse(String(savedAt || ''));
+    if (!Number.isFinite(savedAtTimestamp)) return false;
+
+    return (Date.now() - savedAtTimestamp) <= Math.max(0, Number(maxAgeMs) || 0);
+  }
+
   window.getBeautyfastCachedPublicSetting = function getBeautyfastCachedPublicSetting(settingKey, fallbackValue = null) {
     const normalizedKey = String(settingKey || '').trim();
     if (!normalizedKey) return cloneValue(fallbackValue, fallbackValue);
@@ -44,10 +88,27 @@
       const rawValue = localStorage.getItem(getPublicSettingCacheKey(normalizedKey));
       if (!rawValue) return cloneValue(fallbackValue, fallbackValue);
 
-      return JSON.parse(rawValue);
+      const cacheEntry = parseCachedEntry(rawValue);
+      return cloneValue(cacheEntry.value, fallbackValue);
     } catch (error) {
       localStorage.removeItem(getPublicSettingCacheKey(normalizedKey));
       return cloneValue(fallbackValue, fallbackValue);
+    }
+  };
+
+  window.isBeautyfastPublicSettingCacheFresh = function isBeautyfastPublicSettingCacheFresh(settingKey, maxAgeMs = DEFAULT_PUBLIC_SETTING_CACHE_TTL_MS) {
+    const normalizedKey = String(settingKey || '').trim();
+    if (!normalizedKey) return false;
+
+    try {
+      const rawValue = localStorage.getItem(getPublicSettingCacheKey(normalizedKey));
+      if (!rawValue) return false;
+
+      const cacheEntry = parseCachedEntry(rawValue);
+      return isCacheFresh(cacheEntry.savedAt, maxAgeMs);
+    } catch (error) {
+      localStorage.removeItem(getPublicSettingCacheKey(normalizedKey));
+      return false;
     }
   };
 
@@ -55,7 +116,7 @@
     const normalizedKey = String(settingKey || '').trim();
     if (!normalizedKey) return;
 
-    localStorage.setItem(getPublicSettingCacheKey(normalizedKey), JSON.stringify(cloneValue(value, {})));
+    localStorage.setItem(getPublicSettingCacheKey(normalizedKey), JSON.stringify(buildCachedEntry(value)));
   };
 
   window.getBeautyfastCachedCatalog = function getBeautyfastCachedCatalog(fallbackValue = null) {
@@ -63,15 +124,178 @@
       const rawValue = localStorage.getItem(CATALOG_CACHE_KEY);
       if (!rawValue) return cloneValue(fallbackValue, fallbackValue);
 
-      return JSON.parse(rawValue);
+      const cacheEntry = parseCachedEntry(rawValue);
+      return cloneValue(cacheEntry.value, fallbackValue);
     } catch (error) {
       localStorage.removeItem(CATALOG_CACHE_KEY);
       return cloneValue(fallbackValue, fallbackValue);
     }
   };
 
+  window.isBeautyfastCatalogCacheFresh = function isBeautyfastCatalogCacheFresh(maxAgeMs = DEFAULT_CATALOG_CACHE_TTL_MS) {
+    try {
+      const rawValue = localStorage.getItem(CATALOG_CACHE_KEY);
+      if (!rawValue) return false;
+
+      const cacheEntry = parseCachedEntry(rawValue);
+      return isCacheFresh(cacheEntry.savedAt, maxAgeMs);
+    } catch (error) {
+      localStorage.removeItem(CATALOG_CACHE_KEY);
+      return false;
+    }
+  };
+
   window.setBeautyfastCachedCatalog = function setBeautyfastCachedCatalog(value) {
-    localStorage.setItem(CATALOG_CACHE_KEY, JSON.stringify(cloneValue(value, {})));
+    localStorage.setItem(CATALOG_CACHE_KEY, JSON.stringify(buildCachedEntry(value)));
+  };
+
+  function normalizeStoredProfile(profile) {
+    if (!profile || typeof profile !== 'object') return null;
+
+    const firstName = String(profile.firstName || profile.first_name || '').trim();
+    const lastName = String(profile.lastName || profile.last_name || '').trim();
+    const email = String(profile.email || '').trim().toLowerCase();
+    const phone = String(profile.phone || profile.telefono || '').trim();
+    const marketingConsent = Boolean(profile.marketingConsent || profile.marketing_consent);
+
+    if (!firstName && !lastName && !email && !phone) return null;
+
+    return {
+      firstName,
+      lastName,
+      email,
+      phone,
+      marketingConsent,
+      fullName: [firstName, lastName].filter(Boolean).join(' ').trim(),
+      updatedAt: String(profile.updatedAt || new Date().toISOString())
+    };
+  }
+
+  window.getBeautyfastStoredProfile = function getBeautyfastStoredProfile() {
+    try {
+      const rawValue = localStorage.getItem(PROFILE_STORAGE_KEY);
+      if (!rawValue) return null;
+
+      const normalizedProfile = normalizeStoredProfile(JSON.parse(rawValue));
+      if (!normalizedProfile) {
+        localStorage.removeItem(PROFILE_STORAGE_KEY);
+      }
+
+      return normalizedProfile;
+    } catch (error) {
+      localStorage.removeItem(PROFILE_STORAGE_KEY);
+      return null;
+    }
+  };
+
+  window.saveBeautyfastStoredProfile = function saveBeautyfastStoredProfile(profile) {
+    const currentProfile = window.getBeautyfastStoredProfile() || {};
+    const normalizedProfile = normalizeStoredProfile({
+      ...currentProfile,
+      ...profile,
+      updatedAt: new Date().toISOString()
+    });
+
+    if (!normalizedProfile) {
+      localStorage.removeItem(PROFILE_STORAGE_KEY);
+      return null;
+    }
+
+    localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(normalizedProfile));
+    return normalizedProfile;
+  };
+
+  window.clearBeautyfastStoredProfile = function clearBeautyfastStoredProfile() {
+    localStorage.removeItem(PROFILE_STORAGE_KEY);
+  };
+
+  window.getBeautyfastProfileDisplayName = function getBeautyfastProfileDisplayName(profile) {
+    const normalizedProfile = normalizeStoredProfile(profile || window.getBeautyfastStoredProfile());
+    if (!normalizedProfile) return '';
+
+    if (normalizedProfile.firstName) return normalizedProfile.firstName;
+    if (normalizedProfile.fullName) return normalizedProfile.fullName;
+    if (normalizedProfile.email) return normalizedProfile.email.split('@')[0] || normalizedProfile.email;
+    return '';
+  };
+
+  window.prefillBeautyfastCheckoutForm = function prefillBeautyfastCheckoutForm(form) {
+    if (!form || typeof form.querySelector !== 'function') return;
+
+    const profile = window.getBeautyfastStoredProfile();
+    if (!profile) return;
+
+    const fieldMap = {
+      email: profile.email,
+      nombre: profile.firstName,
+      apellidos: profile.lastName,
+      telefono: profile.phone
+    };
+
+    Object.entries(fieldMap).forEach(([fieldName, fieldValue]) => {
+      const input = form.querySelector(`[name="${fieldName}"]`);
+      if (!input || input.value.trim() || !fieldValue) return;
+      input.value = fieldValue;
+    });
+
+    const newsletterCheckbox = form.querySelector('[name="newsletter"]');
+    if (newsletterCheckbox && !newsletterCheckbox.checked && profile.marketingConsent) {
+      newsletterCheckbox.checked = true;
+    }
+  };
+
+  window.prefillBeautyfastContactFields = function prefillBeautyfastContactFields(root = document) {
+    const profile = window.getBeautyfastStoredProfile();
+    if (!profile || !root || typeof root.querySelector !== 'function') return;
+
+    const contactName = root.querySelector('#nombreContacto');
+    const contactEmail = root.querySelector('#emailContacto');
+    const contactPhone = root.querySelector('#whatsappContacto');
+
+    if (contactName && !contactName.value.trim()) {
+      contactName.value = profile.fullName || profile.firstName || '';
+    }
+
+    if (contactEmail && !contactEmail.value.trim()) {
+      contactEmail.value = profile.email || '';
+    }
+
+    if (contactPhone && !contactPhone.value.trim()) {
+      contactPhone.value = profile.phone || '';
+    }
+  };
+
+  window.getBeautyfastDefaultHomeTestimonials = function getBeautyfastDefaultHomeTestimonials() {
+    return DEFAULT_HOME_TESTIMONIALS.map((testimonial) => ({ ...testimonial }));
+  };
+
+  window.normalizeBeautyfastHomeTestimonial = function normalizeBeautyfastHomeTestimonial(testimonial, index = 0) {
+    const normalizedSortOrder = Number(testimonial?.sort_order);
+
+    return {
+      id: String(testimonial?.id || `testimonial-${index + 1}`).trim() || `testimonial-${index + 1}`,
+      image_url: String(testimonial?.image_url || testimonial?.image || '').trim(),
+      customer_name: String(testimonial?.customer_name || testimonial?.name || `Cliente ${index + 1}`).trim() || `Cliente ${index + 1}`,
+      quote: String(testimonial?.quote || testimonial?.text || '').trim(),
+      active: testimonial?.active !== false,
+      sort_order: Number.isFinite(normalizedSortOrder) ? normalizedSortOrder : index + 1
+    };
+  };
+
+  window.getBeautyfastDefaultHomeFaqs = function getBeautyfastDefaultHomeFaqs() {
+    return DEFAULT_HOME_FAQS.map((faq) => ({ ...faq }));
+  };
+
+  window.normalizeBeautyfastHomeFaq = function normalizeBeautyfastHomeFaq(faq, index = 0) {
+    const normalizedSortOrder = Number(faq?.sort_order);
+
+    return {
+      id: String(faq?.id || `faq-${index + 1}`).trim() || `faq-${index + 1}`,
+      question: String(faq?.question || '').trim(),
+      answer: String(faq?.answer || '').trim(),
+      active: faq?.active !== false,
+      sort_order: Number.isFinite(normalizedSortOrder) ? normalizedSortOrder : index + 1
+    };
   };
 
   window.getBeautyfastDefaultHomeSlides = function getBeautyfastDefaultHomeSlides() {

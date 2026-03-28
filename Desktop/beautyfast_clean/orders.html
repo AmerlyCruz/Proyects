@@ -3,17 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Inicia sesión para ver tu historial de pedidos de El Secreto de Aris.">
+  <meta name="description" content="Inicia sesión para ver tu historial de pedidos y el avance de tus consultas en El Secreto de Aris.">
   <meta name="theme-color" content="#606c38">
   <title>Mis pedidos - El Secreto de Aris</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="preconnect" href="https://xmipcqspotmfljleamcw.supabase.co" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="beautyfast.css">
 </head>
 <body class="account-shell">
+  <div class="site-topbar">
+    <p>Compra segura, entrega local y soporte rápido por WhatsApp.</p>
+  </div>
   <header class="header header-relative">
-    <a href="index.html" class="sidebar-btn sidebar-btn-secondary">Inicio</a>
+    <div class="header-side header-side-left">
+      <a href="index.html" class="sidebar-btn sidebar-btn-secondary">Inicio</a>
+    </div>
 
     <div class="brand">
       <svg width="40" height="40" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" class="leaf-icon">
@@ -33,17 +40,17 @@
       <h1><a href="index.html" class="brand-link">El Secreto de Aris</a></h1>
     </div>
 
-    <div class="header-right">
+    <div class="header-side header-side-right">
       <div id="headerAccount" class="header-account"></div>
-      <a href="checkout.html" class="sidebar-btn sidebar-btn-secondary" id="ordersCheckoutLink">Checkout</a>
+      <a href="checkout.html" class="sidebar-btn sidebar-btn-secondary" id="ordersCheckoutLink">Pagar</a>
     </div>
   </header>
 
   <main class="account-main">
     <section class="account-hero">
       <p class="account-eyebrow" id="accountEyebrow">Área del cliente</p>
-      <h1 class="account-title" id="accountTitle">Mis pedidos</h1>
-      <p class="account-copy" id="accountCopy">Crea tu cuenta o inicia sesión para ver el historial de tus pedidos. Cuando compres con la sesión iniciada, tus órdenes aparecerán aquí automáticamente.</p>
+      <h1 class="account-title" id="accountTitle">Mi cuenta</h1>
+      <p class="account-copy" id="accountCopy">Crea tu cuenta o inicia sesión para ver el historial de tus pedidos y el avance de las consultas que hayas enviado por la tienda.</p>
     </section>
 
     <section class="account-grid" id="accountGrid">
@@ -82,6 +89,19 @@
           <div class="orders-empty">Tus pedidos aparecerán aquí cuando inicies sesión y completes compras con tu cuenta activa.</div>
         </div>
       </article>
+
+      <article class="account-card account-card-wide" id="supportCard">
+        <div class="account-toolbar">
+          <div class="account-toolbar-copy">
+            <h2 class="account-section-title account-section-title-tight">Tus consultas</h2>
+            <div id="supportSummary" class="history-summary">Inicia sesión para ver el avance de las consultas que hayas enviado desde la tienda.</div>
+          </div>
+        </div>
+
+        <div id="supportList" class="support-list">
+          <div class="orders-empty">Aquí verás el avance de tus consultas cuando entres con tu cuenta.</div>
+        </div>
+      </article>
     </section>
   </main>
 
@@ -107,6 +127,8 @@
     const accountTitle = document.getElementById('accountTitle');
     const accountCopy = document.getElementById('accountCopy');
     const historySummary = document.getElementById('historySummary');
+    const supportSummary = document.getElementById('supportSummary');
+    const supportList = document.getElementById('supportList');
     let authMode = 'login';
     let adminRedirectScheduled = false;
 
@@ -119,7 +141,7 @@
     function redirectAdminToPanel() {
       if (adminRedirectScheduled) return;
       adminRedirectScheduled = true;
-      setStatus('Sesión de administrador detectada. Te estamos llevando al panel.', 'is-success');
+      setStatus('Cuenta de gestión detectada. Te estamos llevando a la zona privada.', 'is-success');
       window.setTimeout(() => {
         window.location.href = 'admin.html';
       }, 250);
@@ -246,16 +268,37 @@
       if (!headerAccount) return;
 
       if (isAdmin) {
-        headerAccount.innerHTML = '<a href="admin.html" class="sidebar-btn sidebar-btn-secondary header-account-pill">Panel admin</a>';
+        headerAccount.innerHTML = `
+          <a href="admin.html" class="header-account-button" aria-label="Abrir gestión de la tienda">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 12c2.761 0 5-2.239 5-5s-2.239-5-5-5-5 2.239-5 5 2.239 5 5 5zm0 2c-4.418 0-8 2.239-8 5v1h16v-1c0-2.761-3.582-5-8-5z" fill="currentColor"></path>
+            </svg>
+            <span class="header-account-label">Gestión</span>
+          </a>
+        `;
         return;
       }
 
       if (user) {
-        headerAccount.innerHTML = `<a href="orders.html" class="sidebar-btn sidebar-btn-secondary header-account-pill">${escapeHtml(getDisplayName(user, profile))}</a>`;
+        headerAccount.innerHTML = `
+          <a href="orders.html" class="header-account-button" aria-label="Abrir mi cuenta">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 12c2.761 0 5-2.239 5-5s-2.239-5-5-5-5 2.239-5 5 2.239 5 5 5zm0 2c-4.418 0-8 2.239-8 5v1h16v-1c0-2.761-3.582-5-8-5z" fill="currentColor"></path>
+            </svg>
+            <span class="header-account-label">${escapeHtml(getDisplayName(user, profile))}</span>
+          </a>
+        `;
         return;
       }
 
-      headerAccount.innerHTML = '<a href="orders.html" class="sidebar-btn sidebar-btn-secondary header-account-pill">Ingresar</a>';
+      headerAccount.innerHTML = `
+        <a href="orders.html" class="header-account-button" aria-label="Abrir acceso de cliente">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 12c2.761 0 5-2.239 5-5s-2.239-5-5-5-5 2.239-5 5 2.239 5 5 5zm0 2c-4.418 0-8 2.239-8 5v1h16v-1c0-2.761-3.582-5-8-5z" fill="currentColor"></path>
+          </svg>
+          <span class="header-account-label">Ingresar</span>
+        </a>
+      `;
     }
 
     function setAccountMode(mode) {
@@ -277,19 +320,25 @@
       }
 
       if (accountTitle) {
-        accountTitle.textContent = mode === 'customer' ? 'Tu historial de pedidos' : 'Mis pedidos';
+        accountTitle.textContent = mode === 'customer' ? 'Tu actividad en la tienda' : 'Mi cuenta';
       }
 
       if (accountCopy) {
         accountCopy.textContent = mode === 'customer'
-          ? 'Aquí verás tus pedidos recientes, su estado y los detalles de entrega. Abre cualquier tarjeta para revisar la información completa.'
-          : 'Crea tu cuenta o inicia sesión para ver el historial de tus pedidos. Cuando compres con la sesión iniciada, tus órdenes aparecerán aquí automáticamente.';
+          ? 'Aquí verás tus pedidos recientes, su estado, los detalles de entrega y el avance de las consultas que hayas enviado. Abre cualquier tarjeta para revisar la información completa.'
+          : 'Crea tu cuenta o inicia sesión para ver el historial de tus pedidos y el avance de tus consultas. Cuando compres o escribas con la sesión iniciada, todo aparecerá aquí automáticamente.';
       }
 
       if (historySummary && mode !== 'customer') {
         historySummary.textContent = mode === 'admin'
-          ? 'Esta sesión pertenece al panel administrativo.'
+          ? 'Esta cuenta es para gestion interna.'
           : 'Inicia sesión para ver el resumen de tus pedidos.';
+      }
+
+      if (supportSummary && mode !== 'customer') {
+        supportSummary.textContent = mode === 'admin'
+          ? 'Esta cuenta es para gestión interna.'
+          : 'Inicia sesión para ver el avance de tus consultas.';
       }
     }
 
@@ -303,6 +352,70 @@
 
       const latestOrder = orders[0];
       historySummary.textContent = `${orders.length} pedido(s) guardado(s). Último movimiento: ${friendlyStatus(latestOrder.status || 'pending')}.`;
+    }
+
+    function friendlySupportStatus(status) {
+      switch ((status || '').toLowerCase()) {
+        case 'in_review': return 'En revisión';
+        case 'replied': return 'Respondida';
+        case 'completed': return 'Cerrada';
+        default: return 'Pendiente';
+      }
+    }
+
+    function supportStatusClass(status) {
+      switch ((status || '').toLowerCase()) {
+        case 'completed': return 'status-completed';
+        case 'replied': return 'status';
+        case 'in_review': return 'payment';
+        default: return 'status-pending';
+      }
+    }
+
+    function updateSupportSummary(messages) {
+      if (!supportSummary) return;
+
+      if (!Array.isArray(messages) || !messages.length) {
+        supportSummary.textContent = 'Todavía no tienes consultas registradas con esta cuenta.';
+        return;
+      }
+
+      const openCount = messages.filter((entry) => ['received', 'in_review'].includes(String(entry.status || '').toLowerCase())).length;
+      const latestMessage = messages[0];
+      supportSummary.textContent = `${messages.length} consulta(s) registrada(s). ${openCount ? `${openCount} sigue(n) abierta(s). ` : ''}Último avance: ${friendlySupportStatus(latestMessage.status || 'received')}.`;
+    }
+
+    function renderSupportMessages(messages) {
+      updateSupportSummary(messages);
+
+      if (!supportList) return;
+
+      if (!Array.isArray(messages) || !messages.length) {
+        supportList.innerHTML = '<div class="orders-empty">Todavía no tienes consultas guardadas. Cuando escribas desde la tienda con tu cuenta iniciada, aparecerán aquí.</div>';
+        return;
+      }
+
+      supportList.innerHTML = messages.map((entry) => `
+        <article class="support-card">
+          <div class="support-card-head">
+            <div>
+              <h3 class="support-card-title">${escapeHtml(entry.topic || 'Consulta general')}</h3>
+              <div class="support-card-meta">Enviada el ${escapeHtml(formatDate(entry.created_at))}</div>
+            </div>
+            <span class="order-badge ${supportStatusClass(entry.status)}">${escapeHtml(friendlySupportStatus(entry.status || 'received'))}</span>
+          </div>
+
+          <div class="support-card-body">${escapeHtml(entry.message || 'Sin mensaje')}</div>
+
+          ${entry.admin_reply ? `
+            <div class="support-card-reply">
+              <strong>Respuesta del equipo</strong>
+              <div>${escapeHtml(entry.admin_reply)}</div>
+              <div class="support-card-meta">${escapeHtml(entry.replied_at ? `Actualizado el ${formatDate(entry.replied_at)}` : 'Respuesta disponible')}</div>
+            </div>
+          ` : '<div class="orders-empty">Todavía no hemos dejado una respuesta aquí. Cuando avancemos tu caso, verás la actualización en este espacio.</div>'}
+        </article>
+      `).join('');
     }
 
     function renderOrders(orders) {
@@ -367,6 +480,7 @@
         logoutBtn.hidden = true;
         if (ordersCheckoutLink) ordersCheckoutLink.hidden = false;
         renderOrders([]);
+        renderSupportMessages([]);
         return;
       }
 
@@ -377,10 +491,11 @@
       if (adminResult.ok && adminResult.isAdmin) {
         renderHeaderAccountState({ user: sessionResult.user, profile: adminResult.profile, isAdmin: true });
         setAccountMode('admin');
-        accountUser.textContent = 'Sesión de administrador activa.';
+        accountUser.textContent = 'Sesión de gestión activa.';
         logoutBtn.hidden = false;
         if (ordersCheckoutLink) ordersCheckoutLink.hidden = true;
-        ordersList.innerHTML = '<div class="orders-empty">Abriendo panel de administración...</div>';
+        ordersList.innerHTML = '<div class="orders-empty">Abriendo zona de gestión...</div>';
+        renderSupportMessages([]);
         redirectAdminToPanel();
         return;
       }
@@ -391,13 +506,25 @@
       logoutBtn.hidden = false;
       if (ordersCheckoutLink) ordersCheckoutLink.hidden = false;
 
-      const ordersResult = await window.fetchBeautyfastOrders();
+      const [ordersResult, messagesResult] = await Promise.all([
+        window.fetchBeautyfastOrders(),
+        typeof window.fetchBeautyfastMyContactMessages === 'function'
+          ? window.fetchBeautyfastMyContactMessages()
+          : Promise.resolve({ ok: false, data: [] })
+      ]);
       if (!ordersResult.ok) {
         ordersList.innerHTML = `<div class="orders-empty">${escapeHtml(ordersResult.error || 'No pudimos cargar tus pedidos.')}</div>`;
+      } else {
+        renderOrders(ordersResult.data);
+      }
+
+      if (!messagesResult.ok && messagesResult.reason !== 'not_authenticated') {
+        supportList.innerHTML = `<div class="orders-empty">${escapeHtml(messagesResult.error || 'No pudimos cargar tus consultas.')}</div>`;
+        updateSupportSummary([]);
         return;
       }
 
-      renderOrders(ordersResult.data);
+      renderSupportMessages(messagesResult.data || []);
     }
 
     toggleButtons.forEach((button) => {

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Panel de administración de El Secreto de Aris para estadísticas, gestión de productos y control operativo.">
+  <meta name="description" content="Centro de gestión de El Secreto de Aris para ventas, catálogo y seguimiento de clientes.">
   <meta name="theme-color" content="#606c38">
   <title>Admin - El Secreto de Aris</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -41,14 +41,14 @@
 
   <main class="admin-main">
     <section class="admin-hero">
-      <p class="admin-eyebrow">Panel privado</p>
-      <h1 class="admin-title">Administrador único</h1>
-      <p class="admin-copy">Controla ventas, productos, precios, ofertas e imágenes desde una sola pantalla. Todo está pensado para que puedas administrar la tienda sin entrar en detalles técnicos.</p>
+      <p class="admin-eyebrow">Gestión privada</p>
+      <h1 class="admin-title">Centro de la tienda</h1>
+      <p class="admin-copy">Controla ventas, productos, precios, ofertas e imágenes desde una sola pantalla. Todo está pensado para que puedas mover la tienda con claridad y sin vueltas.</p>
     </section>
 
     <section class="admin-panel admin-gate" id="adminGate">
-      <h2>Acceso administrador</h2>
-      <p class="admin-panel-copy">Inicia sesión con tu cuenta de administrador para entrar al panel de control.</p>
+      <h2>Acceso de gestión</h2>
+      <p class="admin-panel-copy">Inicia sesión con tu cuenta autorizada para entrar a la zona privada.</p>
       <form id="adminAuthForm" class="admin-form">
         <div class="admin-field">
           <label for="adminUsername">Usuario</label>
@@ -59,10 +59,10 @@
           <input type="password" id="adminPassword" autocomplete="current-password" required>
         </div>
         <div class="admin-form-actions">
-          <button type="submit" class="checkout-btn" id="adminLoginBtn">Entrar al panel</button>
+          <button type="submit" class="checkout-btn" id="adminLoginBtn">Entrar</button>
         </div>
       </form>
-      <div id="adminGateStatus" class="account-status">El panel verificará si tu perfil tiene rol de administrador.</div>
+      <div id="adminGateStatus" class="account-status">Estamos validando si esta cuenta puede entrar a la zona privada.</div>
     </section>
 
     <section id="adminDashboard" class="admin-dashboard-shell" hidden>
@@ -75,7 +75,7 @@
             <div class="admin-toolbar admin-orders-toolbar">
               <div>
                 <h2>Gestión del catálogo</h2>
-                <p class="admin-panel-copy">Abre una vista dedicada para trabajar por separado productos individuales, slider principal o cargas masivas, sin apilar paneles largos en la misma pantalla.</p>
+                <p class="admin-panel-copy">Abre una vista dedicada para trabajar por separado productos individuales, carrusel principal o cargas grandes, sin apilar bloques largos en la misma pantalla.</p>
               </div>
             </div>
 
@@ -89,14 +89,20 @@
               <button type="button" class="admin-orders-launch-card" data-open-catalog-view="slider">
                 <span class="admin-orders-launch-eyebrow">Home</span>
                 <strong class="admin-orders-launch-title">Slider principal</strong>
-                <span class="admin-orders-launch-copy">Gestiona las imágenes del carrusel y su orden sin dejarlas fijas en el HTML.</span>
+                <span class="admin-orders-launch-copy">Gestiona las imágenes del carrusel y su orden sin dejarlas fijas en la página.</span>
                 <span class="admin-orders-launch-count">Slides del inicio</span>
+              </button>
+              <button type="button" class="admin-orders-launch-card" data-open-catalog-view="content">
+                <span class="admin-orders-launch-eyebrow">Home</span>
+                <strong class="admin-orders-launch-title">Contenido del home</strong>
+                <span class="admin-orders-launch-copy">Administra testimonios con imagen y las preguntas frecuentes que se muestran en la portada.</span>
+                <span class="admin-orders-launch-count">Testimonios + preguntas</span>
               </button>
               <button type="button" class="admin-orders-launch-card" data-open-catalog-view="bulk">
                 <span class="admin-orders-launch-eyebrow">Importación</span>
-                <strong class="admin-orders-launch-title">Carga masiva</strong>
-                <span class="admin-orders-launch-copy">Sube CSV o pega una tabla para cargar muchos productos de una sola vez.</span>
-                <span class="admin-orders-launch-count">CSV y texto</span>
+                <strong class="admin-orders-launch-title">Carga grande</strong>
+                <span class="admin-orders-launch-copy">Sube un archivo de tabla o pega una lista para cargar muchos productos de una sola vez.</span>
+                <span class="admin-orders-launch-count">Archivo o lista</span>
               </button>
             </div>
           </section>
@@ -206,7 +212,7 @@
             <div class="admin-toolbar admin-toolbar-collapsible">
               <div>
                 <h2>Slider principal</h2>
-                <p class="admin-panel-copy">Administra las imágenes del carrusel de inicio sin dejarlas fijas en el HTML. Cada slide puede tener imagen, enlace y orden propio.</p>
+                <p class="admin-panel-copy">Administra las imágenes del carrusel de inicio sin dejarlas fijas en la página. Cada imagen puede tener enlace y orden propio.</p>
               </div>
               <button type="button" class="admin-collapse-btn" id="adminSliderToggleBtn" aria-expanded="false" aria-controls="adminSliderSectionBody">
                 <span>Mostrar slider</span>
@@ -236,7 +242,7 @@
                     </div>
                     <div class="admin-field">
                       <label for="adminSliderLink">Destino al hacer clic</label>
-                      <input type="text" id="adminSliderLink" placeholder="beautyfast.html#capilar">
+                      <input type="text" id="adminSliderLink" placeholder="tienda#capilar">
                     </div>
                     <div class="admin-field">
                       <label for="adminSliderSort">Orden</label>
@@ -273,15 +279,15 @@
 
           <section class="admin-panel" id="adminBulkManagerPanel">
             <h2>Carga rápida de productos</h2>
-            <p class="admin-panel-copy">Si quieres cargar muchos productos de una vez, puedes subir un CSV de Excel o pegar aquí una tabla preparada.</p>
+            <p class="admin-panel-copy">Si quieres cargar muchos productos de una vez, puedes subir un archivo de tabla o pegar aquí una lista preparada.</p>
             <div class="admin-field admin-field-full">
-              <label for="adminBulkFile">Archivo CSV</label>
-              <div id="adminBulkDropzone" class="admin-bulk-dropzone" tabindex="0" role="button" aria-label="Arrastra aquí un archivo CSV o pulsa para seleccionarlo">
-                <strong>Arrastra tu CSV aquí</strong>
+              <label for="adminBulkFile">Archivo de carga</label>
+              <div id="adminBulkDropzone" class="admin-bulk-dropzone" tabindex="0" role="button" aria-label="Arrastra aquí un archivo de carga o pulsa para seleccionarlo">
+                <strong>Arrastra tu archivo aquí</strong>
                 <span>o pulsa para elegir un archivo guardado desde Excel</span>
               </div>
               <input type="file" id="adminBulkFile" accept=".csv,.txt">
-              <div class="admin-field-help" id="adminBulkFileHelp">Puedes usar un archivo CSV guardado desde Excel con columnas como nombre, categoría, precio y descripción.</div>
+              <div class="admin-field-help" id="adminBulkFileHelp">Puedes usar un archivo guardado desde Excel con columnas como nombre, categoría, precio y descripción.</div>
             </div>
             <div class="admin-field admin-field-full">
               <label for="adminBulkJson">Lista de productos</label>
@@ -289,10 +295,144 @@
               <div class="admin-field-help">Si pegas texto, también aceptamos columnas separadas por comas, punto y coma o tabulaciones.</div>
             </div>
             <div class="admin-form-actions">
-              <button type="button" class="sidebar-btn sidebar-btn-secondary" id="adminBulkTemplateBtn">Descargar plantilla CSV</button>
+              <button type="button" class="sidebar-btn sidebar-btn-secondary" id="adminBulkTemplateBtn">Descargar plantilla</button>
               <button type="button" class="checkout-btn" id="adminBulkImportBtn">Cargar productos</button>
             </div>
             <div id="adminBulkStatus" class="account-status">Cuando cargues un archivo o una tabla, aquí verás el resultado.</div>
+          </section>
+
+          <section class="admin-panel" id="adminHomeContentPanel">
+            <div class="admin-content-stack">
+              <section class="admin-content-panel">
+                <div class="admin-toolbar admin-toolbar-collapsible">
+                  <div>
+                    <h2>Testimonios del home</h2>
+                    <p class="admin-panel-copy">Sube imagenes de testimonios reales y elige el orden en que quieres mostrarlos al entrar a la tienda.</p>
+                  </div>
+                  <button type="button" class="admin-collapse-btn" id="adminTestimonialsToggleBtn" aria-expanded="false" aria-controls="adminTestimonialsSectionBody">
+                    <span>Mostrar testimonios</span>
+                    <span class="admin-collapse-icon">▾</span>
+                  </button>
+                </div>
+
+                <div id="adminTestimonialsSectionBody" class="admin-collapsible-body" hidden>
+                  <div class="admin-toolbar">
+                    <div>
+                      <h3>Testimonios activos</h3>
+                      <p class="admin-panel-copy">Mantiene el carrusel visual del home editable y solo muestra lo que dejes activo.</p>
+                    </div>
+                    <div class="admin-form-actions">
+                      <button type="button" class="sidebar-btn sidebar-btn-secondary" id="adminSeedTestimonialsBtn">Restaurar base</button>
+                      <button type="button" class="sidebar-btn sidebar-btn-secondary" id="adminNewTestimonialBtn">Nuevo testimonio</button>
+                    </div>
+                  </div>
+
+                  <div id="adminTestimonialComposer" class="admin-product-composer" hidden>
+                    <form id="adminTestimonialForm" class="admin-form">
+                      <input type="hidden" id="adminTestimonialId">
+
+                      <div class="admin-form-grid">
+                        <div class="admin-field">
+                          <label for="adminTestimonialName">Nombre visible</label>
+                          <input type="text" id="adminTestimonialName" placeholder="Laura G." required>
+                        </div>
+                        <div class="admin-field">
+                          <label for="adminTestimonialSort">Orden</label>
+                          <input type="number" id="adminTestimonialSort" min="0" step="1" value="0">
+                        </div>
+                        <div class="admin-field admin-field-full">
+                          <label for="adminTestimonialQuote">Texto breve</label>
+                          <textarea id="adminTestimonialQuote" placeholder="Resumen corto del resultado o experiencia" required></textarea>
+                        </div>
+                        <div class="admin-field admin-field-full">
+                          <label for="adminTestimonialImageUrl">URL de imagen</label>
+                          <input type="url" id="adminTestimonialImageUrl" placeholder="https://...">
+                        </div>
+                        <div class="admin-field admin-field-full">
+                          <label for="adminTestimonialImageFile">O subir imagen</label>
+                          <input type="file" id="adminTestimonialImageFile" accept="image/*">
+                        </div>
+                      </div>
+
+                      <div class="admin-inline-checks">
+                        <label><input type="checkbox" id="adminTestimonialActive" checked> Testimonio activo</label>
+                      </div>
+
+                      <div class="admin-preview" id="adminTestimonialPreview">Vista previa del testimonio</div>
+
+                      <div class="admin-form-actions">
+                        <button type="submit" class="checkout-btn" id="adminSaveTestimonialBtn">Guardar testimonio</button>
+                        <button type="button" class="sidebar-btn sidebar-btn-secondary" id="adminClearTestimonialBtn">Limpiar</button>
+                      </div>
+                    </form>
+
+                    <div id="adminTestimonialStatus" class="account-status">Listo para crear el primer testimonio visual.</div>
+                  </div>
+
+                  <div id="adminTestimonialsList" class="admin-slider-grid"></div>
+                </div>
+              </section>
+
+              <section class="admin-content-panel">
+                <div class="admin-toolbar admin-toolbar-collapsible">
+                  <div>
+                    <h2>Preguntas frecuentes</h2>
+                    <p class="admin-panel-copy">Edita las preguntas y respuestas que aparecen al inicio de la tienda sin complicarte.</p>
+                  </div>
+                  <button type="button" class="admin-collapse-btn" id="adminFaqToggleBtn" aria-expanded="false" aria-controls="adminFaqSectionBody">
+                    <span>Mostrar preguntas</span>
+                    <span class="admin-collapse-icon">▾</span>
+                  </button>
+                </div>
+
+                <div id="adminFaqSectionBody" class="admin-collapsible-body" hidden>
+                  <div class="admin-toolbar">
+                    <div>
+                      <h3>Preguntas activas</h3>
+                      <p class="admin-panel-copy">Organiza el orden de lectura y deja visibles solo las respuestas vigentes.</p>
+                    </div>
+                    <div class="admin-form-actions">
+                      <button type="button" class="sidebar-btn sidebar-btn-secondary" id="adminSeedFaqBtn">Restaurar preguntas base</button>
+                      <button type="button" class="sidebar-btn sidebar-btn-secondary" id="adminNewFaqBtn">Nueva pregunta</button>
+                    </div>
+                  </div>
+
+                  <div id="adminFaqComposer" class="admin-product-composer" hidden>
+                    <form id="adminFaqForm" class="admin-form">
+                      <input type="hidden" id="adminFaqId">
+
+                      <div class="admin-form-grid">
+                        <div class="admin-field admin-field-full">
+                          <label for="adminFaqQuestion">Pregunta</label>
+                          <input type="text" id="adminFaqQuestion" placeholder="Escribe la pregunta" required>
+                        </div>
+                        <div class="admin-field admin-field-full">
+                          <label for="adminFaqAnswer">Respuesta</label>
+                          <textarea id="adminFaqAnswer" placeholder="Escribe la respuesta" required></textarea>
+                        </div>
+                        <div class="admin-field">
+                          <label for="adminFaqSort">Orden</label>
+                          <input type="number" id="adminFaqSort" min="0" step="1" value="0">
+                        </div>
+                      </div>
+
+                      <div class="admin-inline-checks">
+                        <label><input type="checkbox" id="adminFaqActive" checked> Pregunta activa</label>
+                      </div>
+
+                      <div class="admin-form-actions">
+                        <button type="submit" class="checkout-btn" id="adminSaveFaqBtn">Guardar pregunta</button>
+                        <button type="button" class="sidebar-btn sidebar-btn-secondary" id="adminClearFaqBtn">Limpiar</button>
+                      </div>
+                    </form>
+
+                    <div id="adminFaqStatus" class="account-status">Listo para crear una nueva pregunta frecuente.</div>
+                  </div>
+
+                  <div id="adminFaqList" class="admin-faq-list"></div>
+                </div>
+              </section>
+            </div>
           </section>
         </div>
 
@@ -301,7 +441,7 @@
             <div class="admin-toolbar admin-orders-toolbar">
               <div>
                 <h2>Pedidos</h2>
-                <p class="admin-panel-copy">Abre una vista dedicada para ver pedidos vigentes o revisar el histórico sin cargar el panel principal.</p>
+                <p class="admin-panel-copy">Abre una vista dedicada para ver pedidos vigentes o revisar el histórico sin cargar toda la portada privada.</p>
               </div>
             </div>
 
@@ -327,6 +467,36 @@
               Si todavía no ves productos aquí, usa el botón de cargar productos iniciales o revisa la configuración básica de la tienda.
             </div>
           </section>
+
+          <section class="admin-panel">
+            <div class="admin-toolbar admin-orders-toolbar">
+              <div>
+                <h2>Consultas de clientes</h2>
+                <p class="admin-panel-copy">Abre una vista dedicada para responder, seguir el avance y cerrar cada consulta sin mezclarla con el resto del panel.</p>
+              </div>
+            </div>
+
+            <div class="admin-orders-launch-grid">
+              <button type="button" class="admin-orders-launch-card" id="adminMessagesOpenPendingBtn" data-open-messages-view="pending">
+                <span class="admin-orders-launch-eyebrow">Consultas</span>
+                <strong class="admin-orders-launch-title">Pendientes</strong>
+                <span class="admin-orders-launch-copy">Mensajes nuevos o en revisión que todavía necesitan una respuesta o seguimiento.</span>
+                <span class="admin-orders-launch-count" id="adminMessagesPendingCount">0 consultas</span>
+              </button>
+              <button type="button" class="admin-orders-launch-card" id="adminMessagesOpenRepliedBtn" data-open-messages-view="replied">
+                <span class="admin-orders-launch-eyebrow">Consultas</span>
+                <strong class="admin-orders-launch-title">Respondidas</strong>
+                <span class="admin-orders-launch-copy">Casos con respuesta enviada que siguen abiertos para observación o confirmación.</span>
+                <span class="admin-orders-launch-count" id="adminMessagesRepliedCount">0 consultas</span>
+              </button>
+              <button type="button" class="admin-orders-launch-card" id="adminMessagesOpenCompletedBtn" data-open-messages-view="completed">
+                <span class="admin-orders-launch-eyebrow">Consultas</span>
+                <strong class="admin-orders-launch-title">Cerradas</strong>
+                <span class="admin-orders-launch-copy">Consultas resueltas para revisar historial, tiempos y seguimiento completado.</span>
+                <span class="admin-orders-launch-count" id="adminMessagesCompletedCount">0 consultas</span>
+              </button>
+            </div>
+          </section>
         </div>
       </div>
       </div>
@@ -339,7 +509,7 @@
             <p class="admin-panel-copy" id="adminOrdersWorkspaceCopy">Aquí ves primero un resumen compacto y puedes abrir cada pedido solo cuando lo necesites.</p>
           </div>
           <div class="admin-form-actions">
-            <button type="button" class="checkout-btn" id="adminOrdersExportBtn">Exportar CSV</button>
+            <button type="button" class="checkout-btn" id="adminOrdersExportBtn">Exportar archivo</button>
             <button type="button" class="sidebar-btn sidebar-btn-secondary" id="adminOrdersBackBtn">Volver al panel</button>
           </div>
         </div>
@@ -381,6 +551,7 @@
           <div class="admin-orders-view-switch" role="tablist" aria-label="Cambiar vista del catálogo">
             <button type="button" class="admin-segment-btn is-active" id="adminCatalogProductBtn" data-catalog-view="product" aria-selected="true">Producto individual</button>
             <button type="button" class="admin-segment-btn" id="adminCatalogSliderBtn" data-catalog-view="slider" aria-selected="false">Slider</button>
+            <button type="button" class="admin-segment-btn" id="adminCatalogContentBtn" data-catalog-view="content" aria-selected="false">Contenido home</button>
             <button type="button" class="admin-segment-btn" id="adminCatalogBulkBtn" data-catalog-view="bulk" aria-selected="false">Carga masiva</button>
           </div>
         </div>
@@ -388,8 +559,33 @@
         <div class="admin-catalog-panels">
           <div id="adminCatalogProductView" class="admin-catalog-view"></div>
           <div id="adminCatalogSliderView" class="admin-catalog-view" hidden></div>
+          <div id="adminCatalogContentView" class="admin-catalog-view" hidden></div>
           <div id="adminCatalogBulkView" class="admin-catalog-view" hidden></div>
         </div>
+      </section>
+
+      <section class="admin-panel admin-orders-workspace" id="adminMessagesWorkspace" hidden>
+        <div class="admin-toolbar admin-orders-workspace-head">
+          <div>
+            <p class="admin-eyebrow">Consultas</p>
+            <h2 id="adminMessagesWorkspaceTitle">Consultas pendientes</h2>
+            <p class="admin-panel-copy" id="adminMessagesWorkspaceCopy">Responde cada consulta, cambia su avance y deja cerrados los casos resueltos desde una sola vista.</p>
+          </div>
+          <div class="admin-form-actions">
+            <button type="button" class="sidebar-btn sidebar-btn-secondary" id="adminMessagesBackBtn">Volver al panel</button>
+          </div>
+        </div>
+
+        <div class="admin-toolbar admin-orders-toolbar">
+          <div class="admin-orders-view-switch" role="tablist" aria-label="Cambiar vista de consultas">
+            <button type="button" class="admin-segment-btn is-active" id="adminMessagesPendingBtn" data-messages-view="pending" aria-selected="true">Pendientes</button>
+            <button type="button" class="admin-segment-btn" id="adminMessagesRepliedBtn" data-messages-view="replied" aria-selected="false">Respondidas</button>
+            <button type="button" class="admin-segment-btn" id="adminMessagesCompletedBtn" data-messages-view="completed" aria-selected="false">Cerradas</button>
+          </div>
+        </div>
+
+        <div id="adminMessagesSummary" class="admin-orders-summary-grid"></div>
+        <div id="adminMessagesList" class="admin-message-list"></div>
       </section>
     </section>
   </main>
@@ -420,6 +616,12 @@
     const adminOrdersOpenCompletedBtn = document.getElementById('adminOrdersOpenCompletedBtn');
     const adminOrdersActiveCount = document.getElementById('adminOrdersActiveCount');
     const adminOrdersCompletedCount = document.getElementById('adminOrdersCompletedCount');
+    const adminMessagesOpenPendingBtn = document.getElementById('adminMessagesOpenPendingBtn');
+    const adminMessagesOpenRepliedBtn = document.getElementById('adminMessagesOpenRepliedBtn');
+    const adminMessagesOpenCompletedBtn = document.getElementById('adminMessagesOpenCompletedBtn');
+    const adminMessagesPendingCount = document.getElementById('adminMessagesPendingCount');
+    const adminMessagesRepliedCount = document.getElementById('adminMessagesRepliedCount');
+    const adminMessagesCompletedCount = document.getElementById('adminMessagesCompletedCount');
     const adminOrdersWorkspace = document.getElementById('adminOrdersWorkspace');
     const adminOrdersWorkspaceTitle = document.getElementById('adminOrdersWorkspaceTitle');
     const adminOrdersWorkspaceCopy = document.getElementById('adminOrdersWorkspaceCopy');
@@ -431,15 +633,25 @@
     const adminOrdersPeriodLabel = document.getElementById('adminOrdersPeriodLabel');
     const adminOrdersSummary = document.getElementById('adminOrdersSummary');
     const adminOrdersList = document.getElementById('adminOrdersList');
+    const adminMessagesWorkspace = document.getElementById('adminMessagesWorkspace');
+    const adminMessagesWorkspaceTitle = document.getElementById('adminMessagesWorkspaceTitle');
+    const adminMessagesWorkspaceCopy = document.getElementById('adminMessagesWorkspaceCopy');
+    const adminMessagesBackBtn = document.getElementById('adminMessagesBackBtn');
+    const adminMessagesPendingBtn = document.getElementById('adminMessagesPendingBtn');
+    const adminMessagesRepliedBtn = document.getElementById('adminMessagesRepliedBtn');
+    const adminMessagesCompletedBtn = document.getElementById('adminMessagesCompletedBtn');
+    const adminMessagesSummary = document.getElementById('adminMessagesSummary');
     const adminCatalogWorkspace = document.getElementById('adminCatalogWorkspace');
     const adminCatalogWorkspaceTitle = document.getElementById('adminCatalogWorkspaceTitle');
     const adminCatalogWorkspaceCopy = document.getElementById('adminCatalogWorkspaceCopy');
     const adminCatalogBackBtn = document.getElementById('adminCatalogBackBtn');
     const adminCatalogProductBtn = document.getElementById('adminCatalogProductBtn');
     const adminCatalogSliderBtn = document.getElementById('adminCatalogSliderBtn');
+    const adminCatalogContentBtn = document.getElementById('adminCatalogContentBtn');
     const adminCatalogBulkBtn = document.getElementById('adminCatalogBulkBtn');
     const adminCatalogProductView = document.getElementById('adminCatalogProductView');
     const adminCatalogSliderView = document.getElementById('adminCatalogSliderView');
+    const adminCatalogContentView = document.getElementById('adminCatalogContentView');
     const adminCatalogBulkView = document.getElementById('adminCatalogBulkView');
     const adminCatalogModeValue = document.getElementById('adminCatalogModeValue');
     const adminCatalogModeHint = document.getElementById('adminCatalogModeHint');
@@ -474,6 +686,7 @@
     const adminSliderImageUrl = document.getElementById('adminSliderImageUrl');
     const adminSliderImageFile = document.getElementById('adminSliderImageFile');
     const adminBulkManagerPanel = document.getElementById('adminBulkManagerPanel');
+    const adminHomeContentPanel = document.getElementById('adminHomeContentPanel');
     const adminBulkDropzone = document.getElementById('adminBulkDropzone');
     const adminBulkFile = document.getElementById('adminBulkFile');
     const adminBulkFileHelp = document.getElementById('adminBulkFileHelp');
@@ -481,23 +694,56 @@
     const adminBulkStatus = document.getElementById('adminBulkStatus');
     const adminBulkTemplateBtn = document.getElementById('adminBulkTemplateBtn');
     const adminBulkImportBtn = document.getElementById('adminBulkImportBtn');
+    const adminSeedTestimonialsBtn = document.getElementById('adminSeedTestimonialsBtn');
+    const adminTestimonialsToggleBtn = document.getElementById('adminTestimonialsToggleBtn');
+    const adminTestimonialsSectionBody = document.getElementById('adminTestimonialsSectionBody');
+    const adminNewTestimonialBtn = document.getElementById('adminNewTestimonialBtn');
+    const adminTestimonialComposer = document.getElementById('adminTestimonialComposer');
+    const adminTestimonialForm = document.getElementById('adminTestimonialForm');
+    const adminTestimonialStatus = document.getElementById('adminTestimonialStatus');
+    const adminTestimonialsList = document.getElementById('adminTestimonialsList');
+    const adminSaveTestimonialBtn = document.getElementById('adminSaveTestimonialBtn');
+    const adminClearTestimonialBtn = document.getElementById('adminClearTestimonialBtn');
+    const adminTestimonialPreview = document.getElementById('adminTestimonialPreview');
+    const adminTestimonialImageUrl = document.getElementById('adminTestimonialImageUrl');
+    const adminTestimonialImageFile = document.getElementById('adminTestimonialImageFile');
+    const adminSeedFaqBtn = document.getElementById('adminSeedFaqBtn');
+    const adminFaqToggleBtn = document.getElementById('adminFaqToggleBtn');
+    const adminFaqSectionBody = document.getElementById('adminFaqSectionBody');
+    const adminNewFaqBtn = document.getElementById('adminNewFaqBtn');
+    const adminFaqComposer = document.getElementById('adminFaqComposer');
+    const adminFaqForm = document.getElementById('adminFaqForm');
+    const adminFaqStatus = document.getElementById('adminFaqStatus');
+    const adminFaqList = document.getElementById('adminFaqList');
+    const adminSaveFaqBtn = document.getElementById('adminSaveFaqBtn');
+    const adminClearFaqBtn = document.getElementById('adminClearFaqBtn');
+    const adminMessagesList = document.getElementById('adminMessagesList');
 
     const CATALOG_SOURCE_SETTING_KEY = 'catalog_source';
     const HOME_SLIDER_SETTING_KEY = 'home_slider';
+    const HOME_TESTIMONIALS_SETTING_KEY = 'home_testimonials';
+    const HOME_FAQ_SETTING_KEY = 'home_faq';
     const STOCK_VISIBILITY_SETTING_KEY = 'storefront_stock_visibility';
 
     let adminProducts = [];
     let adminOrders = [];
     let adminHomeSlides = [];
+    let adminHomeTestimonials = [];
+    let adminHomeFaqs = [];
+    let adminContactMessages = [];
     let currentCatalogMode = 'hybrid';
     let storefrontShowsOutOfStock = false;
     let areAdminProductsExpanded = false;
     let areAdminSlidesExpanded = false;
+    let areAdminTestimonialsExpanded = false;
+    let areAdminFaqExpanded = false;
     let adminOrdersView = 'active';
     let adminOrdersRange = 'month';
+    let adminMessagesView = 'pending';
     let isOrdersWorkspaceOpen = false;
     let adminCatalogView = 'product';
     let isCatalogWorkspaceOpen = false;
+    let isMessagesWorkspaceOpen = false;
 
     function getAdminLoginConfig() {
       const config = window.BEAUTYFAST_SUPABASE_CONFIG || {};
@@ -731,7 +977,7 @@
     function parseBulkProducts(rawText) {
       const trimmedText = String(rawText || '').trim();
       if (!trimmedText) {
-        throw new Error('Agrega un archivo CSV o pega una lista de productos antes de cargar.');
+        throw new Error('Agrega un archivo de carga o pega una lista de productos antes de continuar.');
       }
 
       if (trimmedText.startsWith('[') || trimmedText.startsWith('{')) {
@@ -748,7 +994,7 @@
       const [bulkFile] = adminBulkFile?.files || [];
       adminBulkFileHelp.textContent = bulkFile
         ? `Archivo seleccionado: ${bulkFile.name}`
-        : 'Puedes usar un archivo CSV guardado desde Excel con columnas como nombre, categoría, precio y descripción.';
+        : 'Puedes usar un archivo guardado desde Excel con columnas como nombre, categoría, precio y descripción.';
     }
 
     function assignBulkFileList(fileList) {
@@ -899,14 +1145,18 @@
         adminCatalogSliderView.appendChild(adminSliderManagerPanel);
       }
 
+      if (adminHomeContentPanel && adminCatalogContentView && adminHomeContentPanel.parentElement !== adminCatalogContentView) {
+        adminCatalogContentView.appendChild(adminHomeContentPanel);
+      }
+
       if (adminBulkManagerPanel && adminCatalogBulkView && adminBulkManagerPanel.parentElement !== adminCatalogBulkView) {
         adminCatalogBulkView.appendChild(adminBulkManagerPanel);
       }
 
-      if (adminProductsToggleBtn) adminProductsToggleBtn.hidden = true;
-      if (adminProductsSectionBody) adminProductsSectionBody.hidden = false;
-      if (adminSliderToggleBtn) adminSliderToggleBtn.hidden = true;
-      if (adminSliderSectionBody) adminSliderSectionBody.hidden = false;
+      renderProductsSectionState();
+      renderSliderSectionState();
+      renderTestimonialsSectionState();
+      renderFaqSectionState();
     }
 
     function renderProductsSectionState() {
@@ -916,6 +1166,24 @@
       adminProductsToggleBtn.setAttribute('aria-expanded', String(areAdminProductsExpanded));
       adminProductsToggleBtn.classList.toggle('is-open', areAdminProductsExpanded);
       adminProductsToggleBtn.querySelector('span').textContent = areAdminProductsExpanded ? 'Ocultar productos' : 'Mostrar productos';
+    }
+
+    function renderTestimonialsSectionState() {
+      if (!adminTestimonialsToggleBtn || !adminTestimonialsSectionBody) return;
+
+      adminTestimonialsSectionBody.hidden = !areAdminTestimonialsExpanded;
+      adminTestimonialsToggleBtn.setAttribute('aria-expanded', String(areAdminTestimonialsExpanded));
+      adminTestimonialsToggleBtn.classList.toggle('is-open', areAdminTestimonialsExpanded);
+      adminTestimonialsToggleBtn.querySelector('span').textContent = areAdminTestimonialsExpanded ? 'Ocultar testimonios' : 'Mostrar testimonios';
+    }
+
+    function renderFaqSectionState() {
+      if (!adminFaqToggleBtn || !adminFaqSectionBody) return;
+
+      adminFaqSectionBody.hidden = !areAdminFaqExpanded;
+      adminFaqToggleBtn.setAttribute('aria-expanded', String(areAdminFaqExpanded));
+      adminFaqToggleBtn.classList.toggle('is-open', areAdminFaqExpanded);
+      adminFaqToggleBtn.querySelector('span').textContent = areAdminFaqExpanded ? 'Ocultar preguntas' : 'Mostrar preguntas';
     }
 
     function renderCatalogMode(mode, options = {}) {
@@ -1126,18 +1394,24 @@
 
       if (adminCatalogView === 'slider') {
         adminCatalogWorkspaceTitle.textContent = 'Slider principal';
-        adminCatalogWorkspaceCopy.textContent = 'Gestiona los slides del home con una vista dedicada, sin listas abiertas o bloques superpuestos encima del panel.';
+        adminCatalogWorkspaceCopy.textContent = 'Gestiona las imágenes principales con una vista dedicada, sin listas abiertas o bloques superpuestos encima de esta zona.';
+        return;
+      }
+
+      if (adminCatalogView === 'content') {
+        adminCatalogWorkspaceTitle.textContent = 'Contenido del home';
+        adminCatalogWorkspaceCopy.textContent = 'Gestiona testimonios visuales y preguntas frecuentes en una vista enfocada solo en el contenido editable de la portada.';
         return;
       }
 
       if (adminCatalogView === 'bulk') {
         adminCatalogWorkspaceTitle.textContent = 'Carga masiva de productos';
-        adminCatalogWorkspaceCopy.textContent = 'Sube CSV o pega texto en una vista enfocada solo en importación y validación masiva.';
+        adminCatalogWorkspaceCopy.textContent = 'Sube un archivo de carga o pega una lista en una vista enfocada solo en revisión y carga grande.';
         return;
       }
 
       adminCatalogWorkspaceTitle.textContent = 'Producto individual';
-      adminCatalogWorkspaceCopy.textContent = 'Crea y edita productos uno por uno, con formulario y listado en una vista separada del resto del panel.';
+      adminCatalogWorkspaceCopy.textContent = 'Crea y edita productos uno por uno, con formulario y listado en una vista separada del resto de la zona privada.';
     }
 
     function renderCatalogWorkspaceState() {
@@ -1146,6 +1420,7 @@
       const views = {
         product: adminCatalogProductView,
         slider: adminCatalogSliderView,
+        content: adminCatalogContentView,
         bulk: adminCatalogBulkView
       };
 
@@ -1154,7 +1429,7 @@
         element.hidden = viewKey !== adminCatalogView;
       });
 
-      [adminCatalogProductBtn, adminCatalogSliderBtn, adminCatalogBulkBtn].forEach((button) => {
+      [adminCatalogProductBtn, adminCatalogSliderBtn, adminCatalogContentBtn, adminCatalogBulkBtn].forEach((button) => {
         if (!button) return;
         const isActive = button.dataset.catalogView === adminCatalogView;
         button.classList.toggle('is-active', isActive);
@@ -1164,9 +1439,18 @@
 
     function openCatalogWorkspace(view) {
       prepareCatalogWorkspace();
-      adminCatalogView = view === 'slider' || view === 'bulk' ? view : 'product';
+      adminCatalogView = ['slider', 'content', 'bulk'].includes(view) ? view : 'product';
+      areAdminProductsExpanded = false;
+      areAdminSlidesExpanded = false;
+      areAdminTestimonialsExpanded = false;
+      areAdminFaqExpanded = false;
+      renderProductsSectionState();
+      renderSliderSectionState();
+      renderTestimonialsSectionState();
+      renderFaqSectionState();
       isCatalogWorkspaceOpen = true;
       isOrdersWorkspaceOpen = false;
+      isMessagesWorkspaceOpen = false;
 
       if (adminOverview) {
         adminOverview.hidden = true;
@@ -1178,6 +1462,12 @@
         adminOrdersWorkspace.hidden = true;
         adminOrdersWorkspace.setAttribute('hidden', 'hidden');
         adminOrdersWorkspace.style.setProperty('display', 'none', 'important');
+      }
+
+      if (adminMessagesWorkspace) {
+        adminMessagesWorkspace.hidden = true;
+        adminMessagesWorkspace.setAttribute('hidden', 'hidden');
+        adminMessagesWorkspace.style.setProperty('display', 'none', 'important');
       }
 
       if (adminCatalogWorkspace) {
@@ -1196,6 +1486,105 @@
       };
     }
 
+    function getDefaultHomeTestimonials() {
+      return typeof window.getBeautyfastDefaultHomeTestimonials === 'function'
+        ? window.getBeautyfastDefaultHomeTestimonials()
+        : [];
+    }
+
+    function normalizeHomeTestimonialRecord(testimonial, index) {
+      if (typeof window.normalizeBeautyfastHomeTestimonial === 'function') {
+        return window.normalizeBeautyfastHomeTestimonial(testimonial, index);
+      }
+
+      return {
+        id: String(testimonial?.id || `testimonial-${index + 1}`).trim(),
+        image_url: String(testimonial?.image_url || '').trim(),
+        customer_name: String(testimonial?.customer_name || `Cliente ${index + 1}`).trim(),
+        quote: String(testimonial?.quote || '').trim(),
+        active: testimonial?.active !== false,
+        sort_order: Number.isFinite(Number(testimonial?.sort_order)) ? Number(testimonial.sort_order) : index + 1
+      };
+    }
+
+    function sortHomeTestimonials(testimonials) {
+      return [...(testimonials || [])].sort((left, right) => {
+        const leftSort = Number(left?.sort_order);
+        const rightSort = Number(right?.sort_order);
+        if (Number.isFinite(leftSort) && Number.isFinite(rightSort) && leftSort !== rightSort) {
+          return leftSort - rightSort;
+        }
+
+        return String(left?.customer_name || '').localeCompare(String(right?.customer_name || ''));
+      });
+    }
+
+    function buildHomeTestimonialsSettingPayload() {
+      return {
+        testimonials: sortHomeTestimonials(adminHomeTestimonials).map((testimonial, index) => normalizeHomeTestimonialRecord(testimonial, index))
+      };
+    }
+
+    async function saveHomeTestimonialsSetting() {
+      const payload = buildHomeTestimonialsSettingPayload();
+      const result = await window.upsertBeautyfastPublicSetting(HOME_TESTIMONIALS_SETTING_KEY, payload);
+
+      if (result.ok && typeof window.setBeautyfastCachedPublicSetting === 'function') {
+        window.setBeautyfastCachedPublicSetting(HOME_TESTIMONIALS_SETTING_KEY, payload);
+      }
+
+      return result;
+    }
+
+    function getDefaultHomeFaqs() {
+      return typeof window.getBeautyfastDefaultHomeFaqs === 'function'
+        ? window.getBeautyfastDefaultHomeFaqs()
+        : [];
+    }
+
+    function normalizeHomeFaqRecord(faq, index) {
+      if (typeof window.normalizeBeautyfastHomeFaq === 'function') {
+        return window.normalizeBeautyfastHomeFaq(faq, index);
+      }
+
+      return {
+        id: String(faq?.id || `faq-${index + 1}`).trim(),
+        question: String(faq?.question || '').trim(),
+        answer: String(faq?.answer || '').trim(),
+        active: faq?.active !== false,
+        sort_order: Number.isFinite(Number(faq?.sort_order)) ? Number(faq.sort_order) : index + 1
+      };
+    }
+
+    function sortHomeFaqs(faqs) {
+      return [...(faqs || [])].sort((left, right) => {
+        const leftSort = Number(left?.sort_order);
+        const rightSort = Number(right?.sort_order);
+        if (Number.isFinite(leftSort) && Number.isFinite(rightSort) && leftSort !== rightSort) {
+          return leftSort - rightSort;
+        }
+
+        return String(left?.question || '').localeCompare(String(right?.question || ''));
+      });
+    }
+
+    function buildHomeFaqSettingPayload() {
+      return {
+        faqs: sortHomeFaqs(adminHomeFaqs).map((faq, index) => normalizeHomeFaqRecord(faq, index))
+      };
+    }
+
+    async function saveHomeFaqSetting() {
+      const payload = buildHomeFaqSettingPayload();
+      const result = await window.upsertBeautyfastPublicSetting(HOME_FAQ_SETTING_KEY, payload);
+
+      if (result.ok && typeof window.setBeautyfastCachedPublicSetting === 'function') {
+        window.setBeautyfastCachedPublicSetting(HOME_FAQ_SETTING_KEY, payload);
+      }
+
+      return result;
+    }
+
     async function saveHomeSliderSetting() {
       const payload = buildHomeSliderSettingPayload();
       const result = await window.upsertBeautyfastPublicSetting(HOME_SLIDER_SETTING_KEY, payload);
@@ -1205,6 +1594,567 @@
       }
 
       return result;
+    }
+
+    function setTestimonialStatus(message, tone = '') {
+      if (!adminTestimonialStatus) return;
+      adminTestimonialStatus.textContent = message;
+      adminTestimonialStatus.className = `account-status${tone ? ` ${tone}` : ''}`;
+    }
+
+    function renderTestimonialPreview(imageUrl) {
+      if (!adminTestimonialPreview) return;
+
+      if (!imageUrl) {
+        adminTestimonialPreview.textContent = 'Vista previa del testimonio';
+        return;
+      }
+
+      adminTestimonialPreview.innerHTML = `<img src="${escapeHtml(imageUrl)}" alt="Vista previa del testimonio">`;
+    }
+
+    function setTestimonialComposerOpen(isOpen) {
+      if (!adminTestimonialComposer) return;
+
+      adminTestimonialComposer.hidden = !isOpen;
+      if (isOpen) {
+        adminTestimonialComposer.removeAttribute('hidden');
+        adminTestimonialComposer.style.setProperty('display', 'grid', 'important');
+        if (adminNewTestimonialBtn) adminNewTestimonialBtn.textContent = 'Ocultar formulario';
+      } else {
+        adminTestimonialComposer.setAttribute('hidden', 'hidden');
+        adminTestimonialComposer.style.setProperty('display', 'none', 'important');
+        if (adminNewTestimonialBtn) adminNewTestimonialBtn.textContent = 'Nuevo testimonio';
+      }
+    }
+
+    function getNextTestimonialSortOrder() {
+      return adminHomeTestimonials.reduce((maxValue, testimonial) => Math.max(maxValue, Number(testimonial.sort_order || 0)), 0) + 1;
+    }
+
+    function resetTestimonialForm(options = {}) {
+      if (!adminTestimonialForm) return;
+
+      adminTestimonialForm.reset();
+      document.getElementById('adminTestimonialId').value = '';
+      document.getElementById('adminTestimonialSort').value = String(getNextTestimonialSortOrder());
+      document.getElementById('adminTestimonialActive').checked = true;
+      renderTestimonialPreview('');
+      setTestimonialStatus('Formulario listo para crear un testimonio visual.', 'is-success');
+
+      if (options.openComposer) {
+        setTestimonialComposerOpen(true);
+      }
+    }
+
+    function fillTestimonialForm(testimonial) {
+      setTestimonialComposerOpen(true);
+      document.getElementById('adminTestimonialId').value = testimonial.id || '';
+      document.getElementById('adminTestimonialName').value = testimonial.customer_name || '';
+      document.getElementById('adminTestimonialQuote').value = testimonial.quote || '';
+      document.getElementById('adminTestimonialSort').value = Number(testimonial.sort_order || 0);
+      document.getElementById('adminTestimonialImageUrl').value = testimonial.image_url || '';
+      document.getElementById('adminTestimonialActive').checked = testimonial.active !== false;
+      renderTestimonialPreview(testimonial.image_url || '');
+      setTestimonialStatus(`Editando testimonio: ${testimonial.customer_name || 'sin nombre'}`, 'is-success');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function renderHomeTestimonialsAdmin() {
+      if (!adminTestimonialsList) return;
+
+      if (!adminHomeTestimonials.length) {
+        adminTestimonialsList.innerHTML = '<div class="orders-empty">No hay testimonios guardados. Puedes restaurar la base o crear uno nuevo.</div>';
+        return;
+      }
+
+      adminTestimonialsList.innerHTML = sortHomeTestimonials(adminHomeTestimonials).map((testimonial) => `
+        <article class="admin-slider-card">
+          <div class="admin-slider-thumb-wrap">
+            ${testimonial.image_url ? `<img src="${escapeHtml(testimonial.image_url)}" alt="${escapeHtml(testimonial.customer_name || 'Testimonio')}" class="admin-slider-thumb">` : '<div class="orders-empty">Sin imagen</div>'}
+          </div>
+          <div class="admin-slider-content">
+            <div class="admin-product-top">
+              <div>
+                <h3 class="admin-product-name">${escapeHtml(testimonial.customer_name || 'Cliente')}</h3>
+                <div class="admin-product-meta">Orden ${escapeHtml(testimonial.sort_order)} · Testimonio home</div>
+              </div>
+            </div>
+            <div class="admin-product-meta">${escapeHtml(testimonial.quote || 'Sin texto')}</div>
+            <div class="admin-badge-row">
+              <span class="admin-chip ${testimonial.active !== false ? 'is-success' : 'is-muted'}">${testimonial.active !== false ? 'Activo' : 'Oculto'}</span>
+            </div>
+            <div class="admin-product-actions">
+              <button type="button" class="sidebar-btn sidebar-btn-secondary" data-edit-testimonial="${escapeHtml(testimonial.id)}">Editar</button>
+              <button type="button" class="sidebar-btn sidebar-btn-secondary" data-delete-testimonial="${escapeHtml(testimonial.id)}">Eliminar</button>
+            </div>
+          </div>
+        </article>
+      `).join('');
+
+      adminTestimonialsList.querySelectorAll('[data-edit-testimonial]').forEach((button) => {
+        button.addEventListener('click', () => {
+          const testimonial = adminHomeTestimonials.find((entry) => String(entry.id) === button.dataset.editTestimonial);
+          if (testimonial) fillTestimonialForm(testimonial);
+        });
+      });
+
+      adminTestimonialsList.querySelectorAll('[data-delete-testimonial]').forEach((button) => {
+        button.addEventListener('click', async () => {
+          const testimonial = adminHomeTestimonials.find((entry) => String(entry.id) === button.dataset.deleteTestimonial);
+          if (!testimonial) return;
+
+          const confirmation = await Swal.fire({
+            icon: 'warning',
+            title: 'Eliminar testimonio',
+            text: `Se eliminara el testimonio de ${testimonial.customer_name || 'sin nombre'}.`,
+            showCancelButton: true,
+            confirmButtonText: 'Eliminar',
+            cancelButtonText: 'Cancelar'
+          });
+
+          if (!confirmation.isConfirmed) return;
+
+          adminHomeTestimonials = adminHomeTestimonials.filter((entry) => String(entry.id) !== String(testimonial.id));
+          const result = await saveHomeTestimonialsSetting();
+          if (!result.ok) {
+            setTestimonialStatus(result.error || 'No pudimos guardar los cambios de testimonios.', 'is-error');
+            return;
+          }
+
+          renderHomeTestimonialsAdmin();
+          resetTestimonialForm();
+          setTestimonialComposerOpen(false);
+          setTestimonialStatus('Testimonio eliminado correctamente.', 'is-success');
+        });
+      });
+    }
+
+    function loadHomeTestimonialsSettings(settingResult) {
+      const normalizedResult = settingResult && typeof settingResult === 'object'
+        ? settingResult
+        : { ok: false, data: null, record: null };
+      const storedTestimonials = Array.isArray(normalizedResult.data?.testimonials) ? normalizedResult.data.testimonials : [];
+      const shouldUseDefaults = !normalizedResult.record && !storedTestimonials.length;
+      const baseTestimonials = shouldUseDefaults ? getDefaultHomeTestimonials() : storedTestimonials;
+
+      adminHomeTestimonials = sortHomeTestimonials(
+        (baseTestimonials || [])
+          .map((testimonial, index) => normalizeHomeTestimonialRecord(testimonial, index))
+          .filter((testimonial) => testimonial.image_url)
+      );
+
+      renderHomeTestimonialsAdmin();
+    }
+
+    function setFaqStatus(message, tone = '') {
+      if (!adminFaqStatus) return;
+      adminFaqStatus.textContent = message;
+      adminFaqStatus.className = `account-status${tone ? ` ${tone}` : ''}`;
+    }
+
+    function setFaqComposerOpen(isOpen) {
+      if (!adminFaqComposer) return;
+
+      adminFaqComposer.hidden = !isOpen;
+      if (isOpen) {
+        adminFaqComposer.removeAttribute('hidden');
+        adminFaqComposer.style.setProperty('display', 'grid', 'important');
+        if (adminNewFaqBtn) adminNewFaqBtn.textContent = 'Ocultar formulario';
+      } else {
+        adminFaqComposer.setAttribute('hidden', 'hidden');
+        adminFaqComposer.style.setProperty('display', 'none', 'important');
+        if (adminNewFaqBtn) adminNewFaqBtn.textContent = 'Nueva pregunta';
+      }
+    }
+
+    function getNextFaqSortOrder() {
+      return adminHomeFaqs.reduce((maxValue, faq) => Math.max(maxValue, Number(faq.sort_order || 0)), 0) + 1;
+    }
+
+    function resetFaqForm(options = {}) {
+      if (!adminFaqForm) return;
+
+      adminFaqForm.reset();
+      document.getElementById('adminFaqId').value = '';
+      document.getElementById('adminFaqSort').value = String(getNextFaqSortOrder());
+      document.getElementById('adminFaqActive').checked = true;
+      setFaqStatus('Formulario listo para crear una nueva pregunta.', 'is-success');
+
+      if (options.openComposer) {
+        setFaqComposerOpen(true);
+      }
+    }
+
+    function fillFaqForm(faq) {
+      setFaqComposerOpen(true);
+      document.getElementById('adminFaqId').value = faq.id || '';
+      document.getElementById('adminFaqQuestion').value = faq.question || '';
+      document.getElementById('adminFaqAnswer').value = faq.answer || '';
+      document.getElementById('adminFaqSort').value = Number(faq.sort_order || 0);
+      document.getElementById('adminFaqActive').checked = faq.active !== false;
+      setFaqStatus(`Editando pregunta: ${faq.question || 'sin titulo'}`, 'is-success');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function renderHomeFaqsAdmin() {
+      if (!adminFaqList) return;
+
+      if (!adminHomeFaqs.length) {
+        adminFaqList.innerHTML = '<div class="orders-empty">No hay preguntas frecuentes guardadas.</div>';
+        return;
+      }
+
+      adminFaqList.innerHTML = sortHomeFaqs(adminHomeFaqs).map((faq) => `
+        <article class="admin-faq-card">
+          <div class="admin-product-top">
+            <div>
+              <h3 class="admin-product-name">${escapeHtml(faq.question || 'Pregunta')}</h3>
+              <div class="admin-product-meta">Orden ${escapeHtml(faq.sort_order)}</div>
+            </div>
+          </div>
+          <div class="admin-product-meta">${escapeHtml(faq.answer || 'Sin respuesta')}</div>
+          <div class="admin-badge-row">
+            <span class="admin-chip ${faq.active !== false ? 'is-success' : 'is-muted'}">${faq.active !== false ? 'Activa' : 'Oculta'}</span>
+          </div>
+          <div class="admin-product-actions">
+            <button type="button" class="sidebar-btn sidebar-btn-secondary" data-edit-faq="${escapeHtml(faq.id)}">Editar</button>
+            <button type="button" class="sidebar-btn sidebar-btn-secondary" data-delete-faq="${escapeHtml(faq.id)}">Eliminar</button>
+          </div>
+        </article>
+      `).join('');
+
+      adminFaqList.querySelectorAll('[data-edit-faq]').forEach((button) => {
+        button.addEventListener('click', () => {
+          const faq = adminHomeFaqs.find((entry) => String(entry.id) === button.dataset.editFaq);
+          if (faq) fillFaqForm(faq);
+        });
+      });
+
+      adminFaqList.querySelectorAll('[data-delete-faq]').forEach((button) => {
+        button.addEventListener('click', async () => {
+          const faq = adminHomeFaqs.find((entry) => String(entry.id) === button.dataset.deleteFaq);
+          if (!faq) return;
+
+          const confirmation = await Swal.fire({
+            icon: 'warning',
+            title: 'Eliminar pregunta frecuente',
+            text: `Se eliminara la pregunta ${faq.question || 'sin titulo'}.`,
+            showCancelButton: true,
+            confirmButtonText: 'Eliminar',
+            cancelButtonText: 'Cancelar'
+          });
+
+          if (!confirmation.isConfirmed) return;
+
+          adminHomeFaqs = adminHomeFaqs.filter((entry) => String(entry.id) !== String(faq.id));
+          const result = await saveHomeFaqSetting();
+          if (!result.ok) {
+            setFaqStatus(result.error || 'No pudimos guardar los cambios del FAQ.', 'is-error');
+            return;
+          }
+
+          renderHomeFaqsAdmin();
+          resetFaqForm();
+          setFaqComposerOpen(false);
+          setFaqStatus('Pregunta eliminada correctamente.', 'is-success');
+        });
+      });
+    }
+
+    function loadHomeFaqSettings(settingResult) {
+      const normalizedResult = settingResult && typeof settingResult === 'object'
+        ? settingResult
+        : { ok: false, data: null, record: null };
+      const storedFaqs = Array.isArray(normalizedResult.data?.faqs) ? normalizedResult.data.faqs : [];
+      const shouldUseDefaults = !normalizedResult.record && !storedFaqs.length;
+      const baseFaqs = shouldUseDefaults ? getDefaultHomeFaqs() : storedFaqs;
+
+      adminHomeFaqs = sortHomeFaqs(
+        (baseFaqs || [])
+          .map((faq, index) => normalizeHomeFaqRecord(faq, index))
+          .filter((faq) => faq.question && faq.answer)
+      );
+
+      renderHomeFaqsAdmin();
+    }
+
+    function normalizeContactMessageStatus(status) {
+      const normalizedStatus = String(status || '').trim().toLowerCase();
+      if (['received', 'in_review', 'replied', 'completed'].includes(normalizedStatus)) {
+        return normalizedStatus;
+      }
+
+      return 'received';
+    }
+
+    function getContactMessageStatusLabel(status) {
+      switch (normalizeContactMessageStatus(status)) {
+        case 'in_review': return 'En revisión';
+        case 'replied': return 'Respondida';
+        case 'completed': return 'Cerrada';
+        default: return 'Pendiente';
+      }
+    }
+
+    function getContactMessageStatusClass(status) {
+      switch (normalizeContactMessageStatus(status)) {
+        case 'completed': return 'is-success';
+        case 'replied': return 'is-warning';
+        case 'in_review': return '';
+        default: return 'is-muted';
+      }
+    }
+
+    function getContactMessagesByView(view) {
+      const normalizedView = view === 'completed' || view === 'replied' ? view : 'pending';
+
+      return adminContactMessages.filter((entry) => {
+        const status = normalizeContactMessageStatus(entry.status);
+        if (normalizedView === 'completed') return status === 'completed';
+        if (normalizedView === 'replied') return status === 'replied';
+        return status === 'received' || status === 'in_review';
+      });
+    }
+
+    function renderMessagesLaunchpad() {
+      const pendingCount = getContactMessagesByView('pending').length;
+      const repliedCount = getContactMessagesByView('replied').length;
+      const completedCount = getContactMessagesByView('completed').length;
+
+      if (adminMessagesPendingCount) adminMessagesPendingCount.textContent = `${pendingCount} consulta(s)`;
+      if (adminMessagesRepliedCount) adminMessagesRepliedCount.textContent = `${repliedCount} consulta(s)`;
+      if (adminMessagesCompletedCount) adminMessagesCompletedCount.textContent = `${completedCount} consulta(s)`;
+    }
+
+    function renderMessagesWorkspaceHeader() {
+      if (!adminMessagesWorkspaceTitle || !adminMessagesWorkspaceCopy) return;
+
+      if (adminMessagesView === 'completed') {
+        adminMessagesWorkspaceTitle.textContent = 'Consultas cerradas';
+        adminMessagesWorkspaceCopy.textContent = 'Aquí revisas los casos resueltos y el historial de respuestas ya completadas.';
+        return;
+      }
+
+      if (adminMessagesView === 'replied') {
+        adminMessagesWorkspaceTitle.textContent = 'Consultas respondidas';
+        adminMessagesWorkspaceCopy.textContent = 'Aquí ves las respuestas enviadas que todavía siguen abiertas para confirmación o cierre.';
+        return;
+      }
+
+      adminMessagesWorkspaceTitle.textContent = 'Consultas pendientes';
+      adminMessagesWorkspaceCopy.textContent = 'Aquí respondes los casos nuevos o en revisión y actualizas su avance hasta cerrarlos.';
+    }
+
+    function renderMessagesControlsState() {
+      renderMessagesWorkspaceHeader();
+
+      [adminMessagesPendingBtn, adminMessagesRepliedBtn, adminMessagesCompletedBtn].forEach((button) => {
+        if (!button) return;
+        const isActive = button.dataset.messagesView === adminMessagesView;
+        button.classList.toggle('is-active', isActive);
+        button.setAttribute('aria-selected', String(isActive));
+      });
+    }
+
+    function renderMessagesSummary(messages) {
+      if (!adminMessagesSummary) return;
+
+      const respondedCount = messages.filter((entry) => ['replied', 'completed'].includes(normalizeContactMessageStatus(entry.status))).length;
+      const waitingCount = messages.filter((entry) => ['received', 'in_review'].includes(normalizeContactMessageStatus(entry.status))).length;
+      const cards = [
+        { label: 'Mostrando ahora', value: `${messages.length} caso(s)` },
+        { label: 'Esperando acción', value: `${waitingCount} caso(s)`, tone: waitingCount ? 'is-warning' : '' },
+        { label: 'Con respuesta', value: `${respondedCount} caso(s)`, tone: respondedCount ? 'is-success' : '' },
+        { label: 'Total general', value: `${adminContactMessages.length} caso(s)` }
+      ];
+
+      adminMessagesSummary.innerHTML = cards.map((card) => `
+        <article class="admin-orders-summary-card ${card.tone || ''}">
+          <span class="admin-orders-summary-label">${escapeHtml(card.label)}</span>
+          <strong class="admin-orders-summary-value">${escapeHtml(card.value)}</strong>
+        </article>
+      `).join('');
+    }
+
+    function buildReplyMailto(entry, replyText) {
+      const body = [
+        `Hola ${entry.name || 'cliente'},`,
+        '',
+        replyText || 'Gracias por escribirnos. Te compartimos respuesta a tu consulta.',
+        '',
+        'Quedamos atentos si necesitas algo más.'
+      ].join('\n');
+
+      if (typeof window.buildBeautyfastReplyMailto === 'function') {
+        return window.buildBeautyfastReplyMailto({
+          email: entry.email || '',
+          subject: `Respuesta a tu consulta: ${entry.topic || 'Duda general'}`,
+          body
+        });
+      }
+
+      return '';
+    }
+
+    async function saveContactMessageUpdate(messageId, updates, button, defaultLabel) {
+      if (!window.updateBeautyfastContactMessage) {
+        await Swal.fire({ icon: 'error', title: 'Acción no disponible', text: 'Esta tienda aún no tiene activa la edición de consultas.' });
+        return false;
+      }
+
+      const targetButton = button || null;
+      if (targetButton) {
+        targetButton.disabled = true;
+        targetButton.textContent = 'Guardando...';
+      }
+
+      const result = await window.updateBeautyfastContactMessage(messageId, updates);
+      if (targetButton) {
+        targetButton.disabled = false;
+        targetButton.textContent = defaultLabel;
+      }
+
+      if (!result.ok) {
+        await Swal.fire({ icon: 'error', title: 'No pudimos guardar', text: result.error || 'Inténtalo de nuevo en un momento.' });
+        return false;
+      }
+
+      adminContactMessages = adminContactMessages.map((entry) => (
+        String(entry.id) === String(result.data.id) ? result.data : entry
+      ));
+      renderMessagesLaunchpad();
+      renderContactMessages();
+      return true;
+    }
+
+    function attachContactMessagesHandlers() {
+      if (!adminMessagesList) return;
+
+      adminMessagesList.querySelectorAll('[data-save-message]').forEach((button) => {
+        button.addEventListener('click', async () => {
+          const card = button.closest('[data-message-id]');
+          const messageId = card?.dataset.messageId;
+          const statusValue = card?.querySelector('[data-message-status-select]')?.value || 'received';
+          const replyText = card?.querySelector('[data-message-reply]')?.value.trim() || '';
+          if (!messageId) return;
+
+          const nextStatus = replyText && statusValue === 'received' ? 'replied' : statusValue;
+          await saveContactMessageUpdate(messageId, {
+            status: nextStatus,
+            admin_reply: replyText,
+            replied_at: nextStatus === 'replied' || nextStatus === 'completed' ? new Date().toISOString() : null,
+            completed_at: nextStatus === 'completed' ? new Date().toISOString() : null
+          }, button, 'Guardar cambios');
+        });
+      });
+
+      adminMessagesList.querySelectorAll('[data-complete-message]').forEach((button) => {
+        button.addEventListener('click', async () => {
+          const card = button.closest('[data-message-id]');
+          const messageId = card?.dataset.messageId;
+          const replyText = card?.querySelector('[data-message-reply]')?.value.trim() || '';
+          if (!messageId) return;
+
+          await saveContactMessageUpdate(messageId, {
+            status: 'completed',
+            admin_reply: replyText,
+            replied_at: replyText ? new Date().toISOString() : null,
+            completed_at: new Date().toISOString()
+          }, button, 'Marcar como cerrada');
+        });
+      });
+
+      adminMessagesList.querySelectorAll('[data-email-message]').forEach((button) => {
+        button.addEventListener('click', () => {
+          const card = button.closest('[data-message-id]');
+          const messageId = card?.dataset.messageId;
+          const entry = adminContactMessages.find((item) => String(item.id) === String(messageId));
+          if (!entry?.email) return;
+
+          const replyText = card?.querySelector('[data-message-reply]')?.value.trim() || entry.admin_reply || '';
+          const mailtoUrl = buildReplyMailto(entry, replyText);
+          if (!mailtoUrl) return;
+
+          window.location.href = mailtoUrl;
+        });
+      });
+    }
+
+    function renderContactMessages() {
+      if (!adminMessagesList) return;
+
+      renderMessagesControlsState();
+      renderMessagesLaunchpad();
+
+      if (!adminContactMessages.length) {
+        if (adminMessagesSummary) adminMessagesSummary.innerHTML = '';
+        adminMessagesList.innerHTML = '<div class="orders-empty">Todavía no hay consultas enviadas desde la tienda.</div>';
+        return;
+      }
+
+      const filteredMessages = getContactMessagesByView(adminMessagesView);
+      renderMessagesSummary(filteredMessages);
+
+      if (!filteredMessages.length) {
+        adminMessagesList.innerHTML = '<div class="orders-empty">No hay consultas en esta vista ahora mismo.</div>';
+        return;
+      }
+
+      adminMessagesList.innerHTML = filteredMessages.map((entry) => {
+        const status = normalizeContactMessageStatus(entry.status);
+        const replyText = String(entry.admin_reply || '').trim();
+
+        return `
+          <article class="admin-message-card" data-message-id="${escapeHtml(entry.id || '')}">
+            <div class="admin-product-top">
+              <div>
+                <h3 class="admin-product-name">${escapeHtml(entry.name || 'Cliente')}</h3>
+                <div class="admin-product-meta">${escapeHtml(entry.email || 'Sin correo')} · ${escapeHtml(entry.topic || 'Duda general')}</div>
+              </div>
+              <div class="admin-badge-row">
+                <span class="admin-chip ${getContactMessageStatusClass(status)}">${escapeHtml(getContactMessageStatusLabel(status))}</span>
+              </div>
+            </div>
+
+            <div class="admin-message-meta-grid">
+              <div class="admin-order-field">
+                <span class="admin-order-label">Consulta recibida</span>
+                <span class="admin-order-value">${escapeHtml(formatDate(entry.created_at))}</span>
+              </div>
+              <div class="admin-order-field">
+                <span class="admin-order-label">Última respuesta</span>
+                <span class="admin-order-value">${escapeHtml(entry.replied_at ? formatDate(entry.replied_at) : 'Aún sin respuesta')}</span>
+              </div>
+            </div>
+
+            <div class="admin-order-summary">${escapeHtml(entry.message || 'Sin mensaje')}</div>
+
+            <div class="admin-order-status-editor">
+              <label class="admin-order-label" for="message-status-${escapeHtml(entry.id || '')}">Avance de la consulta</label>
+              <select class="admin-order-select" id="message-status-${escapeHtml(entry.id || '')}" data-message-status-select>
+                <option value="received" ${status === 'received' ? 'selected' : ''}>Pendiente</option>
+                <option value="in_review" ${status === 'in_review' ? 'selected' : ''}>En revisión</option>
+                <option value="replied" ${status === 'replied' ? 'selected' : ''}>Respondida</option>
+                <option value="completed" ${status === 'completed' ? 'selected' : ''}>Cerrada</option>
+              </select>
+            </div>
+
+            <div class="admin-field admin-field-full" style="margin: 0;">
+              <label for="message-reply-${escapeHtml(entry.id || '')}">Respuesta para el cliente</label>
+              <textarea id="message-reply-${escapeHtml(entry.id || '')}" data-message-reply placeholder="Escribe aquí la respuesta o el seguimiento para el cliente">${escapeHtml(replyText)}</textarea>
+            </div>
+
+            <div class="admin-message-actions">
+              <button type="button" class="checkout-btn" data-save-message="${escapeHtml(entry.id || '')}">Guardar cambios</button>
+              <button type="button" class="sidebar-btn sidebar-btn-secondary" data-complete-message="${escapeHtml(entry.id || '')}">Marcar como cerrada</button>
+              <button type="button" class="sidebar-btn sidebar-btn-secondary" data-email-message="${escapeHtml(entry.id || '')}">Abrir correo</button>
+            </div>
+          </article>
+        `;
+      }).join('');
+
+      attachContactMessagesHandlers();
     }
 
     function renderHomeSlides() {
@@ -1676,6 +2626,7 @@
       adminOrdersView = view === 'completed' ? 'completed' : 'active';
       isOrdersWorkspaceOpen = true;
       isCatalogWorkspaceOpen = false;
+      isMessagesWorkspaceOpen = false;
       if (adminOverview) {
         adminOverview.hidden = true;
         adminOverview.setAttribute('hidden', 'hidden');
@@ -1691,6 +2642,11 @@
         adminCatalogWorkspace.setAttribute('hidden', 'hidden');
         adminCatalogWorkspace.style.setProperty('display', 'none', 'important');
       }
+      if (adminMessagesWorkspace) {
+        adminMessagesWorkspace.hidden = true;
+        adminMessagesWorkspace.setAttribute('hidden', 'hidden');
+        adminMessagesWorkspace.style.setProperty('display', 'none', 'important');
+      }
       renderOrdersWorkspaceHeader();
       renderOrders();
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1702,6 +2658,52 @@
         adminOrdersWorkspace.hidden = true;
         adminOrdersWorkspace.setAttribute('hidden', 'hidden');
         adminOrdersWorkspace.style.setProperty('display', 'none', 'important');
+      }
+      if (adminOverview) {
+        adminOverview.hidden = false;
+        adminOverview.removeAttribute('hidden');
+        adminOverview.style.removeProperty('display');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function openMessagesWorkspace(view) {
+      adminMessagesView = view === 'completed' || view === 'replied' ? view : 'pending';
+      isMessagesWorkspaceOpen = true;
+      isOrdersWorkspaceOpen = false;
+      isCatalogWorkspaceOpen = false;
+
+      if (adminOverview) {
+        adminOverview.hidden = true;
+        adminOverview.setAttribute('hidden', 'hidden');
+        adminOverview.style.setProperty('display', 'none', 'important');
+      }
+      if (adminOrdersWorkspace) {
+        adminOrdersWorkspace.hidden = true;
+        adminOrdersWorkspace.setAttribute('hidden', 'hidden');
+        adminOrdersWorkspace.style.setProperty('display', 'none', 'important');
+      }
+      if (adminCatalogWorkspace) {
+        adminCatalogWorkspace.hidden = true;
+        adminCatalogWorkspace.setAttribute('hidden', 'hidden');
+        adminCatalogWorkspace.style.setProperty('display', 'none', 'important');
+      }
+      if (adminMessagesWorkspace) {
+        adminMessagesWorkspace.hidden = false;
+        adminMessagesWorkspace.removeAttribute('hidden');
+        adminMessagesWorkspace.style.setProperty('display', 'block', 'important');
+      }
+
+      renderContactMessages();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function closeMessagesWorkspace() {
+      isMessagesWorkspaceOpen = false;
+      if (adminMessagesWorkspace) {
+        adminMessagesWorkspace.hidden = true;
+        adminMessagesWorkspace.setAttribute('hidden', 'hidden');
+        adminMessagesWorkspace.style.setProperty('display', 'none', 'important');
       }
       if (adminOverview) {
         adminOverview.hidden = false;
@@ -1919,13 +2921,22 @@
     }
 
     async function loadDashboardData() {
-      const [statsResult, productsResult, ordersResult, sliderSettingResult, stockVisibilityResult] = await Promise.all([
+      const [statsResult, productsResult, ordersResult, sliderSettingResult, testimonialsSettingResult, faqSettingResult, messagesResult, stockVisibilityResult] = await Promise.all([
         window.fetchBeautyfastAdminStats(),
         window.fetchBeautyfastProducts(),
         window.fetchBeautyfastAdminOrders(),
         typeof window.fetchBeautyfastPublicSetting === 'function'
           ? window.fetchBeautyfastPublicSetting(HOME_SLIDER_SETTING_KEY)
           : Promise.resolve({ ok: false, data: null, record: null }),
+        typeof window.fetchBeautyfastPublicSetting === 'function'
+          ? window.fetchBeautyfastPublicSetting(HOME_TESTIMONIALS_SETTING_KEY)
+          : Promise.resolve({ ok: false, data: null, record: null }),
+        typeof window.fetchBeautyfastPublicSetting === 'function'
+          ? window.fetchBeautyfastPublicSetting(HOME_FAQ_SETTING_KEY)
+          : Promise.resolve({ ok: false, data: null, record: null }),
+        typeof window.fetchBeautyfastAdminContactMessages === 'function'
+          ? window.fetchBeautyfastAdminContactMessages()
+          : Promise.resolve({ ok: false, data: [] }),
         typeof window.fetchBeautyfastPublicSetting === 'function'
           ? window.fetchBeautyfastPublicSetting(STOCK_VISIBILITY_SETTING_KEY)
           : Promise.resolve({ ok: false, data: null, record: null })
@@ -1961,6 +2972,8 @@
         adminOrders = ordersResult.data || [];
       }
 
+      adminContactMessages = messagesResult.ok ? (messagesResult.data || []) : [];
+
       const catalogModeResult = await ensureCatalogSourceMode(adminProducts);
       if (!catalogModeResult.ok) {
         renderCatalogMode('hybrid', { hint: 'No pudimos revisar la configuración actual de productos.' });
@@ -1975,6 +2988,10 @@
       renderStats(statsResult.data);
       renderProducts();
       loadHomeSliderSettings(sliderSettingResult);
+      loadHomeTestimonialsSettings(testimonialsSettingResult);
+      loadHomeFaqSettings(faqSettingResult);
+      renderMessagesLaunchpad();
+      renderContactMessages();
       renderOrdersLaunchpad();
       renderOrders();
     }
@@ -1986,6 +3003,7 @@
         renderAdminShellState(false);
         closeOrdersWorkspace();
         closeCatalogWorkspace();
+        closeMessagesWorkspace();
         setGateStatus('Falta completar la configuración inicial antes de usar este panel.', 'is-error');
         return;
       }
@@ -1998,6 +3016,7 @@
         renderAdminShellState(false);
         closeOrdersWorkspace();
         closeCatalogWorkspace();
+        closeMessagesWorkspace();
         setGateStatus(`Inicia sesión con el usuario ${getAdminLoginConfig().username} para entrar al panel.`, '');
         return;
       }
@@ -2011,7 +3030,8 @@
         renderAdminShellState(false);
         closeOrdersWorkspace();
         closeCatalogWorkspace();
-        setGateStatus(adminResult.error || 'No pudimos validar el perfil administrador.', 'is-error');
+        closeMessagesWorkspace();
+        setGateStatus(adminResult.error || 'No pudimos validar si esta cuenta tiene acceso.', 'is-error');
         return;
       }
 
@@ -2021,7 +3041,8 @@
         renderAdminShellState(false);
         closeOrdersWorkspace();
         closeCatalogWorkspace();
-        setGateStatus('Esta cuenta no tiene permiso para entrar al panel de administración.', 'is-error');
+        closeMessagesWorkspace();
+        setGateStatus('Esta cuenta no tiene permiso para entrar a esta zona privada.', 'is-error');
         return;
       }
 
@@ -2040,17 +3061,17 @@
       const typedUsername = adminUsernameInput.value.trim().toLowerCase();
 
       if (!adminLoginConfig.email) {
-        setGateStatus('Falta completar el acceso del administrador en la configuración inicial.', 'is-error');
+        setGateStatus('Falta completar el acceso de gestión en la configuración inicial.', 'is-error');
         adminLoginBtn.disabled = false;
-        adminLoginBtn.textContent = 'Entrar al panel';
+        adminLoginBtn.textContent = 'Entrar';
         return;
       }
 
       const acceptedIdentifiers = [adminLoginConfig.username, adminLoginConfig.email].filter(Boolean);
       if (!acceptedIdentifiers.includes(typedUsername)) {
-        setGateStatus('Usuario administrador no válido.', 'is-error');
+        setGateStatus('El usuario indicado no es válido.', 'is-error');
         adminLoginBtn.disabled = false;
-        adminLoginBtn.textContent = 'Entrar al panel';
+        adminLoginBtn.textContent = 'Entrar';
         return;
       }
 
@@ -2062,13 +3083,13 @@
       if (!result.ok) {
         setGateStatus(result.error || 'No pudimos iniciar sesión.', 'is-error');
         adminLoginBtn.disabled = false;
-        adminLoginBtn.textContent = 'Entrar al panel';
+        adminLoginBtn.textContent = 'Entrar';
         return;
       }
 
-      setGateStatus('Sesión iniciada. Validando permisos...', 'is-success');
+      setGateStatus('Sesión iniciada. Validando acceso...', 'is-success');
       adminLoginBtn.disabled = false;
-      adminLoginBtn.textContent = 'Entrar al panel';
+      adminLoginBtn.textContent = 'Entrar';
       await refreshAdminGate();
     });
 
@@ -2085,6 +3106,7 @@
       renderAdminShellState(false);
       closeOrdersWorkspace();
       closeCatalogWorkspace();
+      closeMessagesWorkspace();
       setGateStatus('Sesión cerrada.', 'is-success');
     });
 
@@ -2122,6 +3144,19 @@
 
       const reader = new FileReader();
       reader.onload = () => renderSliderPreview(reader.result);
+      reader.readAsDataURL(file);
+    });
+
+    adminTestimonialImageUrl?.addEventListener('input', (event) => {
+      renderTestimonialPreview(event.target.value.trim());
+    });
+
+    adminTestimonialImageFile?.addEventListener('change', () => {
+      const [file] = adminTestimonialImageFile.files || [];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = () => renderTestimonialPreview(reader.result);
       reader.readAsDataURL(file);
     });
 
@@ -2179,6 +3214,82 @@
 
     adminClearSliderBtn?.addEventListener('click', () => {
       resetSliderForm({ openComposer: true });
+    });
+
+    adminNewTestimonialBtn?.addEventListener('click', () => {
+      if (adminTestimonialComposer?.hidden) {
+        resetTestimonialForm({ openComposer: true });
+        return;
+      }
+
+      setTestimonialComposerOpen(false);
+    });
+
+    adminClearTestimonialBtn?.addEventListener('click', () => {
+      resetTestimonialForm({ openComposer: true });
+    });
+
+    adminSeedTestimonialsBtn?.addEventListener('click', async () => {
+      adminSeedTestimonialsBtn.disabled = true;
+      adminSeedTestimonialsBtn.textContent = 'Restaurando...';
+
+      adminHomeTestimonials = sortHomeTestimonials(
+        getDefaultHomeTestimonials()
+          .map((testimonial, index) => normalizeHomeTestimonialRecord(testimonial, index))
+          .filter((testimonial) => testimonial.image_url)
+      );
+
+      const result = await saveHomeTestimonialsSetting();
+      adminSeedTestimonialsBtn.disabled = false;
+      adminSeedTestimonialsBtn.textContent = 'Restaurar base';
+
+      if (!result.ok) {
+        setTestimonialStatus(result.error || 'No pudimos restaurar los testimonios base.', 'is-error');
+        return;
+      }
+
+      renderHomeTestimonialsAdmin();
+      resetTestimonialForm();
+      setTestimonialComposerOpen(false);
+      setTestimonialStatus('Los testimonios base se restauraron correctamente.', 'is-success');
+    });
+
+    adminNewFaqBtn?.addEventListener('click', () => {
+      if (adminFaqComposer?.hidden) {
+        resetFaqForm({ openComposer: true });
+        return;
+      }
+
+      setFaqComposerOpen(false);
+    });
+
+    adminClearFaqBtn?.addEventListener('click', () => {
+      resetFaqForm({ openComposer: true });
+    });
+
+    adminSeedFaqBtn?.addEventListener('click', async () => {
+      adminSeedFaqBtn.disabled = true;
+      adminSeedFaqBtn.textContent = 'Restaurando...';
+
+      adminHomeFaqs = sortHomeFaqs(
+        getDefaultHomeFaqs()
+          .map((faq, index) => normalizeHomeFaqRecord(faq, index))
+          .filter((faq) => faq.question && faq.answer)
+      );
+
+      const result = await saveHomeFaqSetting();
+      adminSeedFaqBtn.disabled = false;
+      adminSeedFaqBtn.textContent = 'Restaurar FAQ base';
+
+      if (!result.ok) {
+        setFaqStatus(result.error || 'No pudimos restaurar el FAQ base.', 'is-error');
+        return;
+      }
+
+      renderHomeFaqsAdmin();
+      resetFaqForm();
+      setFaqComposerOpen(false);
+      setFaqStatus('El FAQ base se restauro correctamente.', 'is-success');
     });
 
     adminSeedSliderBtn?.addEventListener('click', async () => {
@@ -2323,7 +3434,23 @@
       renderSliderSectionState();
     }
 
-    [adminCatalogProductBtn, adminCatalogSliderBtn, adminCatalogBulkBtn].forEach((button) => {
+    if (adminTestimonialsToggleBtn) {
+      adminTestimonialsToggleBtn.addEventListener('click', () => {
+        areAdminTestimonialsExpanded = !areAdminTestimonialsExpanded;
+        renderTestimonialsSectionState();
+      });
+      renderTestimonialsSectionState();
+    }
+
+    if (adminFaqToggleBtn) {
+      adminFaqToggleBtn.addEventListener('click', () => {
+        areAdminFaqExpanded = !areAdminFaqExpanded;
+        renderFaqSectionState();
+      });
+      renderFaqSectionState();
+    }
+
+    [adminCatalogProductBtn, adminCatalogSliderBtn, adminCatalogContentBtn, adminCatalogBulkBtn].forEach((button) => {
       button?.addEventListener('click', () => {
         adminCatalogView = button.dataset.catalogView || 'product';
         renderCatalogWorkspaceState();
@@ -2347,10 +3474,22 @@
       });
     });
 
+    [adminMessagesOpenPendingBtn, adminMessagesOpenRepliedBtn, adminMessagesOpenCompletedBtn].forEach((button) => {
+      button?.addEventListener('click', () => {
+        openMessagesWorkspace(button.dataset.openMessagesView);
+      });
+    });
+
     adminDashboard?.addEventListener('click', (event) => {
       const launchCatalogButton = event.target.closest('[data-open-catalog-view]');
       if (launchCatalogButton) {
         openCatalogWorkspace(launchCatalogButton.dataset.openCatalogView);
+        return;
+      }
+
+      const messagesButton = event.target.closest('[data-open-messages-view]');
+      if (messagesButton) {
+        openMessagesWorkspace(messagesButton.dataset.openMessagesView);
         return;
       }
 
@@ -2363,6 +3502,10 @@
       closeOrdersWorkspace();
     });
 
+    adminMessagesBackBtn?.addEventListener('click', () => {
+      closeMessagesWorkspace();
+    });
+
     adminOrdersExportBtn?.addEventListener('click', () => {
       downloadOrdersCsv();
     });
@@ -2371,6 +3514,15 @@
       button.addEventListener('click', () => {
         adminOrdersRange = button.dataset.ordersRange || 'month';
         renderOrders();
+      });
+    });
+
+    [adminMessagesPendingBtn, adminMessagesRepliedBtn, adminMessagesCompletedBtn].forEach((button) => {
+      button?.addEventListener('click', () => {
+        adminMessagesView = button.dataset.messagesView === 'completed'
+          ? 'completed'
+          : (button.dataset.messagesView === 'replied' ? 'replied' : 'pending');
+        renderContactMessages();
       });
     });
 
@@ -2510,17 +3662,130 @@
       setSliderStatus('Slide guardado correctamente.', 'is-success');
     });
 
+    adminTestimonialForm?.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      adminSaveTestimonialBtn.disabled = true;
+      adminSaveTestimonialBtn.textContent = 'Guardando...';
+
+      let imageUrl = adminTestimonialImageUrl.value.trim();
+      const [imageFile] = adminTestimonialImageFile.files || [];
+      if (imageFile) {
+        const uploadResult = await window.uploadBeautyfastProductImage(imageFile);
+        if (!uploadResult.ok) {
+          setTestimonialStatus(uploadResult.error || 'No pudimos subir la imagen del testimonio.', 'is-error');
+          adminSaveTestimonialBtn.disabled = false;
+          adminSaveTestimonialBtn.textContent = 'Guardar testimonio';
+          return;
+        }
+
+        imageUrl = uploadResult.data.publicUrl;
+      }
+
+      const payload = normalizeHomeTestimonialRecord({
+        id: document.getElementById('adminTestimonialId').value || `testimonial-${Date.now()}`,
+        image_url: imageUrl,
+        customer_name: document.getElementById('adminTestimonialName').value.trim(),
+        quote: document.getElementById('adminTestimonialQuote').value.trim(),
+        sort_order: document.getElementById('adminTestimonialSort').value,
+        active: document.getElementById('adminTestimonialActive').checked
+      }, adminHomeTestimonials.length);
+
+      if (!payload.image_url) {
+        setTestimonialStatus('El testimonio necesita una imagen.', 'is-error');
+        adminSaveTestimonialBtn.disabled = false;
+        adminSaveTestimonialBtn.textContent = 'Guardar testimonio';
+        return;
+      }
+
+      if (!payload.customer_name || !payload.quote) {
+        setTestimonialStatus('Completa el nombre y el texto del testimonio.', 'is-error');
+        adminSaveTestimonialBtn.disabled = false;
+        adminSaveTestimonialBtn.textContent = 'Guardar testimonio';
+        return;
+      }
+
+      const existingIndex = adminHomeTestimonials.findIndex((testimonial) => String(testimonial.id) === String(payload.id));
+      if (existingIndex >= 0) {
+        adminHomeTestimonials.splice(existingIndex, 1, payload);
+      } else {
+        adminHomeTestimonials.push(payload);
+      }
+
+      adminHomeTestimonials = sortHomeTestimonials(adminHomeTestimonials);
+      const result = await saveHomeTestimonialsSetting();
+      adminSaveTestimonialBtn.disabled = false;
+      adminSaveTestimonialBtn.textContent = 'Guardar testimonio';
+
+      if (!result.ok) {
+        setTestimonialStatus(result.error || 'No pudimos guardar los testimonios.', 'is-error');
+        return;
+      }
+
+      renderHomeTestimonialsAdmin();
+      resetTestimonialForm();
+      setTestimonialComposerOpen(false);
+      setTestimonialStatus('Testimonio guardado correctamente.', 'is-success');
+    });
+
+    adminFaqForm?.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      adminSaveFaqBtn.disabled = true;
+      adminSaveFaqBtn.textContent = 'Guardando...';
+
+      const payload = normalizeHomeFaqRecord({
+        id: document.getElementById('adminFaqId').value || `faq-${Date.now()}`,
+        question: document.getElementById('adminFaqQuestion').value.trim(),
+        answer: document.getElementById('adminFaqAnswer').value.trim(),
+        sort_order: document.getElementById('adminFaqSort').value,
+        active: document.getElementById('adminFaqActive').checked
+      }, adminHomeFaqs.length);
+
+      if (!payload.question || !payload.answer) {
+        setFaqStatus('Completa la pregunta y la respuesta antes de guardar.', 'is-error');
+        adminSaveFaqBtn.disabled = false;
+        adminSaveFaqBtn.textContent = 'Guardar pregunta';
+        return;
+      }
+
+      const existingIndex = adminHomeFaqs.findIndex((faq) => String(faq.id) === String(payload.id));
+      if (existingIndex >= 0) {
+        adminHomeFaqs.splice(existingIndex, 1, payload);
+      } else {
+        adminHomeFaqs.push(payload);
+      }
+
+      adminHomeFaqs = sortHomeFaqs(adminHomeFaqs);
+      const result = await saveHomeFaqSetting();
+      adminSaveFaqBtn.disabled = false;
+      adminSaveFaqBtn.textContent = 'Guardar pregunta';
+
+      if (!result.ok) {
+        setFaqStatus(result.error || 'No pudimos guardar el FAQ.', 'is-error');
+        return;
+      }
+
+      renderHomeFaqsAdmin();
+      resetFaqForm();
+      setFaqComposerOpen(false);
+      setFaqStatus('Pregunta guardada correctamente.', 'is-success');
+    });
+
     document.addEventListener('DOMContentLoaded', async () => {
       const adminLoginConfig = getAdminLoginConfig();
       adminUsernameInput.value = adminLoginConfig.username;
       if (adminOrdersWorkspace) adminOrdersWorkspace.style.setProperty('display', 'none', 'important');
       if (adminCatalogWorkspace) adminCatalogWorkspace.style.setProperty('display', 'none', 'important');
+      if (adminMessagesWorkspace) adminMessagesWorkspace.style.setProperty('display', 'none', 'important');
       if (adminOverview) adminOverview.style.removeProperty('display');
       prepareCatalogWorkspace();
       resetProductForm();
       setProductComposerOpen(false);
       resetSliderForm();
       setSliderComposerOpen(false);
+      resetTestimonialForm();
+      setTestimonialComposerOpen(false);
+      resetFaqForm();
+      setFaqComposerOpen(false);
       await refreshAdminGate();
     });
   </script>

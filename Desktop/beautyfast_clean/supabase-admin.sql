@@ -35,6 +35,51 @@ create table if not exists public.site_settings (
   updated_at timestamptz not null default timezone('utc', now())
 );
 
+create table if not exists public.contact_messages (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid references auth.users(id) on delete set null,
+  name text not null,
+  email text not null,
+  topic text not null default 'Duda general',
+  message text not null,
+  status text not null default 'received' check (status in ('received', 'in_review', 'replied', 'completed')),
+  admin_reply text not null default '',
+  replied_at timestamptz,
+  completed_at timestamptz,
+  created_at timestamptz not null default timezone('utc', now())
+);
+
+alter table if exists public.contact_messages
+  add column if not exists user_id uuid references auth.users(id) on delete set null;
+
+alter table if exists public.contact_messages
+  add column if not exists status text not null default 'received'
+  check (status in ('received', 'in_review', 'replied', 'completed'));
+
+alter table if exists public.contact_messages
+  add column if not exists admin_reply text not null default '';
+
+alter table if exists public.contact_messages
+  add column if not exists replied_at timestamptz;
+
+alter table if exists public.contact_messages
+  add column if not exists completed_at timestamptz;
+
+update public.contact_messages as messages
+set user_id = users.id
+from auth.users as users
+where messages.user_id is null
+  and lower(coalesce(messages.email, '')) = lower(coalesce(users.email, ''));
+
+update public.contact_messages
+set status = 'received'
+where status is null
+   or status not in ('received', 'in_review', 'replied', 'completed');
+
+update public.contact_messages
+set admin_reply = ''
+where admin_reply is null;
+
 create or replace function public.set_updated_at()
 returns trigger
 language plpgsql
@@ -120,6 +165,7 @@ on conflict (id) do update
 alter table public.user_profiles enable row level security;
 alter table public.products enable row level security;
 alter table public.site_settings enable row level security;
+alter table public.contact_messages enable row level security;
 
 do $$
 begin
@@ -207,6 +253,34 @@ begin
     execute $policy$create policy "Admins can delete site settings" on public.site_settings for delete to authenticated using (public.is_admin())$policy$;
   end if;
 
+  if not exists (
+    select 1 from pg_policies
+    where schemaname = 'public' and tablename = 'contact_messages' and policyname = 'Public can insert contact messages'
+  ) then
+    execute $policy$create policy "Public can insert contact messages" on public.contact_messages for insert to public with check (user_id is null or auth.uid() = user_id)$policy$;
+  end if;
+
+  if not exists (
+    select 1 from pg_policies
+    where schemaname = 'public' and tablename = 'contact_messages' and policyname = 'Admins can read contact messages'
+  ) then
+    execute $policy$create policy "Admins can read contact messages" on public.contact_messages for select to authenticated using (public.is_admin())$policy$;
+  end if;
+
+  if not exists (
+    select 1 from pg_policies
+    where schemaname = 'public' and tablename = 'contact_messages' and policyname = 'Customers can read own contact messages'
+  ) then
+    execute $policy$create policy "Customers can read own contact messages" on public.contact_messages for select to authenticated using ((user_id = auth.uid()) or lower(coalesce(email, '')) = lower(coalesce(auth.jwt() ->> 'email', '')))$policy$;
+  end if;
+
+  if not exists (
+    select 1 from pg_policies
+    where schemaname = 'public' and tablename = 'contact_messages' and policyname = 'Admins can update contact messages'
+  ) then
+    execute $policy$create policy "Admins can update contact messages" on public.contact_messages for update to authenticated using (public.is_admin()) with check (public.is_admin())$policy$;
+  end if;
+
   if exists (
     select 1 from pg_tables where schemaname = 'public' and tablename = 'orders'
   ) then
@@ -235,6 +309,15 @@ on public.products (active);
 
 create index if not exists site_settings_updated_idx
 on public.site_settings (updated_at desc);
+
+create index if not exists contact_messages_created_idx
+on public.contact_messages (created_at desc);
+
+create index if not exists contact_messages_user_created_idx
+on public.contact_messages (user_id, created_at desc);
+
+create index if not exists contact_messages_status_created_idx
+on public.contact_messages (status, created_at desc);
 
 insert into storage.buckets (id, name, public)
 values ('product-images', 'product-images', true)

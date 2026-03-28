@@ -9,6 +9,8 @@
   <title>El Secreto de Aris</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="preconnect" href="https://xmipcqspotmfljleamcw.supabase.co" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="beautyfast.css">
   <style>
@@ -16,12 +18,28 @@
   </style>
 </head>
 <body class="product-shell">
+<div class="site-topbar">
+  <p>Compra segura, entrega local y soporte rápido por WhatsApp.</p>
+</div>
 <header class="header header-relative">
-  <button id="hamburger" class="hamburger" type="button" title="Menú" aria-label="Abrir menú">
-    <span></span>
-    <span></span>
-    <span></span>
-  </button>
+  <div class="header-side header-side-left">
+    <button id="hamburger" class="hamburger" type="button" title="Menú" aria-label="Abrir menú">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <div class="search-box search-box-header">
+      <button id="searchToggle" class="search-toggle" type="button" title="Buscar" aria-label="Abrir buscador">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.35-4.35"></path>
+        </svg>
+      </button>
+      <input type="text" id="search" placeholder="Buscar..." class="search-input" aria-label="Buscar productos">
+      <button id="clearSearch" type="button" class="clear-search" aria-label="Limpiar búsqueda">×</button>
+    </div>
+  </div>
 
   <div class="brand">
     <svg width="40" height="40" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" class="leaf-icon">
@@ -41,21 +59,10 @@
     <h1><a href="index.html" class="brand-link">El Secreto de Aris</a></h1>
   </div>
 
-  <div class="header-right">
+  <div class="header-side header-side-right">
     <div id="headerAccount" class="header-account"></div>
-    <div class="search-box">
-      <button id="searchToggle" class="search-toggle" type="button" title="Buscar" aria-label="Abrir buscador">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="11" cy="11" r="8"></circle>
-          <path d="m21 21-4.35-4.35"></path>
-        </svg>
-      </button>
-      <input type="text" id="search" placeholder="Buscar..." class="search-input" aria-label="Buscar productos">
-      <button id="clearSearch" type="button" class="clear-search" aria-label="Limpiar búsqueda">×</button>
-    </div>
-
     <div class="cart" role="button" tabindex="0" aria-label="Abrir carrito" aria-haspopup="dialog" aria-controls="cartPanel">
-      <svg class="cart-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="#e6d8b0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <svg class="cart-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="9" cy="21" r="1.5"></circle>
         <circle cx="20" cy="21" r="1.5"></circle>
         <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
@@ -64,6 +71,41 @@
     </div>
   </div>
 </header>
+
+<div id="welcomeModal" class="welcome-modal" hidden aria-hidden="true">
+  <div class="welcome-modal__backdrop" data-welcome-close></div>
+  <div class="welcome-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="welcomeModalTitle">
+    <button id="closeWelcomeModal" class="welcome-modal__close" type="button" aria-label="Cerrar formulario">×</button>
+    <p class="welcome-modal__eyebrow">Primer acceso</p>
+    <h2 id="welcomeModalTitle" class="welcome-modal__title">Guarda tus datos y compra más rápido</h2>
+    <p class="welcome-modal__copy">Deja tus datos una sola vez y compra más rápido en tu próxima visita.</p>
+
+    <form id="welcomeForm" class="welcome-form" autocomplete="on">
+      <div class="welcome-form__row">
+        <input type="text" id="welcomeFirstName" name="firstName" placeholder="Nombre" autocomplete="given-name" required>
+        <input type="text" id="welcomeLastName" name="lastName" placeholder="Apellido" autocomplete="family-name" required>
+      </div>
+      <input type="email" id="welcomeEmail" name="email" placeholder="Correo electrónico" autocomplete="email" inputmode="email" required>
+      <input type="tel" id="welcomePhone" name="phone" placeholder="Teléfono" autocomplete="tel" inputmode="tel" required>
+
+      <label class="welcome-form__check">
+        <input type="checkbox" id="welcomeMarketing" name="marketingConsent">
+        <span>Quiero recibir promociones y novedades por correo o WhatsApp.</span>
+      </label>
+
+      <div id="welcomeStatus" class="welcome-status" aria-live="polite"></div>
+
+      <button type="submit" class="welcome-form__submit">Guardar y continuar</button>
+
+      <div class="welcome-form__footer">
+        <a href="orders.html" class="welcome-form__link">Ya tengo cuenta</a>
+        <button id="welcomeSkipBtn" type="button" class="welcome-form__skip">Ahora no</button>
+      </div>
+    </form>
+
+    <p class="welcome-modal__note">Tus datos se usan para autocompletar compras futuras.</p>
+  </div>
+</div>
 
 <section class="catalog-hero">
   <p class="catalog-eyebrow">Colección completa</p>
@@ -177,13 +219,15 @@
     <br>
     <span>Envía tu comprobante de pago por WhatsApp tras completar el pedido.</span>
   </div>
+  <a href="https://soulcrwk.netlify.app/?ref=beautyfast&source=footer&campaign=project-lead#contacto" target="_blank" rel="noopener" class="footer-powered-by" aria-label="Contactar a SoulCrystal Works">
+    <span class="footer-powered-by__label">Powered by</span>
+    <span class="footer-powered-by__brand">SoulCrystal Works</span>
+  </a>
   <a href="https://wa.me/18493990014?text=Hola,%20quiero%20m%C3%A1s%20informaci%C3%B3n..." target="_blank" rel="noopener" title="Contactar por WhatsApp" class="whatsapp-button" aria-label="Contactar por WhatsApp">
     <img src="img/Whatsapp.jpg" alt="WhatsApp">
   </a>
 </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js"></script>
 <script src="supabase-client.js"></script>

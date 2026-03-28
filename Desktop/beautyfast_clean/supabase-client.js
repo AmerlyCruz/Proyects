@@ -21,6 +21,10 @@
     return getConfig().settingsTable || "site_settings";
   }
 
+  function getContactMessagesTable() {
+    return getConfig().contactMessagesTable || "contact_messages";
+  }
+
   function getProductImagesBucket() {
     return getConfig().productImagesBucket || "product-images";
   }
@@ -59,6 +63,54 @@
   function normalizeError(error, fallback) {
     if (!error) return fallback;
     return error.message || fallback;
+  }
+
+  function normalizeContactMessageStatus(status) {
+    const normalizedStatus = String(status || '').trim().toLowerCase();
+    if (['received', 'in_review', 'replied', 'completed'].includes(normalizedStatus)) {
+      return normalizedStatus;
+    }
+
+    return 'received';
+  }
+
+  function normalizeContactMessagePayload(message, options = {}) {
+    const adminReply = String(message?.admin_reply || '').trim();
+    const nextStatus = normalizeContactMessageStatus(message?.status);
+    const payload = {
+      user_id: options.userId || null,
+      name: String(message?.name || '').trim(),
+      email: String(message?.email || '').trim().toLowerCase(),
+      topic: String(message?.topic || 'Duda general').trim() || 'Duda general',
+      message: String(message?.message || '').trim(),
+      status: nextStatus,
+      admin_reply: adminReply
+    };
+
+    if (adminReply && payload.status === 'received') {
+      payload.status = 'replied';
+    }
+
+    if (payload.status === 'replied') {
+      payload.replied_at = message?.replied_at || new Date().toISOString();
+    }
+
+    if (payload.status === 'completed') {
+      payload.completed_at = message?.completed_at || new Date().toISOString();
+      if (adminReply && !message?.replied_at) {
+        payload.replied_at = new Date().toISOString();
+      }
+    }
+
+    if (payload.status !== 'completed' && message?.completed_at === null) {
+      payload.completed_at = null;
+    }
+
+    if (payload.status !== 'replied' && payload.status !== 'completed' && message?.replied_at === null) {
+      payload.replied_at = null;
+    }
+
+    return payload;
   }
 
   function normalizeProductPayload(product) {
@@ -350,6 +402,74 @@
     };
   };
 
+  window.saveBeautyfastContactMessage = async function saveBeautyfastContactMessage(message) {
+    const client = window.getBeautyfastSupabase();
+    if (!client) return { ok: false, reason: 'not_configured', error: 'Falta completar la conexion con Supabase.' };
+
+    const sessionResult = await window.getBeautyfastSession();
+
+    const payload = normalizeContactMessagePayload({
+      ...message,
+      email: String(message?.email || sessionResult.user?.email || '').trim().toLowerCase(),
+      status: 'received',
+      admin_reply: ''
+    }, {
+      userId: sessionResult.user?.id || null
+    });
+
+    if (!payload.name) {
+      return { ok: false, reason: 'validation_error', error: 'Necesitamos tu nombre para enviar la consulta.' };
+    }
+
+    if (!payload.email) {
+      return { ok: false, reason: 'validation_error', error: 'Necesitamos tu correo para responderte.' };
+    }
+
+    if (!payload.message) {
+      return { ok: false, reason: 'validation_error', error: 'Escribe tu mensaje antes de enviarlo.' };
+    }
+
+    const { data, error } = await client
+      .from(getContactMessagesTable())
+      .insert(payload)
+      .select('*')
+      .single();
+
+    if (error) {
+      return { ok: false, reason: 'db_error', error: normalizeError(error, 'No pudimos guardar tu mensaje ahora mismo.') };
+    }
+
+    return { ok: true, data };
+  };
+
+  window.fetchBeautyfastMyContactMessages = async function fetchBeautyfastMyContactMessages() {
+    const client = window.getBeautyfastSupabase();
+    if (!client) return { ok: false, reason: 'not_configured' };
+
+    const sessionResult = await window.getBeautyfastSession();
+    if (!sessionResult.user) return { ok: false, reason: 'not_authenticated' };
+
+    const userEmail = String(sessionResult.user.email || '').trim().toLowerCase();
+    let query = client
+      .from(getContactMessagesTable())
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (userEmail) {
+      query = query.or(`user_id.eq.${sessionResult.user.id},email.eq.${userEmail}`);
+    } else {
+      query = query.eq('user_id', sessionResult.user.id);
+    }
+
+    const { data, error } = await query;
+
+    if (error) {
+      return { ok: false, reason: 'db_error', error: normalizeError(error, 'No pudimos cargar tus consultas.') };
+    }
+
+    return { ok: true, data: data || [], user: sessionResult.user };
+  };
+
   window.upsertBeautyfastPublicSetting = async function upsertBeautyfastPublicSetting(settingKey, valueJson) {
     const client = window.getBeautyfastSupabase();
     if (!client) return { ok: false, reason: 'not_configured' };
@@ -377,6 +497,74 @@
     }
 
     return { ok: true, data };
+  };
+
+  window.fetchBeautyfastAdminContactMessages = async function fetchBeautyfastAdminContactMessages() {
+    const client = window.getBeautyfastSupabase();
+    if (!client) return { ok: false, reason: 'not_configured' };
+
+    const adminResult = await window.isBeautyfastAdmin();
+    if (!adminResult.ok) return adminResult;
+    if (!adminResult.isAdmin) return { ok: false, reason: 'forbidden', error: 'Esta cuenta no tiene acceso administrativo.' };
+
+    const { data, error } = await client
+      .from(getContactMessagesTable())
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      return { ok: false, reason: 'db_error', error: normalizeError(error, 'No pudimos cargar los mensajes del formulario.') };
+    }
+
+    return { ok: true, data: data || [] };
+  };
+
+  window.updateBeautyfastContactMessage = async function updateBeautyfastContactMessage(messageId, updates) {
+    const client = window.getBeautyfastSupabase();
+    if (!client) return { ok: false, reason: 'not_configured' };
+
+    const adminResult = await window.isBeautyfastAdmin();
+    if (!adminResult.ok) return adminResult;
+    if (!adminResult.isAdmin) return { ok: false, reason: 'forbidden', error: 'Esta cuenta no tiene acceso administrativo.' };
+
+    const normalizedMessageId = String(messageId || '').trim();
+    if (!normalizedMessageId) {
+      return { ok: false, reason: 'validation_error', error: 'La consulta no es válida.' };
+    }
+
+    const payload = normalizeContactMessagePayload(updates || {});
+    delete payload.user_id;
+    delete payload.name;
+    delete payload.email;
+    delete payload.topic;
+    delete payload.message;
+
+    const { data, error } = await client
+      .from(getContactMessagesTable())
+      .update(payload)
+      .eq('id', normalizedMessageId)
+      .select('*')
+      .single();
+
+    if (error) {
+      return { ok: false, reason: 'db_error', error: normalizeError(error, 'No pudimos guardar los cambios de la consulta.') };
+    }
+
+    return { ok: true, data };
+  };
+
+  window.buildBeautyfastReplyMailto = function buildBeautyfastReplyMailto(details = {}) {
+    const email = String(details.email || '').trim();
+    if (!email) return '';
+
+    const subject = String(details.subject || '').trim();
+    const body = String(details.body || '').trim();
+    const params = new URLSearchParams();
+    if (subject) params.set('subject', subject);
+    if (body) params.set('body', body);
+
+    const query = params.toString();
+    return `mailto:${email}${query ? `?${query}` : ''}`;
   };
 
   window.fetchBeautyfastAdminStats = async function fetchBeautyfastAdminStats() {
